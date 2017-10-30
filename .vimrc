@@ -1,13 +1,7 @@
-" deinの設定
-if &compatible
-  set nocompatible
-endif
-set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-
-call dein#begin(expand('~/.vim/dein'))
-call dein#add('Shougo/dein.vim')
-call dein#add('fatih/vim-go')
-call dein#end()
+" vim-plugの設定
+call plug#begin('~/.vim/plugged')
+Plug 'fatih/vim-go'
+call plug#end()
 
 filetype plugin indent on
 
@@ -46,6 +40,9 @@ noremap x "_x
 "inoremap [<Enter> []<Left><CR><ESC><S-o>
 "inoremap (<Enter> ()<Left><CR><ESC><S-o>
 
+" ヤンクしたらクリップボードにも入る
+set clipboard=unnamed,autoselect
+
 
 "------------------
 " UI
@@ -80,6 +77,10 @@ set laststatus=2
 
 " コマンドラインの補完
 set wildmode=list:longest
+
+" .goの場合に `err` をハイライト
+autocmd FileType go :highlight goErr cterm=bold ctermfg=lightblue
+autocmd FileType go :match goErr /\<err\>/
 
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj

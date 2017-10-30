@@ -6,9 +6,10 @@ export NVM_DIR="$HOME/.nvm"
 # git 補完
 source /usr/local/etc/bash_completion.d/git-completion.bash
 source /usr/local/etc/bash_completion.d/git-prompt.sh
-
 GIT_PS1_SHOWDIRTYSTATE=true
-export PS1='\h\[\033[00m\]:\W\[\033[31m\]$(__git_ps1 [%s])\[\033[00m\]\$ '
+BIRD=`echo -e '\U1F426'`
+HATCHED_CHICK=`echo -e '\U1F425'`
+export PS1='\n[\w\[\033[31m\]$(__git_ps1 [%s])\[\033[00m\]]\n${BIRD}  < '
 
 # カスタムスクリプト
 source $HOME/.alias.sh
@@ -29,4 +30,9 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH="~/MMM/golang"
 complete -C aws_completer aws
 
-[[ -s "/Users/hidetatsuyaginuma/.gvm/scripts/gvm" ]] && source "/Users/hidetatsuyaginuma/.gvm/scripts/gvm"
+# anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
+
+# GOPATH
+export GOPATH="$HOME/MMM/golang"
