@@ -13,9 +13,12 @@ export NVM_DIR="$HOME/.nvm"
 source /usr/local/etc/bash_completion.d/git-completion.bash
 source /usr/local/etc/bash_completion.d/git-prompt.sh
 GIT_PS1_SHOWDIRTYSTATE=true
+
+# プロンプト
 BIRD=`echo -e '\U1F426'`
 HATCHED_CHICK=`echo -e '\U1F425'`
-export PS1='\n[\w\[\033[31m\]$(__git_ps1 [%s])\[\033[00m\]]\n${BIRD}  < '
+#export PS1='\n[\w\[\033[31m\]$(__git_ps1 [%s])\[\033[00m\]]\n${BIRD}  < '
+export PS1='\n[\w\[\033[31m\]$(__git_ps1 [%s])\[\033[00m\]]\nʕ•ᴥ•ʔ < '
 
 # カスタムスクリプト
 source $HOME/.alias.sh

@@ -1,127 +1,103 @@
-" vim-plugの設定
+" vim-plug
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go'
+Plug 'Shougo/neocomplcache'
+Plug 'airblade/vim-gitgutter'
+Plug 'elzr/vim-json'
 call plug#end()
 
 filetype plugin indent on
 
-"------------------
-" 編集
-"------------------
-
-" 文字コードをUFT-8に設定
+"----------------------------------------------------------------------------
+" Edit
+"----------------------------------------------------------------------------
 set fenc=utf-8
 set encoding=utf-8
-
-" バックアップファイルを作らない
 set nobackup
-
-" スワップファイルを作らない
 set noswapfile
-
-" 編集中のファイルが変更されたら自動で読み直す
 set autoread
-
-" バッファが編集中でもその他のファイルを開けるように
 set hidden
-
-" 入力中のコマンドをステータスに表示する
 set showcmd
-
-" マウスでクリック可能にする
-"set mouse=a
-
-" xで削除した文字はヤンクしない
+" dont't yank x
 noremap PP "0p
 noremap x "_x
 
-" 括弧を補完する
-"inoremap {<Enter> {}<Left><CR><ESC><S-o>
-"inoremap [<Enter> []<Left><CR><ESC><S-o>
-"inoremap (<Enter> ()<Left><CR><ESC><S-o>
-
-" ヤンクしたらクリップボードにも入る
 set clipboard=unnamed,autoselect
+set backspace=indent,eol,start
 
-
-"------------------
+"----------------------------------------------------------------------------
 " UI
-"------------------
-
-" 色をつける
+"----------------------------------------------------------------------------
 syntax on
-
-" 行番号を表示
 set number
-
-" 現在の行を強調表示
 set cursorline
-
-" 現在の行を強調表示（縦）
-"set cursorcolumn
-
-" 行末の1文字先までカーソルを移動できるように
 set virtualedit=onemore
-
-" インデントはスマートインデント
 set smartindent
-
-" ビープ音を可視化
 set visualbell
-
-" 括弧入力時の対応する括弧を表示
 set showmatch
-
-" ステータスラインを常に表示
 set laststatus=2
-
-" コマンドラインの補完
 set wildmode=list:longest
+  
+"----------------------------------------------------------------------------
+" Tab
+"----------------------------------------------------------------------------
+set expandtab
+set tabstop=2
+set shiftwidth=2
 
-" .goの場合に `err` をハイライト
+"----------------------------------------------------------------------------
+" Search
+"----------------------------------------------------------------------------
+set ignorecase
+set smartcase
+set incsearch
+set wrapscan
+set hlsearch
+
+"----------------------------------------------------------------------------
+" Ruby
+"----------------------------------------------------------------------------
+augroup RubyAutoCmd
+  au!
+  au FileType ruby set shiftwidth=2 tabstop=2
+augroup END
+
+" RSpec
+nnoremap <silent>,rs :RunSpec<CR>
+nnoremap <silent>,rl :RunSpecLine<CR>
+
+" Template for rspec file {{{
+func! s:rspec_template()
+  call append(3, "require File.expand_path(File.dirname(__FILE__) + '/spec_helper')")
+  call append(4, '')
+  call append(5, 'describe <description> do')
+  call append(6, '')
+  call append(7, 'end')
+endf
+au RubyAutoCmd BufNewFile *_spec.rb call s:rspec_template()
+
+"----------------------------------------------------------------------------
+" Golang
+"----------------------------------------------------------------------------
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_build_constraints = 1
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
+
 autocmd FileType go :highlight goErr cterm=bold ctermfg=lightblue
 autocmd FileType go :match goErr /\<err\>/
 
-" 折り返し時に表示行単位での移動できるようにする
-nnoremap j gj
-nnoremap k gk
+"----------------------------------------------------------------------------
+" neocomplecache
+"----------------------------------------------------------------------------
+let g:neocomplcache_enable_at_startup = 1
 
-  
-"------------------
-" Tab
-"------------------
-
-" 不可視文字を可視化(タブが「▸-」と表示される)
-"set list listchars=tab:\▸\-
-
-" Tab文字を半角スペースにする
-set expandtab
-
-" 行頭以外のTab文字の表示幅（スペースいくつ分）
-set tabstop=2
-
-" 行頭でのTab文字の表示幅
-set shiftwidth=2
-
-
-"------------------
-" 検索
-"------------------
-
-" 検索文字列が小文字の場合は大文字小文字を区別なく検索する
-set ignorecase
-
-" 検索文字列に大文字が含まれている場合は区別して検索する
-set smartcase
-
-" 検索文字列入力時に順次対象文字列にヒットさせる
-set incsearch
-
-" 検索時に最後まで行ったら最初に戻る
-set wrapscan
-
-" 検索語をハイライト表示
-set hlsearch
-
-" ESC連打でハイライト解除
-nmap <Esc><Esc> :nohlsearch<CR><Esc>
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags

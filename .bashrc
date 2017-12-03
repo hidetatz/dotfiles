@@ -36,3 +36,5 @@ eval "$(anyenv init -)"
 
 # GOPATH
 export GOPATH="$HOME/MMM/golang"
+
+export TERM=xterm-256color
