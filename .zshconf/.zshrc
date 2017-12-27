@@ -2,20 +2,12 @@
 # Environment variables
 
 # LANG
-export LANG=ja_JP.UTF-8
+#export LANG=ja_JP.UTF-8
 
-# node.js
-export NODE_PATH=./
-export NODE_ENV=development
+export PATH=PATH:/usr/x86_64-pc-linux-gnu/gcc-bin/6.4.0:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
 
-# golang
-#export PATH=$PATH:$HOME/.local/bin
-#export PATH=$PATH:/usr/local/go/bin
-export GOPATH="$HOME/MMM/golang"
-
-# anyenv
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
+# for less options
+export LESS='-i -M -R -W'
 
 #----------------------------------
 # aliases
@@ -28,10 +20,9 @@ alias pd='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
 alias pds='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/sh'
 alias pv='vi $(ls -a | peco)'
 alias pcd='cd $(ls -a | peco)'
-alias m='cd $HOME/MMM && ls -a'
+alias m='cd $HOME/mmm && ls -a'
 alias w='cd $HOME/work && ls -a'
 alias b='cd $HOME/work/ygnmhdtt.github.io'
-alias d='cd ~/Dropbox\ \(チームMMM\)/チームMMM/プロジェクト関連/進行中'
 alias be='bundle exec'
 alias mpx='ssh mmpxy01p'
 alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | peco)'
@@ -45,12 +36,12 @@ autoload -Uz colors
 colors
 
 # prompt
-PROMPT='
+export PROMPT='
 [%~'
-PROMPT=$PROMPT'${vcs_info_msg_0_}'
-PROMPT=$PROMPT']'
-PROMPT=$PROMPT'
-ʕ•ᴥ•ʔ < '
+export PROMPT=$PROMPT'${vcs_info_msg_0_}'
+export PROMPT=$PROMPT']'
+export PROMPT=$PROMPT'
+%F{012}gentoo <%f '
 
 # 日本語ファイル名を表示可能にする
 setopt print_eight_bit
@@ -59,7 +50,7 @@ setopt print_eight_bit
 # Auto completion
 
 # file of git-completion
-fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+#fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 
 # enable autoload
 autoload -Uz compinit
@@ -73,7 +64,7 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 
 # auto complete for aws cli
 #complete -C aws_completer aws
-source /usr/local/bin/aws_zsh_completer.sh
+#source /usr/local/bin/aws_zsh_completer.sh
 
 # git prompt
 autoload -Uz vcs_info
