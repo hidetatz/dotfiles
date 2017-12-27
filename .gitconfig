@@ -1,3 +1,7 @@
 [user]
   email = yaginuma@mmmcorp.co.jp
   name = ygnmhdtt
+
+[url "github.com:"]
+  InsteadOf = https://github.com/
+  InsteadOf = git@github.com:
