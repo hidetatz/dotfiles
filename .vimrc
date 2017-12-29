@@ -1,11 +1,3 @@
-" vim-plug
-call plug#begin('~/.vim/plugged')
-Plug 'fatih/vim-go'
-Plug 'Shougo/neocomplcache'
-Plug 'airblade/vim-gitgutter'
-Plug 'elzr/vim-json'
-call plug#end()
-
 filetype plugin indent on
 
 "----------------------------------------------------------------------------
