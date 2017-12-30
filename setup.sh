@@ -1,16 +1,13 @@
 #!/bin/sh
-
-# vim
 ln -sf $HOME/work/dotfiles/.vimrc $HOME/.vimrc
-
-# zsh
-ln -sf $HOME/work/dotfiles/.zshconf/ $HOME/.zshconf
-
-# tmux
+ln -sf $HOME/work/dotfiles/.zshrc $HOME/.zshrc
 ln -sf $HOME/work/dotfiles/.tmux.conf $HOME/.tmux.conf
-
-# gitconfig
 ln -sf $HOME/work/dotfiles/.gitconfig $HOME/.gitconfig
-
-# ketnel
-ln -sf $HOME/work/dotfiles/.kernel-config/ $HOME/.kernel-config
+ln -sf $HOME/work/dotfiles/.fluxbox/ $HOME/.fluxbox
+ln -sf $HOME/work/dotfiles/.gnome/ $HOME/.gnome
+ln -sf $HOME/work/dotfiles/.mozc/ $HOME/.mozc
+ln -sf $HOME/work/dotfiles/.screenlayout $HOME/.screenlayout
+ln -sf $HOME/work/dotfiles/.Xauthority $HOME/.Xauthority
+ln -sf $HOME/work/dotfiles/.xinitrc $HOME/.xinitrc
+ln -sf $HOME/work/dotfiles/.Xmodmap $HOME/.Xmodmap
+ln -sf $HOME/work/dotfiles/.Xresources $HOME/.Xresources

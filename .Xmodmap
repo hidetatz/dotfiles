@@ -1,0 +1,9 @@
+remove lock = Caps_Lock
+
+keycode 66 = Control_L
+keycode 47 = colon semicolon Cyrillic_ZHE
+
+keycode 255 = space
+keycode 65 = Shift_L
+
+add control = Control_L
