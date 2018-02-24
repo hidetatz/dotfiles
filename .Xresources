@@ -1,11 +1,11 @@
 XTerm*termName: xterm-256color
-XTerm*utf8: 1
-XTerm*locale: true
-XTerm*selectToClipboard: true
-XTerm*saveLines: 2000
+!XTerm*utf8: 1
+!XTerm*locale: true
+!XTerm*selectToClipboard: true
+!XTerm*saveLines: 2000
 XTerm*faceSize: 20
-XTerm*faceName: Ricty
-XTerm*faceNameDoublesize: Ricty
+!XTerm*faceName: Ricty
+!XTerm*faceNameDoublesize: Ricty
 
 ! Solarized color scheme for the X Window System
 !

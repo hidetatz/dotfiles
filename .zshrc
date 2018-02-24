@@ -1,23 +1,27 @@
 #----------------------------------
 # Environment variables
 
-# LANG
-#export LANG=ja_JP.UTF-8
-
+source ~/.env
 export PATH=PATH:/usr/x86_64-pc-linux-gnu/gcc-bin/6.4.0:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
-
 # for less options
-export LESS='-i -M -R -W -q'
-
-# for default ediror
-#export EDITOR=vim
+export LESS='-i -M -R -W -q -S'
+# golang
+export GOPATH="/home/ygnmhdtt/mmm/golang"
+export PATH=$PATH:$GOPATH/bin
+# default editor
+export EDITOR="vim"
+# for anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
+# aws cli
+export PATH="$HOME/.local/bin:$PATH"
 
 #----------------------------------
 # aliases
-#source $HOME/.alias.sh
-alias gb="git branch"
-alias gl="git log"
-alias gs="git status"
+alias gb='git branch'
+alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
+alias gla='git log --graph --all --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
+alias gs='git status'
 alias pc='git checkout `git branch | peco | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias pd='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
 alias pds='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/sh'
@@ -30,6 +34,10 @@ alias be='bundle exec'
 alias mpx='ssh mmpxy01p'
 alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | peco)'
 alias ll='ls -alh'
+alias g='git'
+alias t='tig'
+alias dr='docker'
+alias drc='docker-compose'
 
 #----------------------------------
 # Appearance
@@ -37,7 +45,6 @@ alias ll='ls -alh'
 # enable colors
 autoload -Uz colors
 colors
-
 # prompt
 export PROMPT='
 [%~'
@@ -45,30 +52,26 @@ export PROMPT=$PROMPT'${vcs_info_msg_0_}'
 export PROMPT=$PROMPT']'
 export PROMPT=$PROMPT'
 %F{012}gentoo <%f '
-
-# 日本語ファイル名を表示可能にする
+# enable japanese
 setopt print_eight_bit
+
+#----------------------------------
+# Keybind
+
+bindkey -e
+sudo loadkeys ~/work/keymap/my.kmap
 
 #----------------------------------
 # Auto completion
 
-# file of git-completion
-#fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
-
 # enable autoload
 autoload -Uz compinit
 compinit -u
-
-# 補完で小文字でも大文字にマッチさせる
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# ../ の後は今いるディレクトリを補完しない
 zstyle ':completion:*' ignore-parents parent pwd ..
-
 # auto complete for aws cli
 #complete -C aws_completer aws
 #source /usr/local/bin/aws_zsh_completer.sh
-
 # git prompt
 autoload -Uz vcs_info
 setopt prompt_subst
@@ -86,51 +89,31 @@ function precmd () { vcs_info }
 HISTFILE=~/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
-
-# beep を無効にする
+# no beep
 setopt no_beep
-
-# フローコントロールを無効にする
+# disable flow control
 setopt no_flow_control
-
-# Ctrl+Dでzshを終了しない
+# must input 'logout' when logout
 setopt ignore_eof
-
-# '#' 以降をコメントとして扱う
+# '#' for comment
 setopt interactive_comments
-
-# ディレクトリ名だけでcdする
+# don't need `cd` when move into directory
 setopt auto_cd
-
-# cd したら自動的にpushdする
+# do pushd automatically
 setopt auto_pushd
-
-# 重複したディレクトリを追加しない
+# duplicate directory will not be `pushd`
 setopt pushd_ignore_dups
-
-# 同時に起動したzshの間でヒストリを共有する
+# share history in all shell
 setopt share_history
-
-# 同じコマンドをヒストリに残さない
+# don't store same command to history
 setopt hist_ignore_all_dups
-
-# スペースから始まるコマンド行はヒストリに残さない
+# don't store command that starts with space
 setopt hist_ignore_space
-
-# ヒストリに保存するときに余分なスペースを削除する
+# remove space when store history
 setopt hist_reduce_blanks
-
-# historyコマンドは履歴に登録しない
+# `history` will not be stored at zsh_history
 setopt hist_no_store
-
-# 高機能なワイルドカード展開を使用する
+# wildcard
 setopt extended_glob
-
 # vim:set ft=zsh:
 export PATH="/usr/local/opt/qt/bin:$PATH"
-
-#----------------------------------
-# my
-
-# loadkey
-sudo loadkeys ~/work/keymap/my.kmap

@@ -11,3 +11,5 @@ ln -sf $HOME/work/dotfiles/.Xauthority $HOME/.Xauthority
 ln -sf $HOME/work/dotfiles/.xinitrc $HOME/.xinitrc
 ln -sf $HOME/work/dotfiles/.Xmodmap $HOME/.Xmodmap
 ln -sf $HOME/work/dotfiles/.Xresources $HOME/.Xresources
+mkdir ~/.cofig
+ln -sf $HOME/work/dotfiles/.config/fcitx/ $HOME/.config/fcitx
