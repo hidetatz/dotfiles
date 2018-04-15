@@ -11,9 +11,12 @@ Plug 'tpope/vim-endwise'
 Plug 'slim-template/vim-slim'
 Plug 'itchyny/lightline.vim'
 Plug 'othree/yajs.vim'
+"Plug 'powerline/powerline'
 call plug#end()
 
 filetype plugin indent on
+
+"set rtp+=~/.local/lib64/python3.5/site-packages/powerline/bindings/vim
 
 "----------------------------------------------------------------------------
 " Edit
@@ -45,6 +48,12 @@ function! Rstrip()
   endif
   call setpos(".", s:tmppos)
 endfunction
+
+" open at last modified line
+augroup vimrcEx
+  au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
+  \ exe "normal g`\"" | endif
+augroup END
 
 "----------------------------------------------------------------------------
 " UI
@@ -150,6 +159,27 @@ let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 let g:rsenseHome = expand("/home/ygnmhdtt/.anyenv/envs/rbenv/shims/rsense")
 let g:rsenseUseOmniFunc = 1
+
+"----------------------------------------------------------------------------
+" Javascript
+"----------------------------------------------------------------------------
+
+augroup JsAutoCmd
+  au!
+  au FileType javascript set shiftwidth=2 tabstop=2
+augroup END
+
+" Template for flow file {{{
+func! s:flow_template()
+  call append(0, '// @flow')
+  call append(1, "import type { $Request, $Response } from 'express';")
+  call append(2, "import Sequelize from 'sequelize';")
+  call append(3, "import {db} from '../models';")
+  call append(4, "import queryUtils from '../services/query-utils';")
+  call append(5, "import responseUtils from '../services/response-utils';")
+  call append(6, "import {errorMessages} from '../services';")
+endf
+au JsAutoCmd BufNewFile *.js call s:flow_template()
 
 "----------------------------------------------------------------------------
 " Golang
