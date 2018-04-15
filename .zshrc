@@ -15,6 +15,9 @@ export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
 # aws cli
 export PATH="$HOME/.local/bin:$PATH"
+export XDG_RUNTIME_DIR="/run/user/$UID"
+# dbus
+export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 
 #----------------------------------
 # aliases
@@ -38,6 +41,7 @@ alias g='git'
 alias t='tig'
 alias dr='docker'
 alias drc='docker-compose'
+alias ag='awslogs groups | peco | xargs -Iarg awslogs get arg -w'
 
 #----------------------------------
 # Appearance
@@ -45,15 +49,59 @@ alias drc='docker-compose'
 # enable colors
 autoload -Uz colors
 colors
-# prompt
+
+# git prompt
+autoload -Uz vcs_info
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{255}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{255}+"
+zstyle ':vcs_info:*' formats "%F{255}%c%u[%b]%f"
+zstyle ':vcs_info:*' actionformats '[%b|%a]'
+function precmd () { vcs_info }
+
+# zsh prompt
+# %K{num}: background color
+# %F{num}: characters color
+# %f{num}: resetcharacters color
+# %k{num}: reset background color
+# color sample script:
+# for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo
 export PROMPT='
-[%~'
-export PROMPT=$PROMPT'${vcs_info_msg_0_}'
-export PROMPT=$PROMPT']'
-export PROMPT=$PROMPT'
-%F{012}gentoo <%f '
+%K{099}%F{255} gentoo %f%k'
+export PROMPT=$PROMPT'%K{020}%F{099}%f%k'
+export PROMPT=$PROMPT'%K{020}%F{051} %~ %f%k'
+export PROMPT=$PROMPT'`git_dir_check ${vcs_info_msg_0_} $?`
+%F{255} ↬ %f '
+
+function git_dir_check () {
+  if [ -e .git ]; then
+    case `echo $1 | sed -E s/.+}// | cut -c 1` in
+      "!" )
+        color='003'
+        ;;
+      "+" )
+        color='160'
+        ;;
+      * )
+        color='083'
+    esac
+    msg="%K{${color}}%F{020}%f%k"
+    msg=$msg"%K{${color}}%F{black} `echo $1 | sed -E s/.+}//` %f%k%F{${color}}%f"
+  else
+    msg='%F{020}%f'
+  fi
+    echo $msg
+}
+
 # enable japanese
 setopt print_eight_bit
+
+#----------------------------------
+# Powerline
+
+#powerline-daemon -q
+#. ~/.local/lib64/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
 
 #----------------------------------
 # Keybind
@@ -72,15 +120,6 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 # auto complete for aws cli
 #complete -C aws_completer aws
 #source /usr/local/bin/aws_zsh_completer.sh
-# git prompt
-autoload -Uz vcs_info
-setopt prompt_subst
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
-zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
-zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
-zstyle ':vcs_info:*' actionformats '[%b|%a]'
-function precmd () { vcs_info }
 
 #----------------------------------
 # etc
@@ -111,6 +150,8 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 # remove space when store history
 setopt hist_reduce_blanks
+# ignore meta character
+setopt nonomatch
 # `history` will not be stored at zsh_history
 setopt hist_no_store
 # wildcard
