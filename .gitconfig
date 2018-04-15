@@ -1,7 +1,13 @@
 [user]
-  email = yaginuma@mmmcorp.co.jp
+  email = ygnmhdtt@gmail.com
   name = ygnmhdtt
 
 [url "github.com:"]
   InsteadOf = https://github.com/
   InsteadOf = git@github.com:
+
+[includeIf "gitdir:~/mmm/**"]
+  path = ~/.gitconfig-mmm
+
+[pager]
+	branch = false
