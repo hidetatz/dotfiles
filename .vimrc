@@ -11,12 +11,25 @@ Plug 'tpope/vim-endwise'
 Plug 'slim-template/vim-slim'
 Plug 'itchyny/lightline.vim'
 Plug 'othree/yajs.vim'
-"Plug 'powerline/powerline'
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
+Plug 'sheerun/vim-polyglot'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'tomasr/molokai'
+Plug 'altercation/vim-colors-solarized'
+Plug 'w0ng/vim-hybrid'
+Plug 'jeetsukumaran/vim-nefertiti'
+Plug 'KKPMW/moonshine-vim'
+Plug 'nanotech/jellybeans.vim'
+Plug 'cocopon/iceberg.vim'
 call plug#end()
 
 filetype plugin indent on
 
-"set rtp+=~/.local/lib64/python3.5/site-packages/powerline/bindings/vim
+set rtp+=~/.fzf
 
 "----------------------------------------------------------------------------
 " Edit
@@ -58,6 +71,7 @@ augroup END
 "----------------------------------------------------------------------------
 " UI
 "----------------------------------------------------------------------------
+
 syntax on
 set number
 set cursorline
@@ -107,9 +121,11 @@ let g:ale_linters = {
  \   'javascript': ['eslint', 'flow'],
  \}
 "let g:ale_sign_column_always = 1
-let g:ale_statusline_format = ['E: %d', 'W: %d', ':+1:']
+let g:ale_statusline_format = ['E %d', 'W %d', 'LGTM']
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
+highlight link ALEWarningSign String
+highlight link ALEErrorSign Title
 
 "----------------------------------------------------------------------------
 " lightline.vim
@@ -132,6 +148,49 @@ let g:lightline = {
 function! ALEStatus()
   return ALEGetStatusLine()
 endfunction
+
+"----------------------------------------------------------------------------
+" fzf.vim
+"----------------------------------------------------------------------------
+
+nmap ; :Buffers
+nmap t :Files
+
+"----------------------------------------------------------------------------
+" vim-gitgutter
+"----------------------------------------------------------------------------
+
+let g:gitgutter_sign_added = '∙'
+let g:gitgutter_sign_modified = '∙'
+let g:gitgutter_sign_removed = '∙'
+let g:gitgutter_sign_modified_removed = '∙'
+
+
+"----------------------------------------------------------------------------
+" vim-indent-guides'
+"----------------------------------------------------------------------------
+
+" let g:indent_guides_enable_on_vim_startup = 1
+" colorscheme desert256
+" set background=dark
+
+"----------------------------------------------------------------------------
+" colorscheme
+"----------------------------------------------------------------------------
+set background=dark
+
+" favorite!!!
+" colorscheme moonshine
+"
+" favorite!!!
+" colorscheme iceberg
+
+" favorite!!!
+colorscheme hybrid
+"
+" colorscheme molokai
+" colorscheme solarized
+" colorscheme jellybeans
 
 "----------------------------------------------------------------------------
 " Ruby
@@ -206,21 +265,8 @@ augroup END
 "----------------------------------------------------------------------------
 " Java
 "----------------------------------------------------------------------------
-augroup FtlAutoCmd
-  au!
-  au BufNewFile,BufRead *.ftl set filetype=ftl
-  au BufNewFile,BufRead *.ftl set syntax=html
-  au FileType ftl set shiftwidth=2 tabstop=2
-  au FileTYpe ftl nnoremap <silent> <C-c><C-v> :call s:toggleSyntaxBetweenFtlAndHtml()<CR>
-augroup END
-
-func! s:toggleSyntaxBetweenFtlAndHtml()
-  if &syntax ==# 'html'
-    set syntax=ftl
-  else
-    set syntax=html
-  endif
-endf
+au FileType java set shiftwidth=4 tabstop=4
+au FileType java setlocal noexpandtab
 
 "----------------------------------------------------------------------------
 " Shell script
