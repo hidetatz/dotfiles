@@ -158,3 +158,5 @@ setopt hist_no_store
 setopt extended_glob
 # vim:set ft=zsh:
 export PATH="/usr/local/opt/qt/bin:$PATH"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
