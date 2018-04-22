@@ -165,27 +165,18 @@ let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
-
-"----------------------------------------------------------------------------
-" vim-indent-guides'
-"----------------------------------------------------------------------------
-
-" let g:indent_guides_enable_on_vim_startup = 1
-" colorscheme desert256
-" set background=dark
-
 "----------------------------------------------------------------------------
 " colorscheme
 "----------------------------------------------------------------------------
 set background=dark
 
-" favorite!!!
+" favorite!
 " colorscheme moonshine
 "
-" favorite!!!
+" favorite!
 " colorscheme iceberg
 
-" favorite!!!
+" favorite!
 colorscheme hybrid
 "
 " colorscheme molokai
