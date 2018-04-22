@@ -1,21 +1,9 @@
-! remove
 remove lock = Caps_Lock
-!remove mod1 = Alt_L
-!remove mod1 = Alt_R
-
-! for capslock to ctrl
 keycode 66 = Control_L
+add control = Control_L
 
-! for switch colon semicolon
 keycode 47 = colon semicolon Cyrillic_ZHE
 
-! for SandS
-keycode 255 = space
-keycode 65 = Shift_L
+clear Shift
+add Shift = Shift_R
 
-! for HHKB
-!keycode 133 = Alt_R
-!keycode 134 = Alt_L
-
-add control = Control_L
-!add mod1 = Alt_R
