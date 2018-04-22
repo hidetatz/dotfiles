@@ -53,6 +53,7 @@ alias dr='docker'
 alias drc='docker-compose'
 alias ag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
 alias f='cd `find * -type d | grep -v .git | fzf`'
+alias v='vi `fzf`'
 
 #----------------------------------
 # Appearance
@@ -66,11 +67,11 @@ colors
 autoload -Uz vcs_info
 setopt prompt_subst
 zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{255}!"
-zstyle ':vcs_info:git:*' unstagedstr "%F{255}+"
-zstyle ':vcs_info:*' formats "%F{255}%c%u[%b]%f"
-zstyle ':vcs_info:*' actionformats '[%b|%a]'
-function precmd () { vcs_info }
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+zstyle ':vcs_info:*' formats "%F{241}%b %c%u%f"
+zstyle ':vcs_info:*' actionformats '%b|%a'
+precmd () { vcs_info }
 
 # zsh prompt
 # %K{num}: background color
@@ -79,35 +80,44 @@ function precmd () { vcs_info }
 # %k{num}: reset background color
 # color sample script:
 # for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo
-export PROMPT='
-%K{099}%F{255} gentoo %f%k'
-export PROMPT=$PROMPT'%K{020}%F{099}%f%k'
-export PROMPT=$PROMPT'%K{020}%F{051} %~ %f%k'
-export PROMPT=$PROMPT'`git_dir_check ${vcs_info_msg_0_} $?`
-%F{255} ↬ %f '
+PROMPT='
+'
+PROMPT=$PROMPT'%F{038}%~%f '
+PROMPT=$PROMPT'${vcs_info_msg_0_}'
+PROMPT=$PROMPT'
+%F{165}❯%f '
 
-function git_dir_check () {
-  if [ -e .git ]; then
-    case `echo $1 | sed -E s/.+}// | cut -c 1` in
-      "!" )
-        color='003'
-        ;;
-      "+" )
-        color='160'
-        ;;
-      * )
-        color='083'
-    esac
-    msg="%K{${color}}%F{020}%f%k"
-    msg=$msg"%K{${color}}%F{black} `echo $1 | sed -E s/.+}//` %f%k%F{${color}}%f"
-  else
-    msg='%F{020}%f'
-  fi
-    echo $msg
-}
+# =========================== rich prompt
+# ===========================
+# export PROMPT='
+# %K{099}%F{255} gentoo %f%k'
+# export PROMPT=$PROMPT'%K{020}%F{099}%f%k'
+# export PROMPT=$PROMPT'%K{020}%F{051} %~ %f%k'
+# export PROMPT=$PROMPT'`git_dir_check ${vcs_info_msg_0_} $?`
+# %F{255} ↬ %f '
 
-# enable japanese
-setopt print_eight_bit
+# function git_dir_check () {
+#   if [ -e .git ]; then
+#     case `echo $1 | sed -E s/.+}// | cut -c 1` in
+#       "!" )
+#         color='003'
+#         ;;
+#       "+" )
+#         color='160'
+#         ;;
+#       * )
+#         color='083'
+#     esac
+#     msg="%K{${color}}%F{020}%f%k"
+#     msg=$msg"%K{${color}}%F{black} `echo $1 | sed -E s/.+}//` %f%k%F{${color}}%f"
+#   else
+#     msg='%F{020}%f'
+#   fi
+#     echo $msg
+# }
+#
+# ===========================
+# =========================== rich prompt
 
 #----------------------------------
 # fzf
@@ -173,3 +183,5 @@ setopt hist_no_store
 # wildcard
 setopt extended_glob
 # vim:set ft=zsh:
+# enable japanese
+setopt print_eight_bit
