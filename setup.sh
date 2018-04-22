@@ -3,6 +3,12 @@
 # Script to create my environments (WIP)
 # -----------------------------------------
 
+# OS => any Linux distribution or OSX
+
+# Web Browser => Google Chrome
+# Terminal Emulator => is_darwin ? Terminal.app : gnome_terminal
+# Font => Droid Sans Mono || Menlo || Ricty
+
 # -----------------------------------------
 # Install tools
 # -----------------------------------------
@@ -17,31 +23,43 @@
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 ### Install fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install --no-key-bindings --no-completion
+git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+$HOME/.fzf/install --no-key-bindings --no-completion
 
 ### Install tig
+
+### Install Docker and docker-compose
 
 ### Install golang
 
 # -----------------------------------------
 # Set up dotfiles
 # -----------------------------------------
-ln -sf ./.vimrc $HOME/.vimrc
-ln -sf ./.zshrc $HOME/.zshrc
-ln -sf ./.tmux.conf $HOME/.tmux.conf
-ln -sf ./.gitconfig $HOME/.gitconfig
+
+DOTFILES=$HOME/work/dotfiles
+
+ln -sf $DOTFILES/.vimrc $HOME/.vimrc
+ln -sf $DOTFILES/.zshrc $HOME/.zshrc
+ln -sf $DOTFILES/.tmux.conf $HOME/.tmux.conf
+ln -sf $DOTFILES/.gitconfig $HOME/.gitconfig
 
 ### Configuration files for x and window manager (so don't need on OSX or windows)
-# ln -sf $HOME/work/dotfiles/.fluxbox/ $HOME/.fluxbox
-# ln -sf $HOME/work/dotfiles/.gnome/ $HOME/.gnome
-# ln -sf $HOME/work/dotfiles/.mozc/ $HOME/.mozc
-# ln -sf $HOME/work/dotfiles/.screenlayout $HOME/.screenlayout
-# ln -sf $HOME/work/dotfiles/.Xauthority $HOME/.Xauthority
-# ln -sf $HOME/work/dotfiles/.xinitrc $HOME/.xinitrc
-# ln -sf $HOME/work/dotfiles/.Xmodmap $HOME/.Xmodmap
-# ln -sf $HOME/work/dotfiles/.Xresources $HOME/.Xresources
+# ln -sf $DOTFILES/.fluxbox/ $HOME/.fluxbox
+# ln -sf $DOTFILES/.gnome/ $HOME/.gnome
+# ln -sf $DOTFILES/.mozc/ $HOME/.mozc
+# ln -sf $DOTFILES/.screenlayout $HOME/.screenlayout
+# ln -sf $DOTFILES/.Xauthority $HOME/.Xauthority
+# ln -sf $DOTFILES/.xinitrc $HOME/.xinitrc
+# ln -sf $DOTFILES/.Xmodmap $HOME/.Xmodmap
+# ln -sf $DOTFILES/.Xresources $HOME/.Xresources
+# ln -s $DOTFILES/.dbus ./.dbus
+# ln -s $DOTFILES/.fonts ./.fonts
+# ln -s $DOTFILES/.xinitrc $HOME/.xinitrc
+# ln -s $DOTFILES/.Xmodmap $HOME/.Xmodmap
+# ln -s $DOTFILES/.xremap.rb $HOME/.xremap.rb
+# ln -s $DOTFILES/.gnome $HOME/.gnome
 # mkdir ~/.cofig
 # ln -sf $HOME/work/dotfiles/.config/fcitx/ $HOME/.config/fcitx
 
-source ~/.zshrc
+touch $HOME/.env
+source $HOME/.zshrc
