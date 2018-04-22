@@ -1,50 +1,62 @@
 #----------------------------------
 # Environment variables
+#----------------------------------
 
+# load sensitive environment variables
 source ~/.env
+
+# load PATH
 export PATH=PATH:/usr/x86_64-pc-linux-gnu/gcc-bin/6.4.0:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+export PATH="/usr/local/opt/qt/bin:$PATH"
+
 # for less options
 export LESS='-i -M -R -W -q -S'
+
 # golang
 export GOPATH="/home/ygnmhdtt/mmm/golang"
 export PATH=$PATH:$GOPATH/bin
+
 # default editor
 export EDITOR="vim"
+
 # for anyenv
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
+
 # aws cli
 export PATH="$HOME/.local/bin:$PATH"
+
+# x and dbus
 export XDG_RUNTIME_DIR="/run/user/$UID"
-# dbus
 export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 
 #----------------------------------
 # aliases
+#----------------------------------
+
 alias gb='git branch'
 alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
 alias gla='git log --graph --all --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
 alias gs='git status'
-alias pc='git checkout `git branch | peco | sed -e "s/\* //g" | awk "{print \$1}"`'
-alias pd='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
-alias pds='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/sh'
-alias pv='vi $(ls -a | peco)'
-alias pcd='cd $(ls -a | peco)'
+alias pc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
+alias pd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
+alias pds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias mm='cd $HOME/mmm && ls -a'
 alias wo='cd $HOME/work && ls -a'
 alias b='cd $HOME/work/ygnmhdtt.github.io'
-alias be='bundle exec'
 alias mpx='ssh mmpxy01p'
-alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | peco)'
+alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias ll='ls -alh'
 alias g='git'
 alias t='tig'
 alias dr='docker'
 alias drc='docker-compose'
-alias ag='awslogs groups | peco | xargs -Iarg awslogs get arg -w'
+alias ag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
+alias f='cd `find * -type d | grep -v .git | fzf`'
 
 #----------------------------------
 # Appearance
+#----------------------------------
 
 # enable colors
 autoload -Uz colors
@@ -98,19 +110,22 @@ function git_dir_check () {
 setopt print_eight_bit
 
 #----------------------------------
-# Powerline
+# fzf
+#----------------------------------
 
-#powerline-daemon -q
-#. ~/.local/lib64/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS='--height 40% --border'
 
 #----------------------------------
 # Keybind
+#----------------------------------
 
 bindkey -e
 sudo loadkeys ~/work/keymap/my.kmap
 
 #----------------------------------
 # Auto completion
+#----------------------------------
 
 # enable autoload
 autoload -Uz compinit
@@ -122,7 +137,8 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 #source /usr/local/bin/aws_zsh_completer.sh
 
 #----------------------------------
-# etc
+# zsh
+#----------------------------------
 
 # settings for history
 HISTFILE=~/.zsh_history
@@ -157,6 +173,3 @@ setopt hist_no_store
 # wildcard
 setopt extended_glob
 # vim:set ft=zsh:
-export PATH="/usr/local/opt/qt/bin:$PATH"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
