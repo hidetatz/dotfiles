@@ -13,15 +13,11 @@ export PATH="/usr/local/opt/qt/bin:$PATH"
 export LESS='-i -M -R -W -q -S'
 
 # golang
-export GOPATH="/home/ygnmhdtt/mmm/golang"
+export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
 
 # default editor
 export EDITOR="vim"
-
-# for anyenv
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
 
 # aws cli
 export PATH="$HOME/.local/bin:$PATH"
@@ -34,26 +30,35 @@ export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 # aliases
 #----------------------------------
 
+# ----------------
+# common
+# ----------------
+
+alias mpx='ssh mmpxy01p'
+alias ll='ls -alh'
+alias t='tig'
+
+# ----------------
+# git
+# ----------------
+
 alias gb='git branch'
 alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
 alias gla='git log --graph --all --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
 alias gs='git status'
 alias pc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
-alias pd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
-alias pds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
-alias mm='cd $HOME/mmm && ls -a'
-alias wo='cd $HOME/work && ls -a'
-alias b='cd $HOME/work/ygnmhdtt.github.io'
-alias mpx='ssh mmpxy01p'
-alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
-alias ll='ls -alh'
-alias g='git'
-alias t='tig'
-alias dr='docker'
-alias drc='docker-compose'
+
+# ----------------
+# fzf
+# ----------------
+
+alias gd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
+alias gds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias ag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
+alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias f='cd `find * -type d | grep -v .git | fzf`'
 alias v='vi `fzf`'
+alias g='ghq look `ghq list | fzf`'
 
 #----------------------------------
 # Appearance
@@ -131,7 +136,7 @@ export FZF_DEFAULT_OPTS='--height 40% --border'
 #----------------------------------
 
 bindkey -e
-sudo loadkeys ~/work/keymap/my.kmap
+# sudo loadkeys ~/work/keymap/my.kmap
 
 #----------------------------------
 # Auto completion
