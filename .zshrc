@@ -60,6 +60,12 @@ alias f='cd `find * -type d | grep -v .git | fzf`'
 alias v='vi `fzf`'
 alias g='ghq look `ghq list | fzf`'
 
+function grep-fzf-vim { vi `grep -r $1 * | fzf | awk -F: '{print $1}'` }
+alias g='(){grep-fzf-vim $1}'
+
+function git-status-fzf-vim { vi `git status | grep modified | sed "s/^\s\+//" | fzf | awk -F: '{print $2}'` }
+alias gv='git-status-fzf-vim'
+
 #----------------------------------
 # Appearance
 #----------------------------------
