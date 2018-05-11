@@ -10,4 +10,7 @@
   path = ~/.gitconfig-mmm
 
 [pager]
-	branch = false
+  branch = false
+
+[ghq]
+  root = ~/.ghq/src
