@@ -46,16 +46,16 @@ alias gb='git branch'
 alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
 alias gla='git log --graph --all --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
 alias gs='git status'
-alias pc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 
 # ----------------
 # fzf
 # ----------------
 
-alias gd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
-alias gds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
-alias ag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
-alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
+alias fgc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
+alias fd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
+alias fds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
+alias fag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
+alias fap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias f='cd `find * -type d | grep -v .git | fzf`'
 alias v='vi `fzf`'
 alias g='ghq look `ghq list | fzf`'
@@ -64,7 +64,9 @@ function grep-fzf-vim { vi `grep -r $1 * | fzf | awk -F: '{print $1}'` }
 alias gf='(){grep-fzf-vim $1}'
 
 function git-status-fzf-vim { vi `git status | grep modified | sed "s/^\s\+//" | fzf | awk -F: '{print $2}'` }
-alias gv='git-status-fzf-vim'
+alias gsv='git-status-fzf-vim'
+
+alias gbd='git branch | fzf | xargs git branch -d'
 
 #----------------------------------
 # Appearance
