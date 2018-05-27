@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # -----------------------------------------
 # Script to create my environments (WIP)
 # -----------------------------------------
@@ -16,8 +17,16 @@
 ### Install zsh (and chsh)
 
 ### Install latest vim
+wget https://github.com/vim/vim/archive/v8.1.0026.tar.gz
+tar -xzvf v8.1.0026.tar.gz
+cd v8.1.0026
+./configure && make && sudo make install && cd
 
 ### Install latest tmux
+wget https://github.com/tmux/tmux/releases/download/2.7/tmux-2.7.tar.gz
+tar -xzvf tmux-2.7.tar.gz
+cd tmux-2.7
+./configure && make && sudo make install && cd
 
 #### Install tpm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
