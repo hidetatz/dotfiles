@@ -58,7 +58,7 @@ alias fag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
 alias fap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias f='cd `find * -type d | grep -v .git | fzf`'
 alias v='vi `fzf`'
-alias g='ghq look `ghq list | fzf`'
+alias g='cd $HOME/.ghq/src/`ghq list | fzf`'
 
 function grep-fzf-vim { vi `grep -r $1 * | fzf | awk -F: '{print $1}'` }
 alias gf='(){grep-fzf-vim $1}'
