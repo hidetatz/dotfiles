@@ -5,10 +5,6 @@
 # load sensitive environment variables
 source ~/.env
 
-# load PATH
-export PATH=PATH:/usr/x86_64-pc-linux-gnu/gcc-bin/6.4.0:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
-export PATH="/usr/local/opt/qt/bin:$PATH"
-
 # for less options
 export LESS='-i -M -R -W -q -S'
 
@@ -22,10 +18,6 @@ export EDITOR="vim"
 # aws cli
 export PATH="$HOME/.local/bin:$PATH"
 
-# x and dbus
-export XDG_RUNTIME_DIR="/run/user/$UID"
-export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
-
 #----------------------------------
 # aliases
 #----------------------------------
@@ -34,9 +26,9 @@ export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 # common
 # ----------------
 
-alias mpx='ssh mmpxy01p'
 alias ll='ls -alh'
 alias t='tig'
+alias vi='vim'
 
 # ----------------
 # git
