@@ -11,7 +11,6 @@ Plug 'tpope/vim-endwise'
 Plug 'slim-template/vim-slim'
 Plug 'itchyny/lightline.vim'
 Plug 'othree/yajs.vim'
-Plug '~/.fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
@@ -28,8 +27,6 @@ Plug 'cocopon/iceberg.vim'
 call plug#end()
 
 filetype plugin indent on
-
-set rtp+=~/.fzf
 
 "----------------------------------------------------------------------------
 " Edit
