@@ -17,23 +17,23 @@
 ### Install zsh (and chsh)
 
 ### Install latest vim
-wget https://github.com/vim/vim/archive/v8.1.0026.tar.gz
-tar -xzvf v8.1.0026.tar.gz
-cd v8.1.0026
-./configure && make && sudo make install && cd
+#wget https://github.com/vim/vim/archive/v8.1.0026.tar.gz
+#tar -xzvf v8.1.0026.tar.gz
+#cd v8.1.0026
+#./configure && make && sudo make install && cd
 
 ### Install latest tmux
-wget https://github.com/tmux/tmux/releases/download/2.7/tmux-2.7.tar.gz
-tar -xzvf tmux-2.7.tar.gz
-cd tmux-2.7
-./configure && make && sudo make install && cd
+#wget https://github.com/tmux/tmux/releases/download/2.7/tmux-2.7.tar.gz
+#tar -xzvf tmux-2.7.tar.gz
+#cd tmux-2.7
+#./configure && make && sudo make install && cd
 
 #### Install tpm
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+#git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 ### Install fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
-$HOME/.fzf/install --no-key-bindings --no-completion
+#git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+#$HOME/.fzf/install --no-key-bindings --no-completion
 
 ### Install tig
 
@@ -45,12 +45,13 @@ $HOME/.fzf/install --no-key-bindings --no-completion
 # Set up dotfiles
 # -----------------------------------------
 
-DOTFILES=$HOME/work/dotfiles
+DOTFILES=$HOME/.ghq/src/github.com/ygnmhdtt/dotfiles
 
 ln -sf $DOTFILES/.vimrc $HOME/.vimrc
 ln -sf $DOTFILES/.zshrc $HOME/.zshrc
 ln -sf $DOTFILES/.tmux.conf $HOME/.tmux.conf
 ln -sf $DOTFILES/.gitconfig $HOME/.gitconfig
+ln -sf $DOTFILES/.tigrc $HOME/.tigrc
 
 ### Configuration files for x and window manager (so don't need on OSX or windows)
 # ln -sf $DOTFILES/.fluxbox/ $HOME/.fluxbox
@@ -68,7 +69,6 @@ ln -sf $DOTFILES/.gitconfig $HOME/.gitconfig
 # ln -s $DOTFILES/.xremap.rb $HOME/.xremap.rb
 # ln -s $DOTFILES/.gnome $HOME/.gnome
 # mkdir ~/.cofig
-# ln -sf $HOME/work/dotfiles/.config/fcitx/ $HOME/.config/fcitx
+# ln -sf $DOTFILES/.config/fcitx/ $HOME/.config/fcitx
 
 touch $HOME/.env
-source $HOME/.zshrc
