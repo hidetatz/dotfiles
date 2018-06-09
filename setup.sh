@@ -83,22 +83,8 @@ ln -sf $DOTFILES/.tmux.conf $HOME/.tmux.conf
 ln -sf $DOTFILES/.gitconfig $HOME/.gitconfig
 ln -sf $DOTFILES/.tigrc $HOME/.tigrc
 
-### Configuration files for x and window manager (so don't need on OSX or windows)
-# ln -sf $DOTFILES/.fluxbox/ $HOME/.fluxbox
-# ln -sf $DOTFILES/.gnome/ $HOME/.gnome
-# ln -sf $DOTFILES/.mozc/ $HOME/.mozc
-# ln -sf $DOTFILES/.screenlayout $HOME/.screenlayout
-# ln -sf $DOTFILES/.Xauthority $HOME/.Xauthority
-# ln -sf $DOTFILES/.xinitrc $HOME/.xinitrc
-# ln -sf $DOTFILES/.Xmodmap $HOME/.Xmodmap
-# ln -sf $DOTFILES/.Xresources $HOME/.Xresources
-# ln -s $DOTFILES/.dbus ./.dbus
-# ln -s $DOTFILES/.fonts ./.fonts
-# ln -s $DOTFILES/.xinitrc $HOME/.xinitrc
-# ln -s $DOTFILES/.Xmodmap $HOME/.Xmodmap
-# ln -s $DOTFILES/.xremap.rb $HOME/.xremap.rb
-# ln -s $DOTFILES/.gnome $HOME/.gnome
-# mkdir ~/.cofig
-# ln -sf $DOTFILES/.config/fcitx/ $HOME/.config/fcitx
-
 touch $HOME/.env
+. $HOME/.zshrc
+
+go get motemen/ghq
+cat $DOTFILES/repos | ghq import
