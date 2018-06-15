@@ -9,14 +9,13 @@ source ~/.env
 export LESS='-i -M -R -W -q -S'
 
 # golang
+export GOROOT=/usr/local/go
 export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
 
 # default editor
 export EDITOR="vim"
-
-# aws cli
-export PATH="$HOME/.local/bin:$PATH"
 
 #----------------------------------
 # aliases
