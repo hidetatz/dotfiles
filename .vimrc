@@ -24,6 +24,7 @@ Plug 'jeetsukumaran/vim-nefertiti'
 Plug 'KKPMW/moonshine-vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'cocopon/iceberg.vim'
+Plug 'scrooloose/nerdtree'
 call plug#end()
 
 filetype plugin indent on
@@ -161,6 +162,13 @@ let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
+
+"----------------------------------------------------------------------------
+" nerdtree
+"----------------------------------------------------------------------------
+
+autocmd vimenter * NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 "----------------------------------------------------------------------------
 " colorscheme
