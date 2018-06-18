@@ -169,6 +169,7 @@ let g:gitgutter_sign_modified_removed = '∙'
 
 autocmd vimenter * NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd VimEnter * wincmd p
 
 "----------------------------------------------------------------------------
 " colorscheme
