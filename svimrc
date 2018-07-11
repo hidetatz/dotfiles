@@ -1,0 +1,19 @@
+" ====================
+" Settings
+" ====================
+
+let scrollstep = 300
+let hintcharacters = "asdfghjklqweruiop";
+let blacklists = ["*://mail.google.com/*"]
+
+" ====================
+" Shortcuts
+" ====================
+unmap "t"
+map "i" createHint
+map "shift+h" previousTab
+map "shift+l" nextTab
+map "h" goBack
+map "l" goForward
+map "q" nextTab
+map "/" insertMode
