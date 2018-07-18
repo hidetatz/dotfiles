@@ -25,9 +25,13 @@ Plug 'KKPMW/moonshine-vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitivE'
 call plug#end()
 
 filetype plugin indent on
+
+" for fzf installed by homebrew
+set rtp+=/usr/local/opt/fzf
 
 "----------------------------------------------------------------------------
 " Edit
@@ -43,7 +47,9 @@ set showcmd
 noremap PP "0p
 noremap x "_x
 
-set clipboard=unnamed,autoselect
+noremap <Esc><Esc> :nohl<CR>
+
+set clipboard=autoselect
 set backspace=indent,eol,start
 
 " Removing white spaces on end of line when saved file
@@ -72,7 +78,8 @@ augroup END
 
 syntax on
 set number
-set cursorline
+" set cursorline
+set nocursorline
 set virtualedit=onemore
 set smartindent
 set visualbell
@@ -153,6 +160,18 @@ endfunction
 
 nmap ; :Buffers
 nmap t :Files
+" Default fzf layout
+" - down / up / left / right
+let g:fzf_layout = { 'down': '~30%' }
+
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number '.shellescape(<q-args>), 0,
+  \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
+nmap m :GGrep
+
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
 " vim-gitgutter
