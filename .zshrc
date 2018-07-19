@@ -9,13 +9,29 @@ source ~/.env
 export LESS='-i -M -R -W -q -S'
 
 # golang
-export GOROOT=/usr/local/go
 export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
 
 # default editor
 export EDITOR="vim"
+
+if [ "$(uname)" == 'Darwin' ]; then
+  export GOROOT=/usr/local/opt/go/libexec
+else
+  export GOROOT=/usr/local/go
+fi
+export PATH=$PATH:$GOROOT/bin
+
+if [ "$(uname)" == 'Darwin' ]; then
+  # anyenv
+  export PATH="$HOME/.anyenv/bin:$PATH"
+  eval "$(anyenv init -)"
+  # direnv
+  eval "$(direnv hook zsh)"
+fi
+
+# homebrew
+export PATH="/usr/local/bin:$PATH"
 
 #----------------------------------
 # aliases
@@ -42,6 +58,7 @@ alias gs='git status'
 # fzf
 # ----------------
 
+alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias fgc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias fd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias fds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
