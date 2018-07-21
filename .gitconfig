@@ -1,16 +1,13 @@
 [user]
-  email = ygnmhdtt@gmail.com
-  name = ygnmhdtt
+    email = ygnmhdtt@gmail.com
+    name = ygnmhdtt
 
 [url "github.com:"]
-  InsteadOf = https://github.com/
-  InsteadOf = git@github.com:
-
-[includeIf "gitdir:~/mmm/**"]
-  path = ~/.gitconfig-mmm
+    InsteadOf = https://github.com/
+    InsteadOf = git@github.com:
 
 [pager]
-  branch = false
+    branch = false
 
 [ghq]
-  root = ~/.ghq/src
+    root = ~/.ghq/src
