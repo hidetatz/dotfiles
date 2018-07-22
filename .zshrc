@@ -15,14 +15,14 @@ export PATH=$PATH:$GOPATH/bin
 # default editor
 export EDITOR="vim"
 
-if [ "$(uname)" == 'Darwin' ]; then
+if [ "$(uname)" = "Darwin" ]; then
   export GOROOT=/usr/local/opt/go/libexec
 else
   export GOROOT=/usr/local/go
 fi
 export PATH=$PATH:$GOROOT/bin
 
-if [ "$(uname)" == 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
   # anyenv
   export PATH="$HOME/.anyenv/bin:$PATH"
   eval "$(anyenv init -)"
@@ -101,7 +101,7 @@ precmd () { vcs_info }
 # %k{num}: reset background color
 # color sample script:
 # for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo
-if [ "$(uname)" == 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
   PROMPT='
 '
   PROMPT=$PROMPT'%F{038}%~%f '
