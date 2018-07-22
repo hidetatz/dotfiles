@@ -70,12 +70,12 @@ set -e
 
 DOTFILES=$HOME/.ghq/src/github.com/ygnmhdtt/dotfiles
 
-install-zsh
-install-vim
-install-tmux
-install-tig
-install-go
-install-docker
+# install-zsh
+# install-vim
+# install-tmux
+# install-tig
+# install-go
+# install-docker
 
 ln -sf $DOTFILES/.vimrc $HOME/.vimrc
 ln -sf $DOTFILES/.zshrc $HOME/.zshrc
