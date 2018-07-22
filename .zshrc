@@ -103,7 +103,7 @@ precmd () { vcs_info }
 # for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo
 PROMPT='
 '
-PROMPT=$PROMPT'%F{038}%~%f '
+PROMPT=$PROMPT'%F{084}%~%f '
 PROMPT=$PROMPT'${vcs_info_msg_0_}'
 PROMPT=$PROMPT'
 %F{165}❯%f '
