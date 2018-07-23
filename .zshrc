@@ -58,7 +58,20 @@ alias gs='git status'
 # fzf
 # ----------------
 
-alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
+function do-ssh {
+  host=$(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")
+  if [ $host = "uzo-stg-adserver" ]; then
+    $HOME/.ssh/ssh-adserver stg
+  elif [ $host = "uzo-prd-adserver" ]; then
+    $HOME/.ssh/ssh-adserver prd
+  else
+    ssh $host
+  fi
+}
+
+# alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
+alias s='do-ssh'
+
 alias fgc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias fd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias fds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
