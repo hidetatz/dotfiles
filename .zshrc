@@ -15,7 +15,7 @@ export PATH=$PATH:$GOPATH/bin
 # default editor
 export EDITOR="vim"
 
-if [ "$(uname)" = 'Darwin' ]; then
+if [ "$(uname)" = "Darwin" ]; then
   export GOROOT=/usr/local/opt/go/libexec
 else
   export GOROOT=/usr/local/go
