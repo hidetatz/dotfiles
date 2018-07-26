@@ -111,7 +111,8 @@ if [ "$(uname)" = 'Darwin' ]; then
 else
   PROMPT='
 '
-  PROMPT=$PROMPT'%F{084}%~%f '
+  # PROMPT=$PROMPT'%F{084}%~%f '
+  PROMPT=$PROMPT'%F{038}%~%f '
   PROMPT=$PROMPT'${vcs_info_msg_0_}'
   PROMPT=$PROMPT'
 %F{165}❯%f '
