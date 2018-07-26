@@ -1,5 +1,5 @@
 # bind Ctrl-t to prefix
-set -g prefix C-f
+set -g prefix C-t
 
 # unbind default prefix
 unbind C-b
@@ -58,7 +58,7 @@ set-window-option -g window-status-format "#[fg=colour250] #W #[default]"
 # current-window-status
 ## this must be used with ricty font
 # set-window-option -g window-status-current-format "#[fg=black,bg=colour039]#[default]#[fg=colour236,bg=colour039] #I > #W #[default]#[fg=colour039,bg=black]#[default]"
-set-window-option -g window-status-current-format "#[fg=black,bg=colour039]#[default]#[fg=colour236,bg=colour084] #W #[default]#[fg=colour039,bg=black]#[default]"
+set-window-option -g window-status-current-format "#[fg=black,bg=colour039]#[default]#[fg=colour236,bg=colour039] #W #[default]#[fg=colour039,bg=black]#[default]"
 
 ## interval of reflesh
 set -g status-interval 60
