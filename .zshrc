@@ -15,14 +15,14 @@ export PATH=$PATH:$GOPATH/bin
 # default editor
 export EDITOR="vim"
 
-if [ "$(uname)" == 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
   export GOROOT=/usr/local/opt/go/libexec
 else
   export GOROOT=/usr/local/go
 fi
 export PATH=$PATH:$GOROOT/bin
 
-if [ "$(uname)" == 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
   # anyenv
   export PATH="$HOME/.anyenv/bin:$PATH"
   eval "$(anyenv init -)"
@@ -58,15 +58,33 @@ alias gs='git status'
 # fzf
 # ----------------
 
-alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
-alias fgc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
+function do-ssh {
+  host=$(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")
+  if [ $host = "uzo-stg-adserver" ]; then
+    $HOME/.ssh/ssh-adserver stg
+  elif [ $host = "uzo-prd-adserver" ]; then
+    $HOME/.ssh/ssh-adserver prd
+  else
+    ssh $host
+  fi
+}
+
+# alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
+alias s='do-ssh'
+alias gc='git checkout `git branch | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias fd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias fds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
-alias fag='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
+alias fal='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
 alias fap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias f='cd `find * -type d | grep -v .git | fzf`'
 alias v='vi `fzf`'
-alias g='cd $HOME/.ghq/src/`ghq list | fzf`'
+function ghq-cd-fzf {
+  repo=`ghq list | fzf`
+  if [ -n "$repo" ]; then
+    cd $HOME/.ghq/src/$repo
+  fi
+}
+alias g='ghq-cd-fzf'
 
 function grep-fzf-vim { vi `grep -r $1 * | fzf | awk -F: '{print $1}'` }
 alias gf='(){grep-fzf-vim $1}'
@@ -101,7 +119,7 @@ precmd () { vcs_info }
 # %k{num}: reset background color
 # color sample script:
 # for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo
-if [ "$(uname)" == 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
   PROMPT='
 '
   PROMPT=$PROMPT'%F{038}%~%f '
