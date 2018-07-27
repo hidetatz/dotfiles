@@ -89,6 +89,13 @@ alias gsv='git-status-fzf-vim'
 
 alias gbd='git branch | fzf | xargs git branch -d'
 
+# ----------------
+# vpn
+# ----------------
+
+alias vpn='/opt/cisco/anyconnect/bin/vpn'
+alias vpnui='/opt/cisco/anyconnect/bin/vpnui'
+
 #----------------------------------
 # Appearance
 #----------------------------------
