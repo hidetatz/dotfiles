@@ -33,6 +33,10 @@ fi
 # homebrew
 export PATH="/usr/local/bin:$PATH"
 
+# qt
+export QT_DIR="/usr/local/Cellar/qt/5.11.1"
+export QT_HOMEBREW=true
+
 #----------------------------------
 # aliases
 #----------------------------------
