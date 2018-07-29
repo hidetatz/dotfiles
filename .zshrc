@@ -94,6 +94,13 @@ alias gsv='git-status-fzf-vim'
 
 alias gbd='git branch | fzf | xargs git branch -d'
 
+# ----------------
+# vpn
+# ----------------
+
+alias vpn='/opt/cisco/anyconnect/bin/vpn'
+alias vpnui='/opt/cisco/anyconnect/bin/vpnui'
+
 #----------------------------------
 # Appearance
 #----------------------------------
@@ -122,14 +129,14 @@ precmd () { vcs_info }
 if [ "$(uname)" = 'Darwin' ]; then
   PROMPT='
 '
-  PROMPT=$PROMPT'%F{038}%~%f '
+  PROMPT=$PROMPT'%F{084}%~%f '
   PROMPT=$PROMPT'${vcs_info_msg_0_}'
   PROMPT=$PROMPT'
 %F{165}❯%f '
 else
   PROMPT='
 '
-  PROMPT=$PROMPT'%F{084}%~%f '
+  PROMPT=$PROMPT'%F{038}%~%f '
   PROMPT=$PROMPT'${vcs_info_msg_0_}'
   PROMPT=$PROMPT'
 %F{165}❯%f '
