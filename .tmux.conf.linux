@@ -75,10 +75,18 @@ set -g status-position top
 setw -g mode-keys vi
 
 # List of plugins
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-resurrect'
-set -g @plugin 'tmux-plugins/tmux-open'
-set -g @plugin 'tmux-plugins/tmux-copycat'
+# set -g @plugin 'tmux-plugins/tpm'
+# set -g @plugin 'tmux-plugins/tmux-resurrect'
+# set -g @plugin 'tmux-plugins/tmux-open'
+# set -g @plugin 'tmux-plugins/tmux-copycat'
+
+ # List of plugins
+set -g @tpm_plugins '          \
+  tmux-plugins/tpm             \
+  tmux-plugins/tmux-open       \
+  tmux-plugins/tmux-resurrect  \
+  tmux-plugins/tmux-copycat    \
+'
 
 # resurrect
 set-option -g @resurrect-save 'S'
