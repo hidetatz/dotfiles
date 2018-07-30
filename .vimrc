@@ -2,36 +2,36 @@
 " When update, call `:source ~/.vimrc` and `:PlugInstall`
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go'
-Plug 'Shougo/neocomplcache'
 Plug 'airblade/vim-gitgutter'
 Plug 'elzr/vim-json'
-Plug 'mattn/webapi-vim'
-Plug 'w0rp/ale'
 Plug 'tpope/vim-endwise'
-Plug 'slim-template/vim-slim'
 Plug 'itchyny/lightline.vim'
-Plug 'othree/yajs.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
-Plug 'nathanaelkane/vim-indent-guides'
-Plug 'tomasr/molokai'
-Plug 'altercation/vim-colors-solarized'
 Plug 'w0ng/vim-hybrid'
-Plug 'jeetsukumaran/vim-nefertiti'
-Plug 'KKPMW/moonshine-vim'
-Plug 'nanotech/jellybeans.vim'
-Plug 'cocopon/iceberg.vim'
-Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitivE'
+Plug 'haya14busa/vim-auto-programming'
+Plug 'junegunn/vim-easy-align'
+" Plug 'Yggdroot/indentLine'
+" Plug 'Shougo/neocomplcache'
+" Plug 'mattn/webapi-vim'
+" Plug 'w0rp/ale'
+" Plug 'slim-template/vim-slim'
+" Plug 'othree/yajs.vim'
+" Plug 'nathanaelkane/vim-indent-guides'
+" Plug 'tomasr/molokai'
+" Plug 'altercation/vim-colors-solarized'
+" Plug 'jeetsukumaran/vim-nefertiti'
+" Plug 'KKPMW/moonshine-vim'
+" Plug 'nanotech/jellybeans.vim'
+" Plug 'cocopon/iceberg.vim'
+" Plug 'scrooloose/nerdtree'
 call plug#end()
 
 filetype plugin indent on
-
-" for fzf installed by homebrew
-set rtp+=/usr/local/opt/fzf
 
 "----------------------------------------------------------------------------
 " Edit
@@ -43,10 +43,11 @@ set noswapfile
 set autoread
 set hidden
 set showcmd
-" dont't yank x
 noremap PP "0p
+" dont't yank x
 noremap x "_x
 
+" hit esc 2 times to disable highlight
 noremap <Esc><Esc> :nohl<CR>
 
 set clipboard=autoselect
@@ -72,14 +73,16 @@ augroup vimrcEx
   \ exe "normal g`\"" | endif
 augroup END
 
+let mapleader = ","
+nnoremap <Leader>w :w<CR>
+
 "----------------------------------------------------------------------------
 " UI
 "----------------------------------------------------------------------------
-
 syntax on
 set number
-" set cursorline
-set nocursorline
+set cursorline
+" set nocursorline
 set virtualedit=onemore
 set smartindent
 set visualbell
@@ -104,59 +107,72 @@ set incsearch
 set wrapscan
 set hlsearch
 
+nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
+
 "----------------------------------------------------------------------------
 " neocomplecache
 "----------------------------------------------------------------------------
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
+" let g:neocomplcache_enable_at_startup = 1
+" let g:neocomplcache_enable_smart_case = 1
+" let g:neocomplcache_min_syntax_length = 3
+" let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+" let g:neocomplcache_enable_camel_case_completion = 1
+" let g:neocomplcache_enable_underbar_completion = 1
 
 "----------------------------------------------------------------------------
 " ale
 "----------------------------------------------------------------------------
-let g:ale_fixers = {
-  \ 'ruby': ['rubocop'],
-  \ 'slim': ['slim-lint'],
-  \ 'javascript': ['eslint', 'flow']
-  \}
-let g:ale_linters = {
- \   'javascript': ['eslint', 'flow'],
- \}
-"let g:ale_sign_column_always = 1
-let g:ale_statusline_format = ['E %d', 'W %d', 'LGTM']
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
-highlight link ALEWarningSign String
-highlight link ALEErrorSign Title
+"let g:ale_fixers = {
+"  \ 'ruby': ['rubocop'],
+"  \ 'slim': ['slim-lint'],
+"  \ 'javascript': ['eslint', 'flow']
+"  \}
+"let g:ale_linters = {
+" \   'javascript': ['eslint', 'flow'],
+" \}
+""let g:ale_sign_column_always = 1
+"let g:ale_statusline_format = ['E %d', 'W %d', 'LGTM']
+"let g:ale_lint_on_save = 1
+"let g:ale_lint_on_text_changed = 0
+"highlight link ALEWarningSign String
+"highlight link ALEErrorSign Title
 
 "----------------------------------------------------------------------------
 " lightline.vim
 "----------------------------------------------------------------------------
 set noshowmode
+" let g:lightline = {
+"   \ 'colorscheme': 'wombat',
+"   \ 'active': {
+"   \    'left': [
+"   \      ['mode', 'paste'],
+"   \      ['readonly', 'filename', 'modified'],
+"   \      ['ale'],
+"   \    ]
+"   \ },
+"   \ 'component_function': {
+"   \   'ale': 'ALEStatus'
+"   \ }
+" \ }
 let g:lightline = {
-  \ 'colorscheme': 'jellybeans',
+  \ 'colorscheme': 'wombat',
   \ 'active': {
   \    'left': [
   \      ['mode', 'paste'],
-  \      ['readonly', 'filename', 'modified'],
-  \      ['ale'],
+  \      ['readonly', 'filename', 'modified']
   \    ]
   \ },
-  \ 'component_function': {
-  \   'ale': 'ALEStatus'
-  \ }
 \ }
 
-function! ALEStatus()
-  return ALEGetStatusLine()
-endfunction
+" function! ALEStatus()
+"   return ALEGetStatusLine()
+" endfunction
 
 "----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
+" for fzf installed by homebrew
+set rtp+=/usr/local/opt/fzf
 
 nmap ; :Buffers
 nmap t :Files
@@ -176,19 +192,35 @@ command! -bang -nargs=? -complete=dir Files
 "----------------------------------------------------------------------------
 " vim-gitgutter
 "----------------------------------------------------------------------------
+" let g:gitgutter_sign_added = '∙'
+" let g:gitgutter_sign_modified = '∙'
+" let g:gitgutter_sign_removed = '∙'
+" let g:gitgutter_sign_modified_removed = '∙'
 
-let g:gitgutter_sign_added = '∙'
-let g:gitgutter_sign_modified = '∙'
-let g:gitgutter_sign_removed = '∙'
-let g:gitgutter_sign_modified_removed = '∙'
+"----------------------------------------------------------------------------
+" vim-easy-align
+"----------------------------------------------------------------------------
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 "----------------------------------------------------------------------------
 " nerdtree
 "----------------------------------------------------------------------------
+" autocmd vimenter * NERDTree
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" autocmd VimEnter * wincmd p
 
-autocmd vimenter * NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd VimEnter * wincmd p
+"----------------------------------------------------------------------------
+" indentLine
+"----------------------------------------------------------------------------
+" let g:indentLine_color_term = 255
+" let g:indentLine_char = '|'
+
+"----------------------------------------------------------------------------
+" vim-auto-programming
+"----------------------------------------------------------------------------
+set completefunc=autoprogramming#complete
+noremap <C-p> <C-x><C-u>
 
 "----------------------------------------------------------------------------
 " colorscheme
@@ -197,13 +229,13 @@ set background=dark
 
 " favorite!
 " colorscheme moonshine
-"
+
 " favorite!
 " colorscheme iceberg
 
 " favorite!
 colorscheme hybrid
-"
+
 " colorscheme molokai
 " colorscheme solarized
 " colorscheme jellybeans
@@ -217,49 +249,47 @@ augroup RubyAutoCmd
 augroup END
 
 " Template for rspec file {{{
-func! s:rspec_template()
-  call append(3, "require File.expand_path(File.dirname(__FILE__) + '/spec_helper')")
-  call append(4, '')
-  call append(5, 'describe <description> do')
-  call append(6, '')
-  call append(7, 'end')
-endf
-au RubyAutoCmd BufNewFile *_spec.rb call s:rspec_template()
+" func! s:rspec_template()
+"   call append(3, "require File.expand_path(File.dirname(__FILE__) + '/spec_helper')")
+"   call append(4, '')
+"   call append(5, 'describe <description> do')
+"   call append(6, '')
+"   call append(7, 'end')
+" endf
+" au RubyAutoCmd BufNewFile *_spec.rb call s:rspec_template()
 
 " Rsense
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-let g:rsenseHome = expand("/home/ygnmhdtt/.anyenv/envs/rbenv/shims/rsense")
-let g:rsenseUseOmniFunc = 1
+" if !exists('g:neocomplcache_omni_patterns')
+"   let g:neocomplcache_omni_patterns = {}
+" endif
+" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+" autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+" let g:rsenseHome = expand("/home/ygnmhdtt/.anyenv/envs/rbenv/shims/rsense")
+" let g:rsenseUseOmniFunc = 1
 
 "----------------------------------------------------------------------------
 " Javascript
 "----------------------------------------------------------------------------
-
 augroup JsAutoCmd
   au!
   au FileType javascript set shiftwidth=2 tabstop=2
 augroup END
 
-" Template for flow file {{{
-func! s:flow_template()
-  call append(0, '// @flow')
-  call append(1, "import type { $Request, $Response } from 'express';")
-  call append(2, "import Sequelize from 'sequelize';")
-  call append(3, "import {db} from '../models';")
-  call append(4, "import queryUtils from '../services/query-utils';")
-  call append(5, "import responseUtils from '../services/response-utils';")
-  call append(6, "import {errorMessages} from '../services';")
-endf
-au JsAutoCmd BufNewFile *.js call s:flow_template()
+" " Template for flow file {{{
+" func! s:flow_template()
+"   call append(0, '// @flow')
+"   call append(1, "import type { $Request, $Response } from 'express';")
+"   call append(2, "import Sequelize from 'sequelize';")
+"   call append(3, "import {db} from '../models';")
+"   call append(4, "import queryUtils from '../services/query-utils';")
+"   call append(5, "import responseUtils from '../services/response-utils';")
+"   call append(6, "import {errorMessages} from '../services';")
+" endf
+" au JsAutoCmd BufNewFile *.js call s:flow_template()
 
 "----------------------------------------------------------------------------
 " JSON
 "----------------------------------------------------------------------------
-"
 let g:vim_json_syntax_conceal = 0
 
 "----------------------------------------------------------------------------
