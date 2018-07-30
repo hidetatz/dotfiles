@@ -256,7 +256,6 @@ func! s:flow_template()
 endf
 au JsAutoCmd BufNewFile *.js call s:flow_template()
 
-
 "----------------------------------------------------------------------------
 " JSON
 "----------------------------------------------------------------------------
@@ -273,6 +272,9 @@ let g:go_highlight_types = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_autosave = 1
 let g:go_fmt_command = "goimports"
+
+set completeopt=menu,preview
+exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 
 autocmd FileType go :highlight goErr cterm=bold ctermfg=lightblue
 autocmd FileType go :match goErr /\<err\>/
