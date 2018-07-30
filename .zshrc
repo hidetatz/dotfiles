@@ -48,6 +48,7 @@ export QT_HOMEBREW=true
 alias ll='ls -alh'
 alias t='tig'
 alias vi='vim'
+alias v="sudo openconnect -u $VPN_EMAIL $VPN_HOST"
 
 # ----------------
 # git
