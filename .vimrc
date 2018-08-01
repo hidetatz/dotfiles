@@ -13,12 +13,13 @@ Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
 Plug 'w0ng/vim-hybrid'
 Plug 'tpope/vim-fugitivE'
-Plug 'haya14busa/vim-auto-programming'
 Plug 'junegunn/vim-easy-align'
+Plug 'w0rp/ale'
+Plug 'haya14busa/vim-auto-programming'
+" Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'Yggdroot/indentLine'
 " Plug 'Shougo/neocomplcache'
 " Plug 'mattn/webapi-vim'
-" Plug 'w0rp/ale'
 " Plug 'slim-template/vim-slim'
 " Plug 'othree/yajs.vim'
 " Plug 'nathanaelkane/vim-indent-guides'
@@ -38,6 +39,8 @@ filetype plugin indent on
 "----------------------------------------------------------------------------
 set fenc=utf-8
 set encoding=utf-8
+set fileformats=unix,dos,mac
+set ambiwidth=double
 set nobackup
 set noswapfile
 set autoread
@@ -82,14 +85,11 @@ nnoremap <Leader>w :w<CR>
 syntax on
 set number
 set cursorline
-" set nocursorline
 set virtualedit=onemore
 set smartindent
 set visualbell
 set showmatch
 set laststatus=2
-"set wildmode=list:longest
-"set list
 
 "----------------------------------------------------------------------------
 " Tab
@@ -107,53 +107,13 @@ set incsearch
 set wrapscan
 set hlsearch
 
+" hit space 2 times to highlight focused word
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
-
-"----------------------------------------------------------------------------
-" neocomplecache
-"----------------------------------------------------------------------------
-" let g:neocomplcache_enable_at_startup = 1
-" let g:neocomplcache_enable_smart_case = 1
-" let g:neocomplcache_min_syntax_length = 3
-" let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-" let g:neocomplcache_enable_camel_case_completion = 1
-" let g:neocomplcache_enable_underbar_completion = 1
-
-"----------------------------------------------------------------------------
-" ale
-"----------------------------------------------------------------------------
-"let g:ale_fixers = {
-"  \ 'ruby': ['rubocop'],
-"  \ 'slim': ['slim-lint'],
-"  \ 'javascript': ['eslint', 'flow']
-"  \}
-"let g:ale_linters = {
-" \   'javascript': ['eslint', 'flow'],
-" \}
-""let g:ale_sign_column_always = 1
-"let g:ale_statusline_format = ['E %d', 'W %d', 'LGTM']
-"let g:ale_lint_on_save = 1
-"let g:ale_lint_on_text_changed = 0
-"highlight link ALEWarningSign String
-"highlight link ALEErrorSign Title
 
 "----------------------------------------------------------------------------
 " lightline.vim
 "----------------------------------------------------------------------------
 set noshowmode
-" let g:lightline = {
-"   \ 'colorscheme': 'wombat',
-"   \ 'active': {
-"   \    'left': [
-"   \      ['mode', 'paste'],
-"   \      ['readonly', 'filename', 'modified'],
-"   \      ['ale'],
-"   \    ]
-"   \ },
-"   \ 'component_function': {
-"   \   'ale': 'ALEStatus'
-"   \ }
-" \ }
 let g:lightline = {
   \ 'colorscheme': 'wombat',
   \ 'active': {
@@ -164,9 +124,11 @@ let g:lightline = {
   \ },
 \ }
 
-" function! ALEStatus()
-"   return ALEGetStatusLine()
-" endfunction
+
+"----------------------------------------------------------------------------
+" ale
+"----------------------------------------------------------------------------
+let g:ale_fix_on_save = 1
 
 "----------------------------------------------------------------------------
 " fzf.vim
@@ -220,22 +182,15 @@ nmap ga <Plug>(EasyAlign)
 " vim-auto-programming
 "----------------------------------------------------------------------------
 set completefunc=autoprogramming#complete
-noremap <C-p> <C-x><C-u>
+" noremap <C-p> <C-x><C-u>
 
 "----------------------------------------------------------------------------
 " colorscheme
 "----------------------------------------------------------------------------
 set background=dark
-
-" favorite!
-" colorscheme moonshine
-
-" favorite!
-" colorscheme iceberg
-
-" favorite!
 colorscheme hybrid
-
+" colorscheme moonshine
+" colorscheme iceberg
 " colorscheme molokai
 " colorscheme solarized
 " colorscheme jellybeans
@@ -248,25 +203,6 @@ augroup RubyAutoCmd
   au FileType ruby set shiftwidth=2 tabstop=2
 augroup END
 
-" Template for rspec file {{{
-" func! s:rspec_template()
-"   call append(3, "require File.expand_path(File.dirname(__FILE__) + '/spec_helper')")
-"   call append(4, '')
-"   call append(5, 'describe <description> do')
-"   call append(6, '')
-"   call append(7, 'end')
-" endf
-" au RubyAutoCmd BufNewFile *_spec.rb call s:rspec_template()
-
-" Rsense
-" if !exists('g:neocomplcache_omni_patterns')
-"   let g:neocomplcache_omni_patterns = {}
-" endif
-" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-" autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-" let g:rsenseHome = expand("/home/ygnmhdtt/.anyenv/envs/rbenv/shims/rsense")
-" let g:rsenseUseOmniFunc = 1
-
 "----------------------------------------------------------------------------
 " Javascript
 "----------------------------------------------------------------------------
@@ -274,23 +210,6 @@ augroup JsAutoCmd
   au!
   au FileType javascript set shiftwidth=2 tabstop=2
 augroup END
-
-" " Template for flow file {{{
-" func! s:flow_template()
-"   call append(0, '// @flow')
-"   call append(1, "import type { $Request, $Response } from 'express';")
-"   call append(2, "import Sequelize from 'sequelize';")
-"   call append(3, "import {db} from '../models';")
-"   call append(4, "import queryUtils from '../services/query-utils';")
-"   call append(5, "import responseUtils from '../services/response-utils';")
-"   call append(6, "import {errorMessages} from '../services';")
-" endf
-" au JsAutoCmd BufNewFile *.js call s:flow_template()
-
-"----------------------------------------------------------------------------
-" JSON
-"----------------------------------------------------------------------------
-let g:vim_json_syntax_conceal = 0
 
 "----------------------------------------------------------------------------
 " Golang
@@ -301,13 +220,19 @@ let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_autosave = 1
+let g:go_gocode_unimported_packages = 1
 let g:go_fmt_command = "goimports"
 
 set completeopt=menu,preview
 exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 
-autocmd FileType go :highlight goErr cterm=bold ctermfg=lightblue
-autocmd FileType go :match goErr /\<err\>/
+augroup GoAutoCmd
+  au!
+  au FileType go :highlight goErr cterm=bold ctermfg=lightblue
+  au FileType go :match goErr /\<err\>/
+augroup END
+
+inoremap <buffer> <C-X><C-O> <C-X><C-O><C-P>
 
 "----------------------------------------------------------------------------
 " Haskell
@@ -320,8 +245,11 @@ augroup END
 "----------------------------------------------------------------------------
 " Java
 "----------------------------------------------------------------------------
-au FileType java set shiftwidth=4 tabstop=4
-au FileType java setlocal noexpandtab
+augroup JavaAutoCmd
+  au!
+  au FileType java set shiftwidth=4 tabstop=4
+  au FileType java setlocal noexpandtab
+augroup END
 
 "----------------------------------------------------------------------------
 " Shell script
@@ -342,4 +270,12 @@ augroup END
 "----------------------------------------------------------------------------
 " Makefile
 "----------------------------------------------------------------------------
-autocmd FileType make setlocal noexpandtab
+augroup MakefileAutoCmd
+  au!
+  au FileType make setlocal noexpandtab
+augroup END
+
+"----------------------------------------------------------------------------
+" JSON
+"----------------------------------------------------------------------------
+let g:vim_json_syntax_conceal = 0
