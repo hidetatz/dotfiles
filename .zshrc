@@ -48,7 +48,7 @@ export QT_HOMEBREW=true
 alias ll='ls -alh'
 alias t='tig'
 alias vi='vim'
-alias v="sudo openconnect -u $VPN_EMAIL $VPN_HOST"
+alias vpn="sudo openconnect -u $VPN_EMAIL $VPN_HOST"
 
 # ----------------
 # git
@@ -81,8 +81,6 @@ alias fd='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias fds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias fal='awslogs groups | fzf | xargs -Iarg awslogs get arg -w'
 alias fap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
-alias f='cd `find * -type d | grep -v .git | fzf`'
-alias v='vi `fzf`'
 function ghq-cd-fzf {
   repo=`ghq list | fzf`
   if [ -n "$repo" ]; then
@@ -103,8 +101,8 @@ alias gbd='git branch | fzf | xargs git branch -d'
 # vpn
 # ----------------
 
-alias vpn='/opt/cisco/anyconnect/bin/vpn'
-alias vpnui='/opt/cisco/anyconnect/bin/vpnui'
+# alias vpn='/opt/cisco/anyconnect/bin/vpn'
+# alias vpnui='/opt/cisco/anyconnect/bin/vpnui'
 
 #----------------------------------
 # Appearance
