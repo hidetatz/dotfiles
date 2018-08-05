@@ -16,6 +16,7 @@ Plug 'tpope/vim-fugitivE'
 Plug 'junegunn/vim-easy-align'
 Plug 'w0rp/ale'
 Plug 'haya14busa/vim-auto-programming'
+Plug 'oblitum/rainbow'
 " Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'Yggdroot/indentLine'
 " Plug 'Shougo/neocomplcache'
@@ -194,6 +195,19 @@ colorscheme hybrid
 " colorscheme molokai
 " colorscheme solarized
 " colorscheme jellybeans
+
+
+let g:rainbow_active = 1
+
+let g:rainbow_load_separately = [
+    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
+    \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
+    \ ]
+
+let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
+let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
 
 "----------------------------------------------------------------------------
 " Ruby
