@@ -2,6 +2,8 @@
 # Environment variables
 #----------------------------------
 
+export LC_ALL=ja_JP.UTF-8
+
 # load sensitive environment variables
 source ~/.env
 
