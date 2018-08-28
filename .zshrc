@@ -2,7 +2,9 @@
 # Environment variables
 #----------------------------------
 
-export LC_ALL=ja_JP.UTF-8
+export LC_ALL=en_US.UTF-8
+
+export PATH=$PATH:/home/ygnmhdtt/.gem/ruby/2.5.0/bin
 
 # load sensitive environment variables
 source ~/.env
@@ -20,7 +22,7 @@ export EDITOR="vim"
 if [ "$(uname)" = "Darwin" ]; then
   export GOROOT=/usr/local/opt/go/libexec
 else
-  export GOROOT=/usr/local/go
+  export GOROOT=/usr/lib/go
 fi
 export PATH=$PATH:$GOROOT/bin
 
@@ -91,13 +93,22 @@ function ghq-cd-fzf {
 }
 alias g='ghq-cd-fzf'
 
-function grep-fzf-vim { vi `grep -r $1 * | fzf | awk -F: '{print $1}'` }
+function grep-fzf-vim {
+  vi `grep -r $1 * | fzf | awk -F: '{print $1}'`
+}
 alias gf='(){grep-fzf-vim $1}'
 
-function git-status-fzf-vim { vi `git status | grep modified | sed "s/^\s\+//" | fzf | awk -F: '{print $2}'` }
+function git-status-fzf-vim {
+  vi `git status | grep modified | sed "s/^\s\+//" | fzf | awk -F: '{print $2}'`
+}
 alias gsv='git-status-fzf-vim'
 
 alias gbd='git branch | fzf | xargs git branch -d'
+
+function gist-fzf {
+  gist -r `gist -l ygnmhdtt | fzf | awk '{print $1}' | sed "s#https://gist.github.com/##g"`
+}
+alias gis='gist-fzf | less'
 
 # ----------------
 # vpn

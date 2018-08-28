@@ -17,7 +17,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'w0rp/ale'
 Plug 'haya14busa/vim-auto-programming'
 Plug 'oblitum/rainbow'
-" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'Yggdroot/indentLine'
 " Plug 'Shougo/neocomplcache'
 " Plug 'mattn/webapi-vim'
@@ -27,9 +27,9 @@ Plug 'oblitum/rainbow'
 " Plug 'tomasr/molokai'
 " Plug 'altercation/vim-colors-solarized'
 " Plug 'jeetsukumaran/vim-nefertiti'
-" Plug 'KKPMW/moonshine-vim'
+Plug 'KKPMW/moonshine-vim'
 " Plug 'nanotech/jellybeans.vim'
-" Plug 'cocopon/iceberg.vim'
+Plug 'cocopon/iceberg.vim'
 " Plug 'scrooloose/nerdtree'
 call plug#end()
 
@@ -47,7 +47,7 @@ set noswapfile
 set autoread
 set hidden
 set showcmd
-noremap PP "0p
+" noremap PP "0p
 " dont't yank x
 noremap x "_x
 
@@ -77,6 +77,7 @@ augroup vimrcEx
   \ exe "normal g`\"" | endif
 augroup END
 
+" let mapleader = ","
 let mapleader = ","
 nnoremap <Leader>w :w<CR>
 
@@ -155,10 +156,10 @@ command! -bang -nargs=? -complete=dir Files
 "----------------------------------------------------------------------------
 " vim-gitgutter
 "----------------------------------------------------------------------------
-" let g:gitgutter_sign_added = '∙'
-" let g:gitgutter_sign_modified = '∙'
-" let g:gitgutter_sign_removed = '∙'
-" let g:gitgutter_sign_modified_removed = '∙'
+let g:gitgutter_sign_added = '∙'
+let g:gitgutter_sign_modified = '∙'
+let g:gitgutter_sign_removed = '∙'
+let g:gitgutter_sign_modified_removed = '∙'
 
 "----------------------------------------------------------------------------
 " vim-easy-align
@@ -172,6 +173,13 @@ nmap ga <Plug>(EasyAlign)
 " autocmd vimenter * NERDTree
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " autocmd VimEnter * wincmd p
+
+"----------------------------------------------------------------------------
+" vim-commentary
+"----------------------------------------------------------------------------
+autocmd BufRead,BufNewFile *.tf setfiletype terraform
+autocmd BufRead,BufNewFile *.tfvars setfiletype terraform
+autocmd FileType terraform setlocal commentstring=//\ %s
 
 "----------------------------------------------------------------------------
 " indentLine
@@ -189,9 +197,9 @@ set completefunc=autoprogramming#complete
 " colorscheme
 "----------------------------------------------------------------------------
 set background=dark
-colorscheme hybrid
+" colorscheme hybrid
 " colorscheme moonshine
-" colorscheme iceberg
+colorscheme iceberg
 " colorscheme molokai
 " colorscheme solarized
 " colorscheme jellybeans
