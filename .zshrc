@@ -53,6 +53,7 @@ alias ll='ls -alh'
 alias t='tig'
 alias vi='vim'
 alias vpn="sudo openconnect -u $VPN_EMAIL $VPN_HOST"
+alias line="linenotcat"
 
 # ----------------
 # git
