@@ -291,6 +291,11 @@ bind generic	v	show-version		# Show Tig version
 bind main    B !git rebase -i %(commit)
 bind diff    B !git rebase -i %(commit)
 
+bind generic g none
+bind generic gg move-first-line
+bind generic G none
+bind generic G move-last-line
+
 # Colors
 # ------
 
