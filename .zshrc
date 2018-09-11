@@ -70,9 +70,9 @@ alias gs='git status'
 
 function do-ssh {
   host=$(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")
-  if [ $host = "uzo-stg-adserver" ]; then
+  if [ "$host" = "uzo-stg-adserver" ]; then
     $HOME/.ssh/ssh-adserver stg
-  elif [ $host = "uzo-prd-adserver" ]; then
+  elif [ "$host" = "uzo-prd-adserver" ]; then
     $HOME/.ssh/ssh-adserver prd
   else
     ssh $host
@@ -110,6 +110,14 @@ function gist-fzf {
   gist -r `gist -l ygnmhdtt | fzf | awk '{print $1}' | sed "s#https://gist.github.com/##g"`
 }
 alias gis='gist-fzf | less'
+
+function fzf-rebase() {
+  local commits commit
+  commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
+  commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
+  echo -n $(echo "$commit" | sed "s/ .*//")
+}
+alias grf='git rebase -i `fzf-rebase`'
 
 # ----------------
 # vpn
