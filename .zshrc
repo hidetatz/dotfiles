@@ -15,6 +15,7 @@ export LESS='-i -M -R -W -q -S'
 # golang
 export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:/usr/local/go/bin
 
 # default editor
 export EDITOR="vim"
@@ -22,7 +23,7 @@ export EDITOR="vim"
 if [ "$(uname)" = "Darwin" ]; then
   export GOROOT=/usr/local/opt/go/libexec
 else
-  export GOROOT=/usr/lib/go
+  # export GOROOT=/usr/lib/go
 fi
 export PATH=$PATH:$GOROOT/bin
 
