@@ -56,6 +56,8 @@ alias vi='vim'
 alias vpn="sudo openconnect -u $VPN_EMAIL $VPN_HOST"
 alias line="linenotcat"
 
+# alias ecrlogin="$(aws ecr get-login --no-include-email --region ap-northeast-1)"
+
 # ----------------
 # git
 # ----------------
@@ -266,3 +268,9 @@ setopt extended_glob
 # vim:set ft=zsh:
 # enable japanese
 setopt print_eight_bit
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/ygnmhdtt/google-cloud-sdk/path.zsh.inc' ]; then source '/home/ygnmhdtt/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/ygnmhdtt/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/ygnmhdtt/google-cloud-sdk/completion.zsh.inc'; fi

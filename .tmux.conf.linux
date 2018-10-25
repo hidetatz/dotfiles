@@ -46,7 +46,7 @@ set-option -g status-bg "black"
 ## left
 ## this must be used with ricty font
 # set -g status-left '#[fg=colour255,bg=colour248]#{?client_prefix,#[reverse],} tmux #[default]#[fg=colour248,bg=black]#[default]  '
-set -g status-left '#[fg=colour255,bg=colour248]#{?client_prefix,#[reverse],} tmux-ubu #[default]#[fg=colour248,bg=black]#[default]  '
+set -g status-left '#[fg=colour255,bg=colour248]#{?client_prefix,#[reverse],} Arch #[default]#[fg=colour248,bg=black]#[default]  '
 
 # right
 set -g status-right "#[fg=colour255]%Y-%m-%d(%a) %H:%M#[default]"

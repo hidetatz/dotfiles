@@ -17,7 +17,11 @@ Plug 'junegunn/vim-easy-align'
 Plug 'w0rp/ale'
 Plug 'haya14busa/vim-auto-programming'
 Plug 'oblitum/rainbow'
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'mattn/vim-filewatcher'
+Plug 'mechatroner/rainbow_csv'
+Plug 'hashivim/vim-terraform'
+" Plug 'yuttie/comfortable-motion.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'Yggdroot/indentLine'
 " Plug 'Shougo/neocomplcache'
 " Plug 'mattn/webapi-vim'
@@ -131,6 +135,9 @@ let g:lightline = {
 " ale
 "----------------------------------------------------------------------------
 let g:ale_fix_on_save = 1
+let g:ale_lint_on_text_changed = 0
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 "----------------------------------------------------------------------------
 " fzf.vim
@@ -191,7 +198,7 @@ autocmd FileType terraform setlocal commentstring=//\ %s
 " vim-auto-programming
 "----------------------------------------------------------------------------
 set completefunc=autoprogramming#complete
-" noremap <C-p> <C-x><C-u>
+noremap <C-p> <C-x><C-u>
 
 "----------------------------------------------------------------------------
 " colorscheme
@@ -256,6 +263,14 @@ augroup END
 
 inoremap <buffer> <C-X><C-O> <C-X><C-O><C-P>
 
+function! GoErr()
+  let current = line(".")
+  call append(current - 1, "if err != nil {")
+  call append(current + 1, "}")
+endfunction
+" nnoremap <silent> <C-e> :call GoErr()<CR>
+nnoremap <C-e> :call GoErr()<CR>
+
 "----------------------------------------------------------------------------
 " Haskell
 "----------------------------------------------------------------------------
@@ -301,3 +316,18 @@ augroup END
 " JSON
 "----------------------------------------------------------------------------
 let g:vim_json_syntax_conceal = 0
+
+
+"----------------------------------------------------------------------------
+" comfortable-motion.vim
+"----------------------------------------------------------------------------
+let g:comfortable_motion_friction = 200.0
+let g:comfortable_motion_air_drag = 0.0
+
+"----------------------------------------------------------------------------
+" vim-terraform
+"----------------------------------------------------------------------------
+let g:terraform_align=1
+let g:terraform_fold_sections=1
+let g:terraform_remap_spacebar=1
+let g:terraform_fmt_on_save = 1
