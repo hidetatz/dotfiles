@@ -1,9 +1,0 @@
-remove lock = Caps_Lock
-keycode 66 = Control_L
-add control = Control_L
-
-keycode 47 = colon semicolon Cyrillic_ZHE
-
-clear Shift
-add Shift = Shift_R
-
