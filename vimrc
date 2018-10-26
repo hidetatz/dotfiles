@@ -6,11 +6,13 @@ call plug#begin('~/.vim/plugged')
   Plug 'fatih/vim-go'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE'
   Plug 'tpope/vim-surround'
   Plug 'w0rp/ale'
   Plug 'w0ng/vim-hybrid'
+	Plug 'zchee/deoplete-go', { 'do': 'make'}
 call plug#end()
 
 filetype plugin indent on
@@ -52,6 +54,24 @@ noremap x "_x
 noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
+
+
+"----------------------------------------------------------------------------
+" deoplete
+"----------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
+
+"----------------------------------------------------------------------------
+" deoplete-go
+"----------------------------------------------------------------------------
+let g:deoplete#sources#go#gocode_binary	= "$GOPATH/bin/gocode"
+let g:deoplete#sources#go#package_dot = 0
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+let g:deoplete#sources#go#cgo	= 1
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#auto_goos = 1
+let g:deoplete#sources#go#source_importer	= 1
+let g:deoplete#sources#go#builtin_objects	= 1
 
 "----------------------------------------------------------------------------
 " ale

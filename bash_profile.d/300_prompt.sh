@@ -1,15 +1,13 @@
-autoload -Uz vcs_info
-setopt prompt_subst
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
-zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
-zstyle ':vcs_info:*' formats "%F{241}%b %c%u%f"
-zstyle ':vcs_info:*' actionformats '%b|%a'
-precmd () { vcs_info }
+. /usr/local/etc/bash_completion.d/git-prompt.sh
 
-PROMPT='
+PS1='
 '
-PROMPT=$PROMPT'%F{038}%~%f '
-PROMPT=$PROMPT'${vcs_info_msg_0_}'
-PROMPT=$PROMPT'
-%F{165}❯%f '
+PS1=$PS1'\[\e[36m\e[40m\]\w\[\e[0m\]'
+PS1=$PS1'\[\e[2m\e[40m\]$(__git_ps1 | sed -e "s/(//g" | sed -e "s/)//g")\[\e[0m\]'
+PS1=$PS1'
+\[\e[35m\e[40m\]❯\[\e[0m\] '
+
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWUNTRACKEDFILES=true
+GIT_PS1_SHOWSTASHSTATE=false
+GIT_PS1_SHOWUPSTREAM=

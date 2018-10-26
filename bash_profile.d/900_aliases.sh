@@ -1,6 +1,7 @@
 alias ls='ls --color -F'
 alias ll='ls -alh'
-alias vi='vim'
+alias vi='nvim'
+alias vim='nvim'
 alias g='git'
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias gc='g co `g b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
