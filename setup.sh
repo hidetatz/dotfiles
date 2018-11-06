@@ -9,3 +9,4 @@ ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
 ln -sf $DOTFILES/tmux.conf $HOME/.tmux.conf
 ln -sf $DOTFILES/gitconfig $HOME/.gitconfig
 ln -sf $DOTFILES/bash_profile.d $HOME/.bash_profile.d
+ln -sf $DOTFILES/inputrc $HOME/.inputrc

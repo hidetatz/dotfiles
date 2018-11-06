@@ -11,3 +11,11 @@ function ghq-cd-fzf {
     cd $HOME/.ghq/src/$repo
   fi
 }
+
+function kube_prompt() {
+   kubectl_current_context=$(kubectl config current-context)
+   kubectl_project=$(echo $kubectl_current_context | cut -d '_' -f 2)
+   kubectl_cluster=$(echo $kubectl_current_context | cut -d '_' -f 4)
+   kubectl_prompt="k8s:($kubectl_project|$kubectl_cluster)"
+   echo $kubectl_prompt
+}
