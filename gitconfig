@@ -2,9 +2,9 @@
     name = Hidetatsu Yaginuma
     email = ygnmhdtt@gmail.com
 
-; [url "github.com:"]
-;     InsteadOf = https://github.com/
-;     InsteadOf = git@github.com:
+[url "github.com:"]
+    InsteadOf = https://github.com/
+    InsteadOf = git@github.com:
 
 [pager]
     branch = false
