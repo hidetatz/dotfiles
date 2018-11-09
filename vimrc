@@ -4,10 +4,12 @@ call plug#begin('~/.vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'cocopon/iceberg.vim'
 	Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'fatih/vim-go'
+  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE'
   Plug 'tpope/vim-surround'
