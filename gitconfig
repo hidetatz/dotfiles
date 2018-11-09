@@ -13,7 +13,7 @@
     root = ~/.ghq/src
 
 [core]
-	  pager = LESSCHARSET=utf-8 less
+    pager = LESSCHARSET=utf-8 less
 
 [color]
     ui = true
@@ -26,7 +26,7 @@
 
 [alias]
     a = add
-		b = branch
+    b = branch
     ci = commit
     co = checkout
     cb = checkout -b
@@ -40,7 +40,7 @@
     rb = rebase
     rbc = rebase --continue
     rbi = rebase -i
-		s = status
+    s = status
     sb = status -sb
     st = stash
     sp = stash pop

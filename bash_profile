@@ -47,7 +47,7 @@ PS1='
 \[\e[32m\e[40m\]$(kube_prompt)\[\e[0m\]
 '
 PS1=$PS1'\[\e[36m\e[40m\]\w\[\e[0m\]'
-PS1=$PS1'\[\e[2m\e[40m\]$(__git_ps1 | sed -e "s/(//g" | sed -e "s/)//g")\[\e[0m\]'
+PS1=$PS1'\[\e[37m\e[40m\]$(__git_ps1 | sed -e "s/(//g" | sed -e "s/)//g")\[\e[0m\]'
 PS1=$PS1'
 \[\e[35m\e[40m\]❯\[\e[0m\] '
 
