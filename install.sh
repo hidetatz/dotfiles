@@ -63,7 +63,12 @@ function setup_vim() {
 
 function setup_dotfiles() {
   ghq get yagi5/dotfiles
-  $GOPATH/src/github.com/yagi5/dotfiles/setup.sh
+  DOTFILES=$HOME/.ghq/src/github.com/yagi5/dotfiles
+  ln -sf $DOTFILES/vimrc $HOME/.vimrc
+  ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
+  ln -sf $DOTFILES/tmux.conf $HOME/.tmux.conf
+  ln -sf $DOTFILES/gitconfig $HOME/.gitconfig
+  ln -sf $DOTFILES/inputrc $HOME/.inputrc
 }
 
 function setup_git() {
@@ -90,11 +95,11 @@ export GOPATH=$HOME/.ghq
 export PATH=$PATH:$HOME/.ghq/bin
 cd $HOME
 
-#setup_git_ssh_key
-#download_gitconfig
-#install_homebrew
-#install_golang
-#setup_ghq
+setup_git_ssh_key
+download_gitconfig
+install_homebrew
+install_golang
+setup_ghq
 setup_dotfiles
 setup_vim
 setup_git
