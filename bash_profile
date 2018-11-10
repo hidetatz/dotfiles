@@ -1,4 +1,10 @@
 # -------------------------------------
+# common bash config
+# -------------------------------------
+
+export HISTCONTROL=ignoreboth:erasedups
+
+# -------------------------------------
 # environment variables
 # -------------------------------------
 
@@ -95,6 +101,12 @@ export FZF_DEFAULT_OPTS='--height 40% --border'
 # -------------------------------------
 
 PATH=$PATH:$HOME/.local/bin
+
+# -------------------------------------
+# bash_completion
+# -------------------------------------
+
+[ -f $(brew --prefix)/etc/bash_completion ] && source $(brew --prefix)/etc/bash_completion
 
 # -------------------------------------
 # gcloud

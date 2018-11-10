@@ -106,7 +106,6 @@ let g:deoplete#sources#go#builtin_objects	= 1
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 0
 
-
 "----------------------------------------------------------------------------
 " ctrlp
 "----------------------------------------------------------------------------
@@ -119,8 +118,10 @@ let g:ctrlp_cmd = 'CtrlP'
 " for fzf installed by homebrew
 set rtp+=/usr/local/opt/fzf
 
-nmap ; :Buffers
-nmap t :Files
+nnoremap <Leader>r :History:
+nnoremap <Leader>e :History
+nnoremap ; :Buffers
+nnoremap t :Files
 " Default fzf layout
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~30%' }
