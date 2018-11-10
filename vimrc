@@ -29,6 +29,7 @@ set ambiwidth=double
 set tabstop=2
 set shiftwidth=2
 set autoindent
+set backspace=indent,eol,start
 
 " yank to remote
 let g:y2r_config = {

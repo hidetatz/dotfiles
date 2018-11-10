@@ -90,6 +90,19 @@ function setup_gcp_kube() {
   gcloud components install kubectl
 }
 
+function setup_hugo() {
+  brew install hugo
+}
+
+function setup_firebase() {
+  brew install node
+	npm install -g firebase-tools
+}
+
+function setup_bash_completion() {
+  brew install bash-completion
+}
+
 set -e
 export GOPATH=$HOME/.ghq
 export PATH=$PATH:$HOME/.ghq/bin
@@ -106,6 +119,9 @@ setup_git
 setup_tmux
 setup_fzf
 setup_gcp_kube
+setup_hugo
+setup_firebase
+setup_bash_completion
 
 echo "setup successfully finished!!"
 echo "run 'source ~/.bash_profile' and ':PlugInstall'"
