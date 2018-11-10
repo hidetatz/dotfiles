@@ -77,10 +77,12 @@ function setup_git() {
 
 function setup_tmux() {
   brew install tmux
+	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
 
 function setup_fzf() {
   brew install fzf
+	/usr/local/opt/fzf/install
 }
 
 function setup_gcp_kube() {
@@ -124,4 +126,4 @@ setup_firebase
 setup_bash_completion
 
 echo "setup successfully finished!!"
-echo "run 'source ~/.bash_profile' and ':PlugInstall'"
+echo "run 'source ~/.bash_profile' and ':PlugInstall' and <prefix> + r , <prefix> + I(to install tmux plugins)"
