@@ -32,7 +32,7 @@ function ghq-cd-fzf {
 }
 
 function kube_prompt() {
-  kubectl_current_context=$(kubectl config current-context > /dev/null 2>&1)
+  kubectl_current_context=$(kubectl config current-context 2> /dev/null)
   if [ $? -ne 0 ]; then
     kubectl_prompt="k8s:(|)"
   else
