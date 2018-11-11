@@ -33,14 +33,29 @@ function ghq-cd-fzf {
 
 function kube_prompt() {
   kubectl_current_context=$(kubectl config current-context > /dev/null 2>&1)
-	if [ $? -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     kubectl_prompt="k8s:(|)"
- 	else
+  else
     kubectl_project=$(echo $kubectl_current_context | cut -d '_' -f 2)
     kubectl_cluster=$(echo $kubectl_current_context | cut -d '_' -f 4)
     kubectl_prompt="k8s:($kubectl_project|$kubectl_cluster)"
   fi
   echo $kubectl_prompt
+}
+
+function gcloud_config_set_fzf() {
+  gcloud config configurations activate $(gcloud config configurations list | fzf | awk '{print $4}')
+}
+
+function gcloud_config_prompt() {
+  pj=$(cat $HOME/.config/gcloud/active_config)
+  if [ $? -ne 0 ]; then
+    gcloud_config_prompt="gcloud:(|)"
+  else
+    account=$(cat $HOME/.config/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
+    gcloud_config_prompt="gcloud:($account|$pj)"
+  fi
+  echo $gcloud_config_prompt
 }
 
 # -------------------------------------
@@ -50,7 +65,7 @@ function kube_prompt() {
 . /usr/local/etc/bash_completion.d/git-prompt.sh
 
 PS1='
-\[\e[32m\e[40m\]$(kube_prompt)\[\e[0m\]
+\[\e[32m\e[40m\]$(kube_prompt)\[\e[0m\] \[\e[31m\e[40m\]$(gcloud_config_prompt)\[\e[0m\]
 '
 PS1=$PS1'\[\e[36m\e[40m\]\w\[\e[0m\]'
 PS1=$PS1'\[\e[37m\e[40m\]$(__git_ps1 | sed -e "s/(//g" | sed -e "s/)//g")\[\e[0m\]'
@@ -80,6 +95,7 @@ alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
 alias k='kubectl'
+alias gcf='gcloud_config_set_fzf'
 
 # -------------------------------------
 # golang
