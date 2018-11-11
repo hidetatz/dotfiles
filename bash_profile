@@ -3,6 +3,7 @@
 # -------------------------------------
 
 export HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend
 
 # -------------------------------------
 # environment variables
