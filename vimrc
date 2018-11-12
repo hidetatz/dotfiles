@@ -3,10 +3,13 @@ set nocompatible
 call plug#begin('~/.vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'cocopon/iceberg.vim'
-  Plug 'fatih/vim-go'
+	Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE'
   Plug 'tpope/vim-surround'
@@ -20,11 +23,37 @@ filetype plugin indent on
 "----------------------------------------------------------------------------
 " Edit
 "----------------------------------------------------------------------------
+let mapleader = ","
 set encoding=utf-8
 set ambiwidth=double
 set tabstop=2
 set shiftwidth=2
+set expandtab
 set autoindent
+set backspace=indent,eol,start
+
+" yank to remote
+let g:y2r_config = {
+  \   'tmp_file': '/tmp/exchange_file',
+  \   'key_file': expand('$HOME') . '/.exchange.key',
+  \   'host': 'localhost',
+  \   'port': 52224,
+  \}
+
+function Yank2Remote()
+  call writefile(split(@", '\n'), g:y2r_config.tmp_file, 'b')
+  let s:params = ['cat %s %s | timeout 1 nc %s %s']
+  for s:item in ['key_file', 'tmp_file', 'host', 'port']
+      let s:params += [shellescape(g:y2r_config[s:item])]
+  endfor
+  let s:ret = system(call(function('printf'), s:params))
+endfunction
+nnoremap <unique> <Leader>f :call Yank2Remote()<CR>
+
+augroup vimrcEx
+  au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
+  \ exe "normal g`\"" | endif
+augroup END
 
 "----------------------------------------------------------------------------
 " UI
@@ -49,7 +78,6 @@ set ttimeoutlen=50
 "----------------------------------------------------------------------------
 " Key mappings
 "----------------------------------------------------------------------------
-let mapleader = ","
 noremap x "_x
 noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
@@ -80,13 +108,21 @@ let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 0
 
 "----------------------------------------------------------------------------
+" ctrlp
+"----------------------------------------------------------------------------
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+"----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
 " for fzf installed by homebrew
 set rtp+=/usr/local/opt/fzf
 
-nmap ; :Buffers
-nmap t :Files
+nnoremap <Leader>r :History:
+nnoremap <Leader>e :History
+nnoremap ; :Buffers
+nnoremap t :Files
 " Default fzf layout
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~30%' }
