@@ -9,6 +9,10 @@
 [pager]
     branch = false
 
+[url "github.com:"]
+    InsteadOf = https://github.com/
+    InsteadOf = git@github.com:
+
 [ghq]
     root = ~/.ghq/src
 

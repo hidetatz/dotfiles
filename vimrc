@@ -7,9 +7,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE'
   Plug 'tpope/vim-surround'
@@ -31,29 +31,7 @@ set shiftwidth=2
 set expandtab
 set autoindent
 set backspace=indent,eol,start
-
-" yank to remote
-let g:y2r_config = {
-  \   'tmp_file': '/tmp/exchange_file',
-  \   'key_file': expand('$HOME') . '/.exchange.key',
-  \   'host': 'localhost',
-  \   'port': 52224,
-  \}
-
-function Yank2Remote()
-  call writefile(split(@", '\n'), g:y2r_config.tmp_file, 'b')
-  let s:params = ['cat %s %s | timeout 1 nc %s %s']
-  for s:item in ['key_file', 'tmp_file', 'host', 'port']
-      let s:params += [shellescape(g:y2r_config[s:item])]
-  endfor
-  let s:ret = system(call(function('printf'), s:params))
-endfunction
-nnoremap <unique> <Leader>f :call Yank2Remote()<CR>
-
-augroup vimrcEx
-  au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
-  \ exe "normal g`\"" | endif
-augroup END
+set clipboard+=unnamed
 
 "----------------------------------------------------------------------------
 " UI
@@ -83,29 +61,22 @@ noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 
-
-"----------------------------------------------------------------------------
-" deoplete
-"----------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
-
-"----------------------------------------------------------------------------
-" deoplete-go
-"----------------------------------------------------------------------------
-let g:deoplete#sources#go#gocode_binary	= "$GOPATH/bin/gocode"
-let g:deoplete#sources#go#package_dot = 0
-let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-let g:deoplete#sources#go#cgo	= 1
-let g:deoplete#sources#go#pointer = 1
-let g:deoplete#sources#go#auto_goos = 1
-let g:deoplete#sources#go#source_importer	= 1
-let g:deoplete#sources#go#builtin_objects	= 1
-
 "----------------------------------------------------------------------------
 " ale
 "----------------------------------------------------------------------------
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 0
+
+"----------------------------------------------------------------------------
+" deoplete
+"----------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#cgo = 1
+let g:deoplete#sources#go#source_importer = 1
 
 "----------------------------------------------------------------------------
 " ctrlp
@@ -123,6 +94,7 @@ nnoremap <Leader>r :History:
 nnoremap <Leader>e :History
 nnoremap ; :Buffers
 nnoremap t :Files
+
 " Default fzf layout
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~30%' }
