@@ -33,6 +33,11 @@ set autoindent
 set backspace=indent,eol,start
 set clipboard+=unnamed
 
+augroup vimrcEx
+  au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
+  \ exe "normal g`\"" | endif
+augroup END
+
 "----------------------------------------------------------------------------
 " UI
 "----------------------------------------------------------------------------
