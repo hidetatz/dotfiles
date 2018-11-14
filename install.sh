@@ -69,6 +69,7 @@ function setup_dotfiles() {
   ln -sf $DOTFILES/tmux.conf $HOME/.tmux.conf
   ln -sf $DOTFILES/gitconfig $HOME/.gitconfig
   ln -sf $DOTFILES/inputrc $HOME/.inputrc
+  ln -sf $DOTFILES/bash_profile.pvt $HOME/.bash_profile.pvt
 }
 
 function setup_git() {
