@@ -101,6 +101,11 @@ alias k='kubectl'
 alias gcf='gcloud_config_set_fzf'
 
 # -------------------------------------
+# git
+# -------------------------------------
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+# -------------------------------------
 # golang
 # -------------------------------------
 
