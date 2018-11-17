@@ -1,3 +1,10 @@
-$if Bash
 set completion-ignore-case on
-$endif
+set show-all-if-ambiguous on
+set colored-stats On
+set visible-stats On
+set mark-symlinked-directories On
+set colored-completion-prefix On
+set menu-complete-display-prefix On
+
+"\e[A":history-search-backward
+"\e[B":history-search-forward
