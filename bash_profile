@@ -61,6 +61,38 @@ function gcloud_config_prompt() {
   echo $gcloud_config_prompt
 }
 
+function kube_get_namespace() {
+  echo $(find $GOPATH/src/github.com/kouzoh/microservices-terraform/* -iname "*.tf" | grep -v 'microservices-platform' | xargs grep 'ygnmhdtt@' | awk -F '/' '{ print $11"-"$12 }' | sed -e 's/-development/-dev/' | sed -e 's/-production/-prod/' | fzf)
+}
+
+function kube_get_pod() {
+  ns=$1
+  echo $(kubectl get pods -n $ns | grep -v "AGE" | fzf | awk '{print $1}')
+}
+
+function kube_exec_pod() {
+  ns=$(kube_get_namespace)
+  po=$(kube_get_pod $ns)
+  kubectl exec -it $po '/bin/sh' -n $ns
+}
+
+function kube_log_pod() {
+  ns=$(kube_get_namespace)
+  po=$(kube_get_pod $ns)
+  kubectl logs -f $po -n $ns
+}
+
+function kube_port_forward() {
+  if [ $# -ne 1 ]; then
+    echo "specify port"
+    return
+  fi
+  port=$1
+  ns=$(kube_get_namespace)
+  po=$(kube_get_pod $ns)
+  kubectl port-forward $po $port -n $ns
+}
+
 # -------------------------------------
 # prompt
 # -------------------------------------
@@ -99,6 +131,9 @@ alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | 
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
 alias k='kubectl'
 alias gcf='gcloud_config_set_fzf'
+alias ke='kube_exec_pod'
+alias kl='kube_log_pod'
+alias kp='kube_port_forward'
 
 # -------------------------------------
 # git
@@ -130,7 +165,7 @@ PATH=$PATH:$HOME/.local/bin
 # bash_completion
 # -------------------------------------
 
-[ -f $(brew --prefix)/etc/bash_completion ] && source $(brew --prefix)/etc/bash_completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
 # -------------------------------------
 # gcloud
