@@ -1,4 +1,4 @@
-source $HOME/.bash_profile.pvt
+if [ -e $HOME/.bash_profile.pvt ]; then source $HOME/.bash_profile.pvt; fi
 
 # -------------------------------------
 # common bash config
@@ -171,6 +171,8 @@ alias st='stern worker -o json -n $(kube_get_namespace)'
 export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
+
+alias go111='export GO111MODULE=on'
 
 # -------------------------------------
 # fzf
