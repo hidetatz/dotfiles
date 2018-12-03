@@ -7,6 +7,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'rhysd/vim-clang-format'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -148,9 +150,20 @@ augroup GoAutoCmd
 augroup END
 
 "----------------------------------------------------------------------------
+" vim-clang-format
+"----------------------------------------------------------------------------
+autocmd FileType proto ClangFormatAutoEnable
+
+"----------------------------------------------------------------------------
 " vim-terraform
 "----------------------------------------------------------------------------
 let g:terraform_align=1
 let g:terraform_fold_sections=1
 let g:terraform_remap_spacebar=1
 let g:terraform_fmt_on_save = 1
+
+"----------------------------------------------------------------------------
+" vim-easy-align
+"----------------------------------------------------------------------------
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)

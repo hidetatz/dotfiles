@@ -106,6 +106,11 @@ function setup_bash_completion() {
   brew install bash-completion
 }
 
+function setup_protoc() {
+  brew install protobuf
+  brew install clang-format
+}
+
 set -e
 export GOPATH=$HOME/.ghq
 export PATH=$PATH:$HOME/.ghq/bin
@@ -125,6 +130,7 @@ setup_gcp_kube
 setup_hugo
 setup_firebase
 setup_bash_completion
+setup_protoc
 
 echo "setup successfully finished!!"
 echo "run 'source ~/.bash_profile' and ':PlugInstall' and <prefix> + r , <prefix> + I(to install tmux plugins)"

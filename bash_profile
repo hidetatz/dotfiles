@@ -5,6 +5,9 @@ source $HOME/.bash_profile.pvt
 # -------------------------------------
 
 export HISTCONTROL=ignoreboth:erasedups
+export HISTIGNORE='history:ls*:ll*:fg*:bg*:pwd'
+export HISTSIZE=90000
+export HISTFILESIZE=90000
 shopt -s histappend
 
 # -------------------------------------
@@ -20,10 +23,24 @@ if [ -e $HOME/.env ]; then source ~/.env; fi
 # functions
 # -------------------------------------
 
+function git_show_fzf() {
+  while true
+  do
+    format="%C(red)%h%Creset %C(cyan)%cd%Creset %C(yellow)%N%Creset %C(green)%s%Creset %C(white)(%an)%Creset"
+    commits=$(git log --date=iso --color=always --pretty=format:"$format" --abbrev-commit --reverse)
+    commitline=$(echo "$commits" | fzf --tac +s +m --ansi --reverse)
+    if [ $? != 0 ]; then
+      break
+    fi
+    commitid=$(echo "$commitline" | awk '{print $1}')
+    git show $commitid
+  done
+}
+
 function fzf-rebase() {
   local commits commit
   commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
-  commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
+  commit=$(echo "$commits" | fzf --tac +s +m --ansi --reverse) &&
   echo -n $(echo "$commit" | sed "s/ .*//")
 }
 
@@ -93,6 +110,10 @@ function kube_port_forward() {
   kubectl port-forward $po $port -n $ns
 }
 
+function kube_ctx() {
+  kubectl config get-contexts --no-headers --output='name' | fzf | xargs kubectl config use-context
+}
+
 # -------------------------------------
 # prompt
 # -------------------------------------
@@ -125,15 +146,18 @@ alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'
 alias gr='ghq-cd-fzf'
 alias gf='git rbi `fzf-rebase`'
+alias gs='git_show_fzf'
 alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
 alias k='kubectl'
 alias gcf='gcloud_config_set_fzf'
+alias kc='kube_ctx'
 alias ke='kube_exec_pod'
 alias kl='kube_log_pod'
 alias kp='kube_port_forward'
+alias st='stern worker -o json -n $(kube_get_namespace)'
 
 # -------------------------------------
 # git
