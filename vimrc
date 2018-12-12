@@ -1,22 +1,25 @@
 set nocompatible
 
 call plug#begin('~/.vim/plugged')
+  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'airblade/vim-gitgutter'
   Plug 'cocopon/iceberg.vim'
-	Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'rhysd/vim-clang-format'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE'
   Plug 'tpope/vim-surround'
-  Plug 'w0rp/ale'
-  Plug 'w0ng/vim-hybrid'
+  " Plug 'w0rp/ale'
+
+  " for deoplete
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 	Plug 'zchee/deoplete-go', { 'do': 'make'}
 call plug#end()
 
@@ -89,8 +92,8 @@ let g:deoplete#sources#go#source_importer = 1
 "----------------------------------------------------------------------------
 " ctrlp
 "----------------------------------------------------------------------------
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+" let g:ctrlp_map = '<c-p>'
+" let g:ctrlp_cmd = 'CtrlP'
 
 "----------------------------------------------------------------------------
 " fzf.vim
@@ -127,9 +130,9 @@ let g:gitgutter_sign_modified_removed = '∙'
 "----------------------------------------------------------------------------
 " vim-commentary
 "----------------------------------------------------------------------------
-autocmd BufRead,BufNewFile *.tf setfiletype terraform
-autocmd BufRead,BufNewFile *.tfvars setfiletype terraform
-autocmd FileType terraform setlocal commentstring=//\ %s
+" autocmd BufRead,BufNewFile *.tf setfiletype terraform
+" autocmd BufRead,BufNewFile *.tfvars setfiletype terraform
+" autocmd FileType terraform setlocal commentstring=//\ %s
 
 "----------------------------------------------------------------------------
 " Golang
@@ -139,9 +142,32 @@ let g:go_highlight_methods = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_build_constraints = 1
+
 let g:go_fmt_autosave = 1
-let g:go_gocode_unimported_packages = 1
 let g:go_fmt_command = "goimports"
+
+let g:go_gocode_unimported_packages = 1
+let g:go_metalinter_autosave = 1
+
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
+
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+autocmd FileType go nmap <Leader>i <Plug>(go-info)
+
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 
 augroup GoAutoCmd
   au!
@@ -167,3 +193,39 @@ let g:terraform_fmt_on_save = 1
 "----------------------------------------------------------------------------
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
+"----------------------------------------------------------------------------
+" ultisnips
+"----------------------------------------------------------------------------
+" memo: 
+"
+" errp -> if err != nil { panic() }
+" errn -> if err != nil { return err }
+" errl -> if err != nil { log.Fatal(err) }
+" errt -> if err != nil { t.Fatal(err) }
+"
+" fn -> fmt.Println()
+" ff -> fmt.Printf()
+" ln -> log.Println()
+" lf -> log.Printf()
+"
+" br -> break
+" cn -> continue
+" df -> defer ...
+" iota -> const ( ... iota )
+"
+" if
+" for
+" func
+" case
+"
+" json
+" yaml
+"
+" ok
+"
+" rt
+" st
+" sp
+"
+" others: https://github.com/fatih/vim-go/blob/master/gosnippets/UltiSnips/go.snippets
