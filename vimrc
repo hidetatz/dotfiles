@@ -4,7 +4,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'airblade/vim-gitgutter'
   Plug 'cocopon/iceberg.vim'
-  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
@@ -12,15 +11,15 @@ call plug#begin('~/.vim/plugged')
   Plug 'rhysd/vim-clang-format'
   Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-fugitivE'
+  Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'
-  " Plug 'w0rp/ale'
 
-  " for deoplete
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-	Plug 'zchee/deoplete-go', { 'do': 'make'}
+  " go lsp
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'natebosch/vim-lsc'
 call plug#end()
 
 filetype plugin indent on
@@ -64,36 +63,13 @@ set ttimeout
 set ttimeoutlen=50
 
 "----------------------------------------------------------------------------
-" Key mappings
+" Common key mappings
 "----------------------------------------------------------------------------
 noremap x "_x
 noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
-
-"----------------------------------------------------------------------------
-" ale
-"----------------------------------------------------------------------------
-let g:ale_fix_on_save = 1
-let g:ale_lint_on_text_changed = 0
-
-"----------------------------------------------------------------------------
-" deoplete
-"----------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-let g:deoplete#sources#go#package_dot = 1
-let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-let g:deoplete#sources#go#pointer = 1
-let g:deoplete#sources#go#cgo = 1
-let g:deoplete#sources#go#source_importer = 1
-
-"----------------------------------------------------------------------------
-" ctrlp
-"----------------------------------------------------------------------------
-" let g:ctrlp_map = '<c-p>'
-" let g:ctrlp_cmd = 'CtrlP'
 
 "----------------------------------------------------------------------------
 " fzf.vim
@@ -128,13 +104,6 @@ let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 "----------------------------------------------------------------------------
-" vim-commentary
-"----------------------------------------------------------------------------
-" autocmd BufRead,BufNewFile *.tf setfiletype terraform
-" autocmd BufRead,BufNewFile *.tfvars setfiletype terraform
-" autocmd FileType terraform setlocal commentstring=//\ %s
-
-"----------------------------------------------------------------------------
 " Golang
 "----------------------------------------------------------------------------
 let g:go_highlight_functions = 1
@@ -149,14 +118,6 @@ let g:go_fmt_command = "goimports"
 let g:go_gocode_unimported_packages = 1
 let g:go_metalinter_autosave = 1
 
-map <C-n> :cnext<CR>
-map <C-m> :cprevious<CR>
-nnoremap <leader>a :cclose<CR>
-
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
-autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-autocmd FileType go nmap <Leader>i <Plug>(go-info)
-
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
   let l:file = expand('%')
@@ -167,13 +128,35 @@ function! s:build_go_files()
   endif
 endfunction
 
-autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+" go lsp
+let g:lsp_async_completion = 1
+if executable('go-langserver')
+  au User lsp_setup call lsp#register_server({
+      \ 'name': 'go-langserver',
+      \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
+      \ 'whitelist': ['go'],
+      \ })
+endif
 
-augroup GoAutoCmd
-  au!
-  au FileType go :highlight goErr cterm=bold ctermfg=lightblue
-  au FileType go :match goErr /\<err\>/
-augroup END
+au FileType go :highlight goErr cterm=bold ctermfg=lightblue
+au FileType go :match goErr /\<err\>/
+autocmd FileType go setlocal omnifunc=lsp#complete
+autocmd FileType go nmap <leader>a :cclose<CR>
+autocmd FileType go nmap <leader>u <Plug>(go-run)
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <Leader>d :LspDefinition<CR>
+autocmd FileType go nmap <Leader>f :LspReferences<CR>
+autocmd FileType go nmap <Leader>i :LspImplementation<CR>
+autocmd FileType go nmap <Leader>t :LspTypeDefinition<CR>
+autocmd FileType go nmap <silent> <Leader>s :split \| :LspDefinition <CR>
+autocmd FileType go nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
+" autocmd FileType go nmap <C-n> :cnext<CR>
+" autocmd FileType go nmap <C-m> :cprevious<CR>
+" autocmd FileType go nmap <Leader>i <Plug>(go-info)
+" autocmd FileType go nmap <Leader>p :LspHover<CR>
+" autocmd FileType go nmap <Leader>n :LspNextError<CR>
+" autocmd FileType go nmap <Leader>p :LspPreviousError<CR>
 
 "----------------------------------------------------------------------------
 " vim-clang-format
@@ -191,7 +174,6 @@ let g:terraform_fmt_on_save = 1
 "----------------------------------------------------------------------------
 " vim-easy-align
 "----------------------------------------------------------------------------
-xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 "----------------------------------------------------------------------------

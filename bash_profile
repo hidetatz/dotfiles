@@ -193,13 +193,14 @@ export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
 
-alias go111='export GO111MODULE=on'
+alias go111on='export GO111MODULE=on'
+alias go111off='unset GO111MODULE'
 
 # -------------------------------------
 # fzf
 # -------------------------------------
 
-export FZF_DEFAULT_OPTS='--height 40% --border'
+export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # -------------------------------------
