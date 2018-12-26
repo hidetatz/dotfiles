@@ -1,0 +1,10 @@
+go
+dep 
+git 
+go 
+hugo
+bash-completion
+fzf
+tmux
+datawire/blackbird/telepresence
+kube-ps1

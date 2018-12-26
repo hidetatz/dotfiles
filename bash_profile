@@ -1,11 +1,9 @@
-if [ -e $HOME/.bash_profile.pvt ]; then source $HOME/.bash_profile.pvt; fi
-
 # -------------------------------------
 # common bash config
 # -------------------------------------
 
+export XDG_CONFIG_HOME=$HOME/.config
 export HISTCONTROL=ignoreboth:erasedups
-# export HISTIGNORE='history:ls*:ll*:fg*:bg*:pwd'
 export HISTSIZE=90000
 export HISTFILESIZE=90000
 shopt -s histappend
@@ -17,11 +15,16 @@ shopt -s histappend
 export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
 export EDITOR="vim"
-if [ -e $HOME/.env ]; then source ~/.env; fi
+[ -e $XDG_CONFIG_HOME/bash/bash_profile.pvt ] && source $XDG_CONFIG_HOME/bash/bash_profile.pvt
 
 # -------------------------------------
 # functions
 # -------------------------------------
+
+function brew_install() {
+  cat $XDG_CONFIG_HOME/brew/brewcaskpkg | xargs brew cask install
+  cat $XDG_CONFIG_HOME/brew/brewpkg | xargs brew install
+}
 
 function git_show_fzf() {
   while true
@@ -51,32 +54,9 @@ function ghq-cd-fzf {
   fi
 }
 
-# function kube_prompt() {
-#   kubectl_current_context=$(kubectl config current-context 2> /dev/null)
-#   if [ $? -ne 0 ]; then
-#     kubectl_prompt="k8s:(|)"
-#   else
-#     kubectl_project=$(echo $kubectl_current_context | cut -d '_' -f 2)
-#     kubectl_cluster=$(echo $kubectl_current_context | cut -d '_' -f 4)
-#     kubectl_prompt="k8s:($kubectl_project|$kubectl_cluster)"
-#   fi
-#   echo $kubectl_prompt
-# }
-
 function gcloud_config_set_fzf() {
   gcloud config configurations activate $(gcloud config configurations list | fzf | awk '{print $4}')
 }
-
-# function gcloud_config_prompt() {
-#   pj=$(cat $HOME/.config/gcloud/active_config)
-#   if [ $? -ne 0 ]; then
-#     gcloud_config_prompt="g  |(:)"
-#   else
-#     account=$(cat $HOME/.config/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
-#     gcloud_config_prompt="(\[\e[33m\e[40m\]g\[\e[0m\]  |(\[\e[33m\e[40m\]$account\[\e[0m\]:\[\e[33m\e[40m\]$pj\[\e[0m\])"
-#   fi
-#   echo $gcloud_config_prompt
-# }
 
 function gcloud_account() {
   pj=$(cat $HOME/.config/gcloud/active_config)
@@ -165,8 +145,7 @@ GIT_PS1_SHOWUPSTREAM=
 
 alias ls='ls -GF'
 alias ll='ls -alh'
-alias vi='vim'
-alias vim='vim'
+alias vi="vim -u $XDG_CONFIG_HOME/vim/.vimrc"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'
@@ -193,28 +172,25 @@ export GOPATH="$HOME/.ghq"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
 
-alias go111on='export GO111MODULE=on'
-alias go111off='unset GO111MODULE'
-
 # -------------------------------------
 # fzf
 # -------------------------------------
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f $XDG_CONFIG_HOME/fzf/.fzf.bash ] && source $XDG_CONFIG_HOME/fzf/.fzf.bash
 
 # -------------------------------------
 # pip
 # -------------------------------------
 
-PATH=$PATH:$HOME/.local/bin
+# PATH=$PATH:$HOME/.local/bin
 
 # -------------------------------------
 # completion
 # -------------------------------------
 
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-[ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
-source <(kubectl completion bash)
+# [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+# [ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
+# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
+# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
+# source <(kubectl completion bash)

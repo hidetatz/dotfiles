@@ -29,108 +29,71 @@ EOS
 
 function download_gitconfig() {
   cd $HOME
-  if [ -x /bin/tar ]; then
-    TAR=/bin/tar
-  elif [ -x /usr/bin/tar ]; then
-    TAR=/usr/bin/tar
-  else
-    TAR=$(which tar)
-  fi
-  curl -fsSL https://github.com/yagi5/dotfiles/tarball/master | $TAR xz
+  curl -fsSL https://github.com/yagi5/dotfiles/tarball/master | tar xz
   cd yagi5-dotfiles-*
-  mv gitconfig $HOME/.gitconfig
+  mv gitconfig $XDG_CONFIG_HOME/git/.gitconfig
   cd $HOME
   rm -rf $HOME/yagi5-dotfiles-*
 }
 
-function install_homebrew() {
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+function install_tools() {
+  which brew > /dev/null 2>&1 || /usr/bin/ruby -e \
+    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+  source ~/$XDG_CONFIG_HOME/bash/bash_profile
+  brew_install
 }
 
-function install_golang() {
-  brew install go
-}
-
-function setup_ghq() {
-  go get github.com/motemen/ghq
-}
-
-function setup_vim() {
-  # for deoplete.nvim
-  brew install vim --with-python3
+function after_install_tools() {
+  # fzf
+  /usr/local/opt/fzf/install --no-zsh --no-fish --key-bindings --completion --xdg
+  # tmux plugin manager
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  # kubectl
+  gcloud components install kubectl
+  # vim-plug
   curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+  go get -u github.com/motemen/ghq 
+  go get -u github.com/yagi5/gotest 
+  go get -u github.com/kazegusuri/grpcurl 
 }
 
 function setup_dotfiles() {
-  ghq get yagi5/dotfiles
+  git clone https://github.com/yagi5/dotfiles ~/.ghq/src/github.com/yagi5/dotfiles
   DOTFILES=$HOME/.ghq/src/github.com/yagi5/dotfiles
-  ln -sf $DOTFILES/vimrc $HOME/.vimrc
-  ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
-  ln -sf $DOTFILES/tmux.conf $HOME/.tmux.conf
-  ln -sf $DOTFILES/gitconfig $HOME/.gitconfig
-  ln -sf $DOTFILES/inputrc $HOME/.inputrc
-  ln -sf $DOTFILES/bash_profile.pvt $HOME/.bash_profile.pvt
-}
-
-function setup_git() {
-  brew install git
-}
-
-function setup_tmux() {
-  brew install tmux
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-}
-
-function setup_fzf() {
-  brew install fzf
-	/usr/local/opt/fzf/install
-}
-
-function setup_gcp_kube() {
-  brew cask install google-cloud-sdk
-  echo "source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'" >> $HOME/.bash_profile
-  echo "source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'" >> $HOME/.bash_profile
-  gcloud components install kubectl
-}
-
-function setup_hugo() {
-  brew install hugo
+  ln -sf $DOTFILES/bash_profile     $XDG_CONFIG_HOME/bash/bash_profile
+  ln -sf $DOTFILES/bash_profile.pvt $XDG_CONFIG_HOME/bash/bash_profile.pvt
+  ln -sf $DOTFILES/vimrc            $XDG_CONFIG_HOME/vim/vimrc
+  ln -sf $DOTFILES/tmux.conf        $XDG_CONFIG_HOME/tmux/tmux.conf
+  ln -sf $DOTFILES/inputrc          $XDG_CONFIG_HOME/readline/inputrc
+  ln -sf $DOTFILES/brewpkg          $XDG_CONFIG_HOME/brew/brewpkg
+  ln -sf $DOTFILES/brewcaskpkg      $XDG_CONFIG_HOME/brew/brewcaskpkg
 }
 
 function setup_firebase() {
   brew install node
-	npm install -g firebase-tools
-}
-
-function setup_bash_completion() {
-  brew install bash-completion
-}
-
-function setup_protoc() {
-  brew install protobuf
-  brew install clang-format
+  npm install -g firebase-tools
 }
 
 set -e
+
+[ -e $HOME/.config ] || mkdir -p $HOME/.config
+[ -e $HOME/.config/bash ] || mkdir -p $HOME/.config/bash
+[ -e $HOME/.config/git ] || mkdir -p $HOME/.config/git
+[ -e $HOME/.config/vim ] || mkdir -p $HOME/.config/vim
+[ -e $HOME/.config/tmux ] || mkdir -p $HOME/.config/tmux
+[ -e $HOME/.config/brew ] || mkdir -p $HOME/.config/brew
+
 export GOPATH=$HOME/.ghq
 export PATH=$PATH:$HOME/.ghq/bin
+export XDG_CONFIG_HOME=$HOME/.config
 cd $HOME
 
-setup_git_ssh_key
-download_gitconfig
-install_homebrew
-install_golang
-setup_ghq
+#setup_git_ssh_key
+#download_gitconfig
 setup_dotfiles
-setup_vim
-setup_git
-setup_tmux
-setup_fzf
-setup_gcp_kube
-setup_hugo
-setup_firebase
-setup_bash_completion
-setup_protoc
+install_tools
 
 echo "setup successfully finished!!"
 echo "run 'source ~/.bash_profile' and ':PlugInstall' and <prefix> + r , <prefix> + I(to install tmux plugins)"
