@@ -36,6 +36,21 @@ function download_gitconfig() {
   rm -rf $HOME/yagi5-dotfiles-*
 }
 
+function setup_dotfiles() {
+  git clone https://github.com/yagi5/dotfiles ~/ghq/src/github.com/yagi5/dotfiles
+  rm $XDG_CONFIG_HOME/git/config
+  DOTFILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  ln -sf $DOTFILES/profile      $XDG_CONFIG_HOME/bash/profile
+  ln -sf $DOTFILES/profile.pvt  $XDG_CONFIG_HOME/bash/profile.pvt
+  ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/vim/vimrc
+  ln -sf $DOTFILES/tmux.conf    $XDG_CONFIG_HOME/tmux/tmux.conf
+  ln -sf $DOTFILES/inputrc      $XDG_CONFIG_HOME/readline/inputrc
+  ln -sf $DOTFILES/brewpkg      $XDG_CONFIG_HOME/brew/brewpkg
+  ln -sf $DOTFILES/brewcaskpkg  $XDG_CONFIG_HOME/brew/brewcaskpkg
+  ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
+  ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
+}
+
 function install_tools() {
   which brew > /dev/null 2>&1 || /usr/bin/ruby -e \
     "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -63,21 +78,6 @@ function after_install_tools() {
   go get -u github.com/motemen/ghq 
   go get -u github.com/yagi5/gotest 
   go get -u github.com/kazegusuri/grpcurl 
-}
-
-function setup_dotfiles() {
-  git clone https://github.com/yagi5/dotfiles ~/ghq/src/github.com/yagi5/dotfiles
-  rm $XDG_CONFIG_HOME/git/config
-  DOTFILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  ln -sf $DOTFILES/profile      $XDG_CONFIG_HOME/bash/profile
-  ln -sf $DOTFILES/profile.pvt  $XDG_CONFIG_HOME/bash/profile.pvt
-  ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/vim/vimrc
-  ln -sf $DOTFILES/tmux.conf    $XDG_CONFIG_HOME/tmux/tmux.conf
-  ln -sf $DOTFILES/inputrc      $XDG_CONFIG_HOME/readline/inputrc
-  ln -sf $DOTFILES/brewpkg      $XDG_CONFIG_HOME/brew/brewpkg
-  ln -sf $DOTFILES/brewcaskpkg  $XDG_CONFIG_HOME/brew/brewcaskpkg
-  ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
-  ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
 }
 
 function setup_firebase() {
@@ -115,6 +115,8 @@ rm -rf $HOME/.bash_sessions
 
 echo "setup successfully finished!!"
 echo "run below commands"
-echo "source ~/.config/bash/profile'
+echo ""
+echo "source ~/.config/bash/profile"
+echo "rm ~/install.sh"
 echo ":PlugInstall"
-echo "\<prefix\> + r, \<prefix\> + I(to install tmux plugins)"
+echo '<prefix> + r, <prefix> + I(to install tmux plugins)'

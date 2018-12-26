@@ -14,7 +14,7 @@
     InsteadOf = git@github.com:
 
 [ghq]
-    root = ~/.ghq/src
+    root = ~/ghq/src
 
 [core]
     pager = LESSCHARSET=utf-8 less
