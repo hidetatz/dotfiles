@@ -67,14 +67,17 @@ function after_install_tools() {
 
 function setup_dotfiles() {
   git clone https://github.com/yagi5/dotfiles ~/ghq/src/github.com/yagi5/dotfiles
+  rm $XDG_CONFIG_HOME/git/config
   DOTFILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  ln -sf $DOTFILES/bash_profile     $XDG_CONFIG_HOME/bash/bash_profile
-  ln -sf $DOTFILES/bash_profile.pvt $XDG_CONFIG_HOME/bash/bash_profile.pvt
-  ln -sf $DOTFILES/vimrc            $XDG_CONFIG_HOME/vim/vimrc
-  ln -sf $DOTFILES/tmux.conf        $XDG_CONFIG_HOME/tmux/tmux.conf
-  ln -sf $DOTFILES/inputrc          $XDG_CONFIG_HOME/readline/inputrc
-  ln -sf $DOTFILES/brewpkg          $XDG_CONFIG_HOME/brew/brewpkg
-  ln -sf $DOTFILES/brewcaskpkg      $XDG_CONFIG_HOME/brew/brewcaskpkg
+  ln -sf $DOTFILES/profile      $XDG_CONFIG_HOME/bash/profile
+  ln -sf $DOTFILES/profile.pvt  $XDG_CONFIG_HOME/bash/profile.pvt
+  ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/vim/vimrc
+  ln -sf $DOTFILES/tmux.conf    $XDG_CONFIG_HOME/tmux/tmux.conf
+  ln -sf $DOTFILES/inputrc      $XDG_CONFIG_HOME/readline/inputrc
+  ln -sf $DOTFILES/brewpkg      $XDG_CONFIG_HOME/brew/brewpkg
+  ln -sf $DOTFILES/brewcaskpkg  $XDG_CONFIG_HOME/brew/brewcaskpkg
+  ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
+  ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
 }
 
 function setup_firebase() {
@@ -99,11 +102,19 @@ export PATH=$PATH:$HOME/ghq/bin
 export XDG_CONFIG_HOME=$HOME/.config
 cd $HOME
 
-#setup_git_ssh_key
-download_gitconfig
+# setup_git_ssh_key
+# download_gitconfig
 setup_dotfiles
-install_tools
-after_install_tools
+# install_tools
+# after_install_tools
+
+set +e
+
+rm -rf $HOME/.bash_history
+rm -rf $HOME/.bash_sessions
 
 echo "setup successfully finished!!"
-echo "run 'source ~/.bash_profile' and ':PlugInstall' and <prefix> + r , <prefix> + I(to install tmux plugins)"
+echo "run below commands"
+echo "source ~/.config/bash/profile'
+echo ":PlugInstall"
+echo "\<prefix\> + r, \<prefix\> + I(to install tmux plugins)"
