@@ -66,8 +66,8 @@ function after_install_tools() {
 }
 
 function setup_dotfiles() {
-  git clone https://github.com/yagi5/dotfiles ~/.ghq/src/github.com/yagi5/dotfiles
-  DOTFILES=$HOME/.ghq/src/github.com/yagi5/dotfiles
+  git clone https://github.com/yagi5/dotfiles ~/ghq/src/github.com/yagi5/dotfiles
+  DOTFILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   ln -sf $DOTFILES/bash_profile     $XDG_CONFIG_HOME/bash/bash_profile
   ln -sf $DOTFILES/bash_profile.pvt $XDG_CONFIG_HOME/bash/bash_profile.pvt
   ln -sf $DOTFILES/vimrc            $XDG_CONFIG_HOME/vim/vimrc
@@ -92,15 +92,16 @@ set -e
 [ -e $HOME/.config/brew ] || mkdir -p $HOME/.config/brew
 [ -e $HOME/.config/readline ] || mkdir -p $HOME/.config/readline
 [ -e $HOME/.config/kube ] || mkdir -p $HOME/.config/kube
+[ -e $HOME/.config/docker ] || mkdir -p $HOME/.config/docker
 
-export GOPATH=$HOME/.ghq
-export PATH=$PATH:$HOME/.ghq/bin
+export GOPATH=$HOME/ghq
+export PATH=$PATH:$HOME/ghq/bin
 export XDG_CONFIG_HOME=$HOME/.config
 cd $HOME
 
 #setup_git_ssh_key
-# download_gitconfig
-# setup_dotfiles
+download_gitconfig
+setup_dotfiles
 install_tools
 after_install_tools
 

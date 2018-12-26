@@ -7,6 +7,7 @@ export HISTCONTROL=ignoreboth:erasedups
 export HISTFILE=$XDG_CONFIG_HOME/bash/bash_history
 export HISTSIZE=90000
 export HISTFILESIZE=90000
+export SHELL_SESSION_HISTORY=0 # disable $HOME/.bash_sessions
 shopt -s histappend
 
 # -------------------------------------
@@ -17,7 +18,10 @@ export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube"
+export DOCKERCONFIG="$XDG_CONFIG_HOME/docker"
 [ -e $XDG_CONFIG_HOME/bash/bash_profile.pvt ] && source $XDG_CONFIG_HOME/bash/bash_profile.pvt
+[ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh ] && \
+  source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh
 
 # -------------------------------------
 # functions
@@ -52,7 +56,7 @@ function fzf-rebase() {
 function ghq-cd-fzf {
   repo=`ghq list | fzf`
   if [ -n "$repo" ]; then
-    cd $HOME/.ghq/src/$repo
+    cd $HOME/ghq/src/$repo
   fi
 }
 
@@ -170,7 +174,7 @@ alias st='stern worker -o json -n $(kube_get_namespace)'
 # golang
 # -------------------------------------
 
-export GOPATH="$HOME/.ghq"
+export GOPATH="$HOME/ghq"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
 
