@@ -112,6 +112,7 @@ set +e
 
 rm -rf $HOME/.bash_history
 rm -rf $HOME/.bash_sessions
+rm -rf $HOME/.viminfo
 
 echo "setup successfully finished!!"
 echo "run below commands"
