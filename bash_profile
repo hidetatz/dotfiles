@@ -4,6 +4,7 @@
 
 export XDG_CONFIG_HOME=$HOME/.config
 export HISTCONTROL=ignoreboth:erasedups
+export HISTFILE=$XDG_CONFIG_HOME/bash/bash_history
 export HISTSIZE=90000
 export HISTFILESIZE=90000
 shopt -s histappend
@@ -15,6 +16,7 @@ shopt -s histappend
 export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
 export EDITOR="vim"
+export KUBECONFIG="$XDG_CONFIG_HOME/kube"
 [ -e $XDG_CONFIG_HOME/bash/bash_profile.pvt ] && source $XDG_CONFIG_HOME/bash/bash_profile.pvt
 
 # -------------------------------------
@@ -145,7 +147,7 @@ GIT_PS1_SHOWUPSTREAM=
 
 alias ls='ls -GF'
 alias ll='ls -alh'
-alias vi="vim -u $XDG_CONFIG_HOME/vim/.vimrc"
+alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'
@@ -177,7 +179,7 @@ export PATH=$PATH:/usr/local/go/bin
 # -------------------------------------
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
-[ -f $XDG_CONFIG_HOME/fzf/.fzf.bash ] && source $XDG_CONFIG_HOME/fzf/.fzf.bash
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 
 # -------------------------------------
 # pip

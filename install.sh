@@ -31,7 +31,7 @@ function download_gitconfig() {
   cd $HOME
   curl -fsSL https://github.com/yagi5/dotfiles/tarball/master | tar xz
   cd yagi5-dotfiles-*
-  mv gitconfig $XDG_CONFIG_HOME/git/.gitconfig
+  mv gitconfig $XDG_CONFIG_HOME/git/config
   cd $HOME
   rm -rf $HOME/yagi5-dotfiles-*
 }
@@ -40,19 +40,25 @@ function install_tools() {
   which brew > /dev/null 2>&1 || /usr/bin/ruby -e \
     "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-  source ~/$XDG_CONFIG_HOME/bash/bash_profile
-  brew_install
+  while read formula; do
+    brew info $formula > /dev/null 2>&1 || brew cask install $formula
+  done < $XDG_CONFIG_HOME/brew/brewcaskpkg 
+
+  while read formula; do
+    brew info $formula > /dev/null 2>&1 || brew install $formula
+  done < $XDG_CONFIG_HOME/brew/brewpkg 
 }
 
 function after_install_tools() {
   # fzf
-  /usr/local/opt/fzf/install --no-zsh --no-fish --key-bindings --completion --xdg
+  /usr/local/opt/fzf/install --no-zsh --no-fish --key-bindings --completion --no-update-rc --xdg
   # tmux plugin manager
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  [ -e $XDG_CONFIG_HOME/tmux/plugins/tpm ] || git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
   # kubectl
-  gcloud components install kubectl
+  which kubectl > /dev/null 2>&1 | gcloud components install kubectl
   # vim-plug
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  [ -e $XDG_CONFIG_HOME/vim/autoload/ ] | curl -fLo $XDG_CONFIG_HOME/vim/autoload/plug.vim \
+    --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
   go get -u github.com/motemen/ghq 
   go get -u github.com/yagi5/gotest 
@@ -84,6 +90,8 @@ set -e
 [ -e $HOME/.config/vim ] || mkdir -p $HOME/.config/vim
 [ -e $HOME/.config/tmux ] || mkdir -p $HOME/.config/tmux
 [ -e $HOME/.config/brew ] || mkdir -p $HOME/.config/brew
+[ -e $HOME/.config/readline ] || mkdir -p $HOME/.config/readline
+[ -e $HOME/.config/kube ] || mkdir -p $HOME/.config/kube
 
 export GOPATH=$HOME/.ghq
 export PATH=$PATH:$HOME/.ghq/bin
@@ -91,9 +99,10 @@ export XDG_CONFIG_HOME=$HOME/.config
 cd $HOME
 
 #setup_git_ssh_key
-#download_gitconfig
-setup_dotfiles
+# download_gitconfig
+# setup_dotfiles
 install_tools
+after_install_tools
 
 echo "setup successfully finished!!"
 echo "run 'source ~/.bash_profile' and ':PlugInstall' and <prefix> + r , <prefix> + I(to install tmux plugins)"
