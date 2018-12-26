@@ -19,7 +19,7 @@ export LESS='-i -M -R -W -q -S'
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube"
 export DOCKERCONFIG="$XDG_CONFIG_HOME/docker"
-[ -e $XDG_CONFIG_HOME/bash/bash_profile.pvt ] && source $XDG_CONFIG_HOME/bash/bash_profile.pvt
+[ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
 [ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh ] && \
   source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh
 
@@ -154,6 +154,7 @@ GIT_PS1_SHOWUPSTREAM=
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'

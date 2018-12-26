@@ -78,6 +78,7 @@ function after_install_tools() {
   go get -u github.com/motemen/ghq 
   go get -u github.com/yagi5/gotest 
   go get -u github.com/kazegusuri/grpcurl 
+  go get -u github.com/sourcegraph/go-langserver
 }
 
 function setup_firebase() {
@@ -102,11 +103,11 @@ export PATH=$PATH:$HOME/ghq/bin
 export XDG_CONFIG_HOME=$HOME/.config
 cd $HOME
 
-# setup_git_ssh_key
-# download_gitconfig
+setup_git_ssh_key
+download_gitconfig
 setup_dotfiles
-# install_tools
-# after_install_tools
+install_tools
+after_install_tools
 
 set +e
 
@@ -120,4 +121,4 @@ echo ""
 echo "source ~/.config/bash/profile"
 echo "rm ~/install.sh"
 echo ":PlugInstall"
-echo '<prefix> + r, <prefix> + I(to install tmux plugins)'
+echo '<prefix> + I(to install tmux plugins)'
