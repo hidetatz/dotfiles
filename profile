@@ -18,7 +18,7 @@ export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube"
-export DOCKERCONFIG="$XDG_CONFIG_HOME/docker"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
 [ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh ] && \
   source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh
@@ -156,6 +156,7 @@ alias ll='ls -alh'
 alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
+alias docker="docker --config $XDG_CONFIG_HOME/docker/"
 alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'
 alias gr='ghq-cd-fzf'
@@ -198,8 +199,8 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 # completion
 # -------------------------------------
 
-# [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-# [ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+[ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
 # source <(kubectl completion bash)
