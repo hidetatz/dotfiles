@@ -50,3 +50,6 @@
     st = stash
     sp = stash pop
     url =! bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
+
+[http]
+	cookiefile = /Users/yagi5/.config/git/cookies
