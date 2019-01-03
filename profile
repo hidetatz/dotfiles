@@ -16,10 +16,12 @@ shopt -s histappend
 
 export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
+export LaqESSHISTSIZE=0
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
+[ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/bash-preexec.sh ] && source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/bash-preexec.sh
 [ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh ] && \
   source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh
 
@@ -200,6 +202,17 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 # -------------------------------------
 
 # PATH=$PATH:$HOME/.local/bin
+
+# -------------------------------------
+# preexec(https://github.com/rcaloras/bash-preexec)
+# -------------------------------------
+
+preexec() {
+  hist-datastore put $PWD "$1"
+}
+precmd() { 
+  : 
+}
 
 # -------------------------------------
 # completion
