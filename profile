@@ -179,6 +179,7 @@ alias ke='kube_exec_pod'
 alias kl='kube_log_pod'
 alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
+alias h='history_get_from_datastore'
 
 # -------------------------------------
 # golang
