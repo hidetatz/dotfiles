@@ -118,6 +118,10 @@ function kube_ctx() {
   kubectl config get-contexts --no-headers --output='name' | fzf | xargs kubectl config use-context
 }
 
+function history_get_from_datastore() {
+  hist-datastore get $PWD | fzf
+}
+
 # -------------------------------------
 # prompt
 # -------------------------------------
@@ -208,8 +212,9 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 # -------------------------------------
 
 preexec() {
-  hist-datastore put $PWD "$1"
+  (hist-datastore put $PWD "$1" &)
 }
+
 precmd() { 
   : 
 }
