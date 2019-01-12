@@ -18,6 +18,7 @@
 
 [core]
     pager = LESSCHARSET=utf-8 less
+    sshCommand = "ssh -F $XDG_CONFIG_HOME/ssh/config"
 
 [color]
     ui = true

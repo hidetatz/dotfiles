@@ -2,12 +2,12 @@
 
 function setup_git_ssh_key() {
   set +xe
-  ssh-keygen -t rsa -f $HOME/.ssh/github_mac -P ""
+  ssh-keygen -t rsa -f $XDG_CONFIG_HOME/ssh/github_mac -P ""
   
   echo "Input GitHub token(to register public key to GitHub)"
   read -sp "Token: " token 
   
-  publickey=`cat $HOME/.ssh/github_mac.pub`
+  publickey=`cat $SDG_CONFIG_HOME/ssh/github_mac.pub`
   
   curl -XPOST \
     -H "Content-Type: application/json" \
@@ -15,14 +15,14 @@ function setup_git_ssh_key() {
     -d "{\"title\": \"fromscript\", \"key\": \"${publickey}\"}" \
     'https://api.github.com/user/keys'
   set -xe
-  chmod 600 $HOME/.ssh/github_mac
-  rm $HOME/.ssh/github_mac.pub
+  chmod 600 $XDG_CONFIG_HOME/ssh/github_mac
+  rm $XDG_CONFIG_HOME/ssh/github_mac.pub
 
 cat << EOS >> $HOME/.ssh/config
 
 Host github github.com
   HostName github.com
-  IdentityFile ~/.ssh/github_mac
+  IdentityFile ~/.config/ssh/github_mac
   User git
 EOS
 }

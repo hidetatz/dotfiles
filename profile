@@ -180,6 +180,7 @@ alias kl='kube_log_pod'
 alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias h='history_get_from_datastore'
+alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 
 # -------------------------------------
 # golang
