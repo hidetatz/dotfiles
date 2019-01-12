@@ -154,6 +154,13 @@ GIT_PS1_SHOWSTASHSTATE=false
 GIT_PS1_SHOWUPSTREAM=
 
 # -------------------------------------
+# completion
+# -------------------------------------
+
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+[ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
+
+# -------------------------------------
 # alias
 # -------------------------------------
 
@@ -179,8 +186,13 @@ alias ke='kube_exec_pod'
 alias kl='kube_log_pod'
 alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
-alias h='history_get_from_datastore'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
+
+# -------------------------------------
+# bind
+# -------------------------------------
+
+bind '"\C-r": " \C-e\C-u\C-y\ey\C-u`history_get_from_datastore`\e\C-e\er\e^"'
 
 # -------------------------------------
 # golang
@@ -201,7 +213,7 @@ eval "$(hub alias -s)"
 # -------------------------------------
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+# [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 
 # -------------------------------------
 # pip
@@ -220,13 +232,3 @@ preexec() {
 precmd() { 
   : 
 }
-
-# -------------------------------------
-# completion
-# -------------------------------------
-
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-[ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
-# source <(kubectl completion bash)
