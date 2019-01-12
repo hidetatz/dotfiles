@@ -18,7 +18,7 @@
 
 [core]
     pager = LESSCHARSET=utf-8 less
-    sshCommand = "ssh -F $XDG_CONFIG_HOME/ssh/config"
+    sshCommand = "ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
 
 [color]
     ui = true
