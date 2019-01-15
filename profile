@@ -16,6 +16,7 @@ shopt -s histappend
 
 export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
+export LESSHISTSIZE=0
 export LaqESSHISTSIZE=0
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube"
