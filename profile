@@ -50,7 +50,8 @@ function git_show_fzf() {
 
 function fzf-rebase() {
   local commits commit
-  commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
+  format="%C(red)%h%Creset %C(cyan)%cd%Creset %C(yellow)%N%Creset %C(green)%s%Creset %C(white)(%an)%Creset"
+  commits=$(git log --color=always --pretty=oneline --pretty=format:"$format" --abbrev-commit --reverse) &&
   commit=$(echo "$commits" | fzf --tac +s +m --ansi --reverse) &&
   echo -n $(echo "$commit" | sed "s/ .*//")
 }
