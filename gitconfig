@@ -18,7 +18,7 @@
 
 [core]
     pager = LESSCHARSET=utf-8 less
-    sshCommand = "ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
+    sshCommand = "ssh -F /Users/ygnmhdtt/.config/ssh/config -o UserKnownHostsFile=/Users/ygnmhdtt/.config/ssh/known_hosts"
     editor = vim -u /Users/ygnmhdtt/.config/vim/vimrc
 
 [color]

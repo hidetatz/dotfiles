@@ -21,6 +21,7 @@ export LaqESSHISTSIZE=0
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
+export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
 [ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/bash-preexec.sh ] && source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/bash-preexec.sh
 [ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh ] && \
@@ -121,7 +122,8 @@ function kube_ctx() {
 }
 
 function history_get_from_datastore() {
-  hist-datastore get $PWD | fzf
+	pwd=`dirs +0`
+  hist-datastore get $pwd | fzf
 }
 
 # -------------------------------------
@@ -179,7 +181,7 @@ alias gf='git rbi `fzf-rebase`'
 alias gs='git_show_fzf'
 alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
-alias ap='export AWS_DEFAULT_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
+alias ap='export AWS_PROFILE=$(grep -iE "^[]+[^*]" ~/.config/aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
 alias k='kubectl'
 alias gcf='gcloud_config_set_fzf'
@@ -194,6 +196,9 @@ alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_
 # bind
 # -------------------------------------
 
+# necessary for history_get_from_datastore
+bind '"\er": redraw-current-line'
+bind '"\e^": history-expand-line'
 bind '"\C-r": " \C-e\C-u\C-y\ey\C-u`history_get_from_datastore`\e\C-e\er\e^"'
 
 # -------------------------------------
@@ -228,7 +233,8 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 # -------------------------------------
 
 preexec() {
-  (hist-datastore put $PWD "$1" &)
+	pwd=`dirs +0`
+  (hist-datastore put $pwd "$1" &)
 }
 
 precmd() { 

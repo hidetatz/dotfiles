@@ -7,7 +7,7 @@ function setup_git_ssh_key() {
   echo "Input GitHub token(to register public key to GitHub)"
   read -sp "Token: " token 
   
-  publickey=`cat $SDG_CONFIG_HOME/ssh/github_mac.pub`
+  publickey=`cat $XDG_CONFIG_HOME/ssh/github_mac.pub`
   
   curl -XPOST \
     -H "Content-Type: application/json" \
