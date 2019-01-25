@@ -123,7 +123,7 @@ function kube_ctx() {
 
 function history_get_from_datastore() {
 	pwd=`dirs +0`
-  hist-datastore get $pwd | fzf
+  hist-datastore get $pwd | fzf --no-sort
 }
 
 # -------------------------------------
