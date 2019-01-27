@@ -18,8 +18,8 @@
 
 [core]
     pager = LESSCHARSET=utf-8 less
-    sshCommand = "ssh -F /Users/ygnmhdtt/.config/ssh/config -o UserKnownHostsFile=/Users/ygnmhdtt/.config/ssh/known_hosts"
-    editor = vim -u /Users/ygnmhdtt/.config/vim/vimrc
+    sshCommand = "ssh -F $HOME/.config/ssh/config -o UserKnownHostsFile=$HOME/.config/ssh/known_hosts"
+    editor = vim -u $HOME/.config/vim/vimrc
 
 [color]
     ui = true
@@ -54,4 +54,4 @@
     url =! bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
 
 [http]
-	cookiefile = /Users/yagi5/.config/git/cookies
+	cookiefile = $HOME/.config/git/cookies
