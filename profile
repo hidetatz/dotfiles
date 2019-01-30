@@ -122,8 +122,22 @@ function kube_ctx() {
 }
 
 function history_get_from_datastore() {
-	pwd=`dirs +0`
+  pwd=`dirs +0`
   hist-datastore get $pwd | fzf --no-sort
+}
+
+function aws_logs_fzf() {
+  group=$(cw ls groups | fzf --no-sort)
+  if [ $? != 0 ]; then
+    return
+  fi
+  stream=$(aws logs describe-log-streams --log-group-name=$group --order-by=LastEventTime | \
+    jq .logStreams[].logStreamName | tr -d '"' | fzf --no-sort --tac --reverse)
+  if [ $? != 0 ]; then
+    return
+  fi
+  echo "cw tail --follow --timestamp $group:$stream"
+  cw tail --follow --timestamp $group:$stream
 }
 
 # -------------------------------------
@@ -191,6 +205,7 @@ alias kl='kube_log_pod'
 alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
+alias af='aws_logs_fzf'
 
 # -------------------------------------
 # bind
@@ -233,7 +248,7 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 # -------------------------------------
 
 preexec() {
-	pwd=`dirs +0`
+  pwd=`dirs +0`
   (hist-datastore put $pwd "$1" &)
 }
 
