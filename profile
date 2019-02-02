@@ -195,7 +195,7 @@ alias gf='git rbi `fzf-rebase`'
 alias gs='git_show_fzf'
 alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
-alias ap='export AWS_PROFILE=$(grep -iE "^[]+[^*]" ~/.config/aws/credentials | tr -d [| tr -d ] | fzf)'
+alias ap='export AWS_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
 alias k='kubectl'
 alias gcf='gcloud_config_set_fzf'
