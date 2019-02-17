@@ -70,9 +70,9 @@ function gcloud_config_set_fzf() {
 }
 
 function gcloud_account() {
-  [ -e $HOME/.config/gcloug/active_config ] || echo "" && return
+  [ -e $HOME/.config/gcloud/active_config ] || (echo "" && return)
   pj=$(cat $HOME/.config/gcloud/active_config)
-  if [ $? -ne 0 ]; then
+  if [ -z "$pj" ]; then
     account=""
   else
     account=$(cat $HOME/.config/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
@@ -81,7 +81,7 @@ function gcloud_account() {
 }
 
 function gcloud_pj() {
-  [ -e $HOME/.config/gcloug/active_config ] || echo "" && return
+  [ -e $HOME/.config/gcloud/active_config ] || (echo "" && return)
   echo $(cat $HOME/.config/gcloud/active_config)
 }
 
