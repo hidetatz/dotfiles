@@ -127,6 +127,7 @@ function history_get_from_datastore() {
 }
 
 function aws_logs_fzf() {
+  export AWS_DEFAULT_REGION=ap-northeast-1
   group=$(cw ls groups | fzf --no-sort)
   if [ $? != 0 ]; then
     return
@@ -206,6 +207,9 @@ alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias af='aws_logs_fzf'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfd='terraform destroy'
 
 # -------------------------------------
 # bind
