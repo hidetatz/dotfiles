@@ -9,26 +9,11 @@ call plug#begin('~/.config/vim/plugged')
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'rhysd/vim-clang-format'
   Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-
-  " go lsp
-  Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  Plug 'natebosch/vim-lsc'
-
-  " terraform
-  Plug 'vim-syntastic/syntastic'
-  Plug 'juliosueiras/vim-terraform-completion'
 call plug#end()
 
 filetype plugin indent on
@@ -41,6 +26,7 @@ set encoding=utf-8
 set ambiwidth=double
 set tabstop=2
 set shiftwidth=2
+
 " set expandtab
 set autoindent
 set backspace=indent,eol,start
@@ -106,14 +92,6 @@ command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
-" vim-gitgutter
-"----------------------------------------------------------------------------
-let g:gitgutter_sign_added = '∙'
-let g:gitgutter_sign_modified = '∙'
-let g:gitgutter_sign_removed = '∙'
-let g:gitgutter_sign_modified_removed = '∙'
-
-"----------------------------------------------------------------------------
 " Golang
 "----------------------------------------------------------------------------
 let g:go_highlight_functions = 1
@@ -138,8 +116,6 @@ function! s:build_go_files()
   endif
 endfunction
 
-" go lsp
-let g:lsp_async_completion = 1
 if executable('go-langserver')
   au User lsp_setup call lsp#register_server({
       \ 'name': 'go-langserver',
@@ -147,6 +123,14 @@ if executable('go-langserver')
       \ 'whitelist': ['go'],
       \ })
 endif
+
+" if executable('bingo')
+"     au User lsp_setup call lsp#register_server({
+"         \ 'name': 'bingo',
+"         \ 'cmd': {server_info->['bingo', '-mode', 'stdio']},
+"         \ 'whitelist': ['go'],
+"         \ })
+" endif
 
 au FileType go :highlight goErr cterm=bold ctermfg=lightblue
 au FileType go :match goErr /\<err\>/
@@ -161,17 +145,6 @@ autocmd FileType go nmap <Leader>i :LspImplementation<CR>
 autocmd FileType go nmap <Leader>t :LspTypeDefinition<CR>
 autocmd FileType go nmap <silent> <Leader>s :split \| :LspDefinition <CR>
 autocmd FileType go nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
-" autocmd FileType go nmap <C-n> :cnext<CR>
-" autocmd FileType go nmap <C-m> :cprevious<CR>
-" autocmd FileType go nmap <Leader>i <Plug>(go-info)
-" autocmd FileType go nmap <Leader>p :LspHover<CR>
-" autocmd FileType go nmap <Leader>n :LspNextError<CR>
-" autocmd FileType go nmap <Leader>p :LspPreviousError<CR>
-
-"----------------------------------------------------------------------------
-" vim-clang-format
-"----------------------------------------------------------------------------
-autocmd FileType proto ClangFormatAutoEnable
 
 "----------------------------------------------------------------------------
 " vim-terraform
@@ -180,82 +153,3 @@ let g:terraform_align=1
 let g:terraform_fold_sections=1
 let g:terraform_remap_spacebar=1
 let g:terraform_fmt_on_save = 1
-
-"----------------------------------------------------------------------------
-" vim-easy-align
-"----------------------------------------------------------------------------
-nmap ga <Plug>(EasyAlign)
-
-"----------------------------------------------------------------------------
-" deoplete.nvim
-"----------------------------------------------------------------------------
-" let g:deoplete#omni_patterns = {}
-" let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
-" let g:deoplete#enable_at_startup = 1
-" call deoplete#initialize()
-
-" call deoplete#initialize()
-
-"----------------------------------------------------------------------------
-" vim-terraform-completion
-"----------------------------------------------------------------------------
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-
-" (Optional)Remove Info(Preview) window
-set completeopt-=preview
-
-" (Optional)Hide Info(Preview) window after completions
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-" (Optional) Enable terraform plan to be include in filter
-let g:syntastic_terraform_tffilter_plan = 1
-
-" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
-let g:terraform_completion_keys = 1
-
-" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
-let g:terraform_registry_module_completion = 0
-
-"----------------------------------------------------------------------------
-" ultisnips
-"----------------------------------------------------------------------------
-" memo: 
-"
-" errp -> if err != nil { panic() }
-" errn -> if err != nil { return err }
-" errl -> if err != nil { log.Fatal(err) }
-" errt -> if err != nil { t.Fatal(err) }
-"
-" fn -> fmt.Println()
-" ff -> fmt.Printf()
-" ln -> log.Println()
-" lf -> log.Printf()
-"
-" br -> break
-" cn -> continue
-" df -> defer ...
-" iota -> const ( ... iota )
-"
-" if
-" for
-" func
-" case
-"
-" json
-" yaml
-"
-" ok
-"
-" rt
-" st
-" sp
-"
-" others: https://github.com/fatih/vim-go/blob/master/gosnippets/UltiSnips/go.snippets
