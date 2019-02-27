@@ -9,11 +9,15 @@ call plug#begin('~/.config/vim/plugged')
   Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
+  Plug 'Shougo/deoplete.nvim'
   Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'
+  Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 call plug#end()
 
 filetype plugin indent on
@@ -66,6 +70,12 @@ nnoremap <Leader>w :w<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
 nnoremap Y y$
+
+"----------------------------------------------------------------------------
+" deoplete.nvim
+"----------------------------------------------------------------------------
+
+let g:deoplete#enable_at_startup = 1
 
 "----------------------------------------------------------------------------
 " fzf.vim
