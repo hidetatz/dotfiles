@@ -264,4 +264,4 @@ precmd() {
 # hist-datastore
 # -------------------------------------
 
-cacheupdate &
+(cacheupdate &)
