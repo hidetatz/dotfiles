@@ -19,7 +19,7 @@ export LESS='-i -M -R -W -q -S'
 export LESSHISTSIZE=0
 export LaqESSHISTSIZE=0
 export EDITOR="vim"
-export KUBECONFIG="$XDG_CONFIG_HOME/kube"
+export KUBECONFIG="$XDG_CONFIG_HOME/kube/config"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
