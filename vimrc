@@ -6,14 +6,18 @@ call plug#begin('~/.config/vim/plugged')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'airblade/vim-gitgutter'
   Plug 'cocopon/iceberg.vim'
-  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
-  Plug 'Shougo/deoplete.nvim'
   Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'
+
+  " programming
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'roxma/nvim-yarp'
@@ -127,11 +131,11 @@ function! s:build_go_files()
 endfunction
 
 if executable('go-langserver')
-  au User lsp_setup call lsp#register_server({
-      \ 'name': 'go-langserver',
-      \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
-      \ 'whitelist': ['go'],
-      \ })
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'go-langserver',
+        \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
+        \ 'whitelist': ['go'],
+        \ })
 endif
 
 " if executable('bingo')

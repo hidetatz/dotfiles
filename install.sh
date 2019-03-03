@@ -97,6 +97,7 @@ set -e
 [ -e $HOME/.config/readline ] || mkdir -p $HOME/.config/readline
 [ -e $HOME/.config/kube ] || mkdir -p $HOME/.config/kube
 [ -e $HOME/.config/docker ] || mkdir -p $HOME/.config/docker
+[ -e $HOME/.config/nvim ] || mkdir -p $HOME/.config/nvim
 
 export GOPATH=$HOME/ghq
 export PATH=$PATH:$HOME/ghq/bin
