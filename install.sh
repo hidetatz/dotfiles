@@ -48,6 +48,7 @@ function setup_dotfiles() {
   ln -sf $DOTFILES/brewpkg      $XDG_CONFIG_HOME/brew/brewpkg
   ln -sf $DOTFILES/brewcaskpkg  $XDG_CONFIG_HOME/brew/brewcaskpkg
   ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
+  ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/nvim/init.vim
   ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
 }
 
