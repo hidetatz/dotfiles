@@ -10,10 +10,13 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'
-  Plug 'stamblerre/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
 
-  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-  Plug 'Shougo/deoplete.nvim' , { 'do': ':UpdateRemotePlugins' }
+  " lsp and go
+  Plug 'fatih/vim-go'
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-gocode.vim'
 call plug#end()
 
 filetype plugin indent on
@@ -69,12 +72,6 @@ nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<
 nnoremap Y y$
 
 "----------------------------------------------------------------------------
-" deoplete.nvim
-"----------------------------------------------------------------------------
-
-let g:deoplete#enable_at_startup = 1
-
-"----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
 " for fzf installed by homebrew
@@ -97,32 +94,65 @@ command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
-" Golang
+" Go
 "----------------------------------------------------------------------------
 
-let g:LanguageClient_rootMarkers = {
-    \ 'go': ['.git', 'go.mod'],
-    \ }
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
 
-" let g:LanguageClient_serverCommands = {
-"     \ 'go': ['bingo','-format-style=goimports','--diagnostics-style=instant','--cache-style','always']
-"     \ }
-let g:LanguageClient_serverCommands = {
-    \ 'go': ['go-langserver','-gocodecompletion','-diagnostics']
-    \ }
+let g:go_gocode_unimported_packages = 1
+let g:go_metalinter_autosave = 1
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+
+if executable('go-langserver')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'go-langserver',
+    \ 'cmd': {server_info->['go-langserver', 
+    \   '-gocodecompletion', 
+    \   '-format-tool=goimports', 
+    \   '-diagnostics', 
+    \   '-lint-tool=golint'
+    \ ]},
+    \ 'whitelist': ['go'],
+    \ })
+endif
+
+call asyncomplete#register_source(asyncomplete#sources#gocode#get_source_options({
+  \ 'name': 'gocode',
+  \ 'whitelist': ['go'],
+  \ 'completor': function('asyncomplete#sources#gocode#completor'),
+  \ 'config': {
+  \    'gocode_path': expand('~/ghq/bin/gocode')
+  \  },
+  \ }))
 
 au FileType go :highlight goErr cterm=bold ctermfg=lightblue
 au FileType go :match goErr /\<err\>/
 
-nnoremap <Leader>a :call LanguageClient#textDocument_hover()<CR>
-nnoremap <Leader>d :call LanguageClient#textDocument_definition()<CR>
-nnoremap <Leader>t :call LanguageClient#textDocument_typeDefinition()<CR>
-nnoremap <Leader>i :call LanguageClient#textDocument_implementation()<CR>
-nnoremap <Leader>r :call LanguageClient#textDocument_rename()<CR>
-nnoremap <Leader>D :call LanguageClient#textDocument_references()<CR>
-nnoremap <Leader>f :call LanguageClient#textDocument_formatting()<CR>
-nnoremap <Leader>s :call LanguageClient#serverStatus()<CR>
-nnoremap <Leader>S :call LanguageClient#serverStatusMessage()<CR>
+"----------------------------------------------------------------------------
+" vim-lsp
+"----------------------------------------------------------------------------
+
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+
+nmap <Leader>d :LspDefinition<CR>
+nmap <Leader>D :LspDocumentDiagnostics<CR>
+nmap <Leader>f :LspDocumentFormat<CR>
+nmap <Leader>s :LspDocumentSymbol<CR>
+nmap <Leader>h :LspHover<CR>
+nmap <Leader>i :LspImplementation<CR>
+nmap <Leader>n :LspNextError<CR>
+nmap <Leader>p :LspPreviousError<CR>
+nmap <Leader>R :LspReferences<CR>
+nmap <Leader>r :LspRename<CR>
+nmap <Leader>S :LspStatus<CR>
+" currently not working
+" nmap <Leader>a :LspCodeAction<CR>
+" nmap <Leader>e :LspDeclaration<CR>
+" nmap <Leader>a :LspDocumentRangeFormat<CR>
+" nmap <Leader>a :LspTypeDefinition<CR>
+" nmap <Leader>a :LspWorkspaceSymbol<CR>
 
 "----------------------------------------------------------------------------
 " vim-terraform
