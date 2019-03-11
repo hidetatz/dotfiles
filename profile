@@ -8,6 +8,9 @@ export HISTFILE=$XDG_CONFIG_HOME/bash/bash_history
 export HISTSIZE=90000
 export HISTFILESIZE=90000
 export SHELL_SESSION_HISTORY=0 # disable $HOME/.bash_sessions
+export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
+export BOTO_PATH="$XDG_CONFIG_HOME/boto/boto"
+for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
 shopt -s histappend
 
 # -------------------------------------
@@ -156,7 +159,7 @@ function aws_logs_fzf() {
 KUBE_PS1_SYMBOL_COLOR=green
 KUBE_PS1_CTX_COLOR=green
 KUBE_PS1_NS_COLOR=green
-source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+# source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
 
 PS1='
 $(kube_ps1) 
@@ -230,23 +233,18 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
 
 # -------------------------------------
-# hub
-# -------------------------------------
-
-eval "$(hub alias -s)"
-
-# -------------------------------------
 # fzf
 # -------------------------------------
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 # [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 
 # -------------------------------------
-# pip
+# gcloud
 # -------------------------------------
 
-# PATH=$PATH:$HOME/.local/bin
+PATH=$PATH:$XDG_CONFIG_HOME/google-cloud-sdk/bin
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)

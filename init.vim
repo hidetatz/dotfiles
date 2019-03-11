@@ -76,6 +76,7 @@ nnoremap Y y$
 "----------------------------------------------------------------------------
 " for fzf installed by homebrew
 set rtp+=/usr/local/opt/fzf
+set rtp+=~/ghq/src/github.com/junegunn/fzf
 
 nnoremap ; :Buffers
 nnoremap t :Files
