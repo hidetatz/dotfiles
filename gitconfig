@@ -54,6 +54,7 @@
     url =! bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
 
 [http]
-	cookiefile = $HOME/.config/git/cookies
+    cookiefile = $HOME/.config/git/cookies
+
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+    insteadOf = https://github.com/

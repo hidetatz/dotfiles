@@ -42,27 +42,14 @@ function setup_dotfiles() {
   DOTFILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   ln -sf $DOTFILES/profile      $XDG_CONFIG_HOME/bash/profile
   ln -sf $DOTFILES/profile.pvt  $XDG_CONFIG_HOME/bash/profile.pvt
-  ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/vim/vimrc
   ln -sf $DOTFILES/tmux.conf    $XDG_CONFIG_HOME/tmux/tmux.conf
-  ln -sf $DOTFILES/inputrc      $XDG_CONFIG_HOME/readline/inputrc
-  ln -sf $DOTFILES/brewpkg      $XDG_CONFIG_HOME/brew/brewpkg
-  ln -sf $DOTFILES/brewcaskpkg  $XDG_CONFIG_HOME/brew/brewcaskpkg
   ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
   ln -sf $DOTFILES/init.vim     $XDG_CONFIG_HOME/nvim/init.vim
   ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
 }
 
 function install_tools() {
-  which brew > /dev/null 2>&1 || /usr/bin/ruby -e \
-    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-  while read formula; do
-    brew info $formula > /dev/null 2>&1 || brew cask install $formula
-  done < $XDG_CONFIG_HOME/brew/brewcaskpkg 
-
-  while read formula; do
-    brew info $formula > /dev/null 2>&1 || brew install $formula
-  done < $XDG_CONFIG_HOME/brew/brewpkg 
+  which snap > /dev/null 2>&1 || apt install snap
 }
 
 function after_install_tools() {
@@ -75,16 +62,6 @@ function after_install_tools() {
   # vim-plug
   [ -e $XDG_CONFIG_HOME/vim/autoload/ ] | curl -fLo $XDG_CONFIG_HOME/vim/autoload/plug.vim \
     --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-  go get -u github.com/motemen/ghq 
-  go get -u github.com/yagi5/gotest 
-  go get -u github.com/kazegusuri/grpcurl 
-  go get -u github.com/sourcegraph/go-langserver
-}
-
-function setup_firebase() {
-  brew install node
-  npm install -g firebase-tools
 }
 
 set -e
@@ -92,10 +69,7 @@ set -e
 [ -e $HOME/.config ] || mkdir -p $HOME/.config
 [ -e $HOME/.config/bash ] || mkdir -p $HOME/.config/bash
 [ -e $HOME/.config/git ] || mkdir -p $HOME/.config/git
-[ -e $HOME/.config/vim ] || mkdir -p $HOME/.config/vim
 [ -e $HOME/.config/tmux ] || mkdir -p $HOME/.config/tmux
-[ -e $HOME/.config/brew ] || mkdir -p $HOME/.config/brew
-[ -e $HOME/.config/readline ] || mkdir -p $HOME/.config/readline
 [ -e $HOME/.config/kube ] || mkdir -p $HOME/.config/kube
 [ -e $HOME/.config/docker ] || mkdir -p $HOME/.config/docker
 [ -e $HOME/.config/nvim ] || mkdir -p $HOME/.config/nvim
@@ -116,6 +90,8 @@ set +e
 rm -rf $HOME/.bash_history
 rm -rf $HOME/.bash_sessions
 rm -rf $HOME/.viminfo
+
+echo "source ~/.config/bash/profile" | sudo tee -a /etc/profile
 
 echo "setup successfully finished!!"
 echo "run below commands"

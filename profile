@@ -144,6 +144,33 @@ function aws_logs_fzf() {
   cw tail --follow --timestamp $group:$stream
 }
 
+function go_get() {
+	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  echo $1 >> $DOT_FILES/packages/go
+	cat $DOT_FILES/packages/go | while read line
+	do
+    ghq list | grep github.com/$line || go get github.com/$line
+	done
+}
+
+function ghq_get() {
+	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  echo $1 >> $DOT_FILES/packages/ghq
+	cat $DOT_FILES/packages/ghq | while read line
+	do
+    ghq list | grep github.com/$line || ghq get $line
+	done
+}
+
+function snap_get() {
+	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  echo $1 >> $DOT_FILES/packages/snap
+	cat $DOT_FILES/packages/snap | while read line
+	do
+    snap list | grep $line || snap install $line
+	done
+}
+
 # -------------------------------------
 # prompt
 # -------------------------------------
