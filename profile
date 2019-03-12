@@ -19,7 +19,8 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
 shopt -s histappend
 
-for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
+# for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
+for f in ~/.config/scripts/*; do source $f; done
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
 
 # -------------------------------------
@@ -150,12 +151,12 @@ function ghq_get() {
 	done
 }
 
-function snap_get() {
+function brew_get() {
 	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/snap
-	cat $DOT_FILES/packages/snap | while read line
+	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/brew
+	cat $DOT_FILES/packages/brew | while read line
 	do
-    snap list | grep $line || snap install $line
+    brew list | grep $line || brew install $line
 	done
 }
 
@@ -200,7 +201,7 @@ GIT_PS1_SHOWUPSTREAM=
 # alias
 # -------------------------------------
 
-alias ls='ls --color -F'
+alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
