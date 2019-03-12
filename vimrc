@@ -36,7 +36,9 @@ set hidden
 " set expandtab
 set autoindent
 set backspace=indent,eol,start
-set clipboard+=unnamed
+" set clipboard+=unnamed
+set clipboard=unnamedplus,autoselect,exclude:cons\\\\|linux
+
 
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
