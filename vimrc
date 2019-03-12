@@ -4,6 +4,7 @@ set viminfo+=n~/.config/vim/viminfo
 
 call plug#begin('~/.config/vim/plugged')
   Plug 'airblade/vim-gitgutter'
+  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'cocopon/iceberg.vim'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
@@ -12,12 +13,12 @@ call plug#begin('~/.config/vim/plugged')
   Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'
 
-  " lsp and go
+  " go
   Plug 'fatih/vim-go'
-  Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/vim-lsp'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-gocode.vim'
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 call plug#end()
 
 filetype plugin indent on
@@ -96,65 +97,62 @@ command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
+" deoplete.nvim
+"----------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
+
+"----------------------------------------------------------------------------
 " Go
 "----------------------------------------------------------------------------
 
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
 let g:go_fmt_autosave = 1
 let g:go_fmt_command = "goimports"
-
 let g:go_gocode_unimported_packages = 1
 let g:go_metalinter_autosave = 1
 let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_textobj_include_function_doc = 1 
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_build_constraints = 1
+let g:go_play_open_browser = 0 " don't open the go playground url automatically
+" let g:go_auto_type_info = 1
+" let g:go_auto_sameids = 1
 
-if executable('go-langserver')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'go-langserver',
-    \ 'cmd': {server_info->['go-langserver', 
-    \   '-gocodecompletion', 
-    \   '-format-tool=goimports', 
-    \   '-diagnostics', 
-    \   '-lint-tool=golint'
-    \ ]},
-    \ 'whitelist': ['go'],
-    \ })
-endif
-
-call asyncomplete#register_source(asyncomplete#sources#gocode#get_source_options({
-  \ 'name': 'gocode',
-  \ 'whitelist': ['go'],
-  \ 'completor': function('asyncomplete#sources#gocode#completor'),
-  \ 'config': {
-  \    'gocode_path': expand('~/ghq/bin/gocode')
-  \  },
-  \ }))
-
-au FileType go :highlight goErr cterm=bold ctermfg=lightblue
-au FileType go :match goErr /\<err\>/
-
-"----------------------------------------------------------------------------
-" vim-lsp
-"----------------------------------------------------------------------------
-
-let g:lsp_signs_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
-
-nmap <Leader>d :LspDefinition<CR>
-nmap <Leader>D :LspDocumentDiagnostics<CR>
-nmap <Leader>f :LspDocumentFormat<CR>
-nmap <Leader>s :LspDocumentSymbol<CR>
-nmap <Leader>h :LspHover<CR>
-nmap <Leader>i :LspImplementation<CR>
-nmap <Leader>n :LspNextError<CR>
-nmap <Leader>p :LspPreviousError<CR>
-nmap <Leader>R :LspReferences<CR>
-nmap <Leader>r :LspRename<CR>
-nmap <Leader>S :LspStatus<CR>
-" currently not working
-" nmap <Leader>a :LspCodeAction<CR>
-" nmap <Leader>e :LspDeclaration<CR>
-" nmap <Leader>a :LspDocumentRangeFormat<CR>
-" nmap <Leader>a :LspTypeDefinition<CR>
-" nmap <Leader>a :LspWorkspaceSymbol<CR>
+augroup go
+  nnoremap <C-n> :cnext<CR>
+  nnoremap <C-m> :cprevious<CR>
+  nnoremap <leader>a :cclose<CR>
+  nnoremap <leader>o :GoDecls<CR>
+  nnoremap <leader>O :GoDeclsDir<CR>
+  nnoremap <leader>d :GoDef<CR>
+  nnoremap <leader>D :GoDoc<CR>
+  nnoremap <leader>i :GoInfo<CR>
+  nnoremap <leader>R :GoRename<CR>
+  nnoremap <leader>g :GoImpl<CR>
+  nnoremap <leader>I :GoImplements<CR>
+  nnoremap <leader>k :GoKeyify<CR>
+  nnoremap <leader>f :GoFillStruct<CR>
+  nnoremap <leader>t :GoAddTags
+  nnoremap <leader>s :GoRemoveTags<CR>
+  nnoremap <leader>r <Plug>(go-run)
+  nnoremap <Leader>c <Plug>(go-coverage-toggle)
+  nnoremap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  :highlight goErr cterm=bold ctermfg=lightblue
+  :match goErr /\<err\>/
+augroup END
 
 "----------------------------------------------------------------------------
 " vim-terraform
