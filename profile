@@ -137,7 +137,7 @@ function go_get() {
 	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
 	cat $DOT_FILES/packages/go | while read line
 	do
-    ghq list | grep github.com/$line || go get github.com/$line
+    ghq list | grep github.com/$line || go get -u github.com/$line
 	done
 }
 
