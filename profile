@@ -7,37 +7,24 @@ export HISTCONTROL=ignoreboth:erasedups
 export HISTFILE=$XDG_CONFIG_HOME/bash/bash_history
 export HISTSIZE=90000
 export HISTFILESIZE=90000
-export SHELL_SESSION_HISTORY=0 # disable $HOME/.bash_sessions
+export SHELL_SESSION_HISTORY=0 # disable $HOME/.bash_sessions for OSX
 export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 export BOTO_PATH="$XDG_CONFIG_HOME/boto/boto"
-for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
-shopt -s histappend
-
-# -------------------------------------
-# environment variables
-# -------------------------------------
-
 export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
 export LESSHISTSIZE=0
-export LaqESSHISTSIZE=0
 export EDITOR="vim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube/config"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
+shopt -s histappend
+
+for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
-[ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/bash-preexec.sh ] && source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/bash-preexec.sh
-[ -e $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh ] && \
-  source $HOME/ghq/src/github.com/yagi5/dotfiles/scripts/git-prompt.sh
 
 # -------------------------------------
 # functions
 # -------------------------------------
-
-function brew_install() {
-  cat $XDG_CONFIG_HOME/brew/brewcaskpkg | xargs brew cask install
-  cat $XDG_CONFIG_HOME/brew/brewpkg | xargs brew install
-}
 
 function git_show_fzf() {
   while true
@@ -146,7 +133,8 @@ function aws_logs_fzf() {
 
 function go_get() {
 	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  echo $1 >> $DOT_FILES/packages/go
+
+	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
 	cat $DOT_FILES/packages/go | while read line
 	do
     ghq list | grep github.com/$line || go get github.com/$line
@@ -155,7 +143,7 @@ function go_get() {
 
 function ghq_get() {
 	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  echo $1 >> $DOT_FILES/packages/ghq
+	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/ghq
 	cat $DOT_FILES/packages/ghq | while read line
 	do
     ghq list | grep github.com/$line || ghq get $line
@@ -164,7 +152,7 @@ function ghq_get() {
 
 function snap_get() {
 	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  echo $1 >> $DOT_FILES/packages/snap
+	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/snap
 	cat $DOT_FILES/packages/snap | while read line
 	do
     snap list | grep $line || snap install $line
@@ -186,7 +174,6 @@ function snap_get() {
 KUBE_PS1_SYMBOL_COLOR=green
 KUBE_PS1_CTX_COLOR=green
 KUBE_PS1_NS_COLOR=green
-# source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
 
 PS1='
 $(kube_ps1) 
@@ -213,10 +200,9 @@ GIT_PS1_SHOWUPSTREAM=
 # alias
 # -------------------------------------
 
-alias ls='ls -GF'
+alias ls='ls --color -F'
 alias ll='ls -alh'
 alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
-#alias vi="nvim"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
@@ -238,9 +224,6 @@ alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias af='aws_logs_fzf'
-alias tfp='terraform plan'
-alias tfa='terraform apply'
-alias tfd='terraform destroy'
 
 # -------------------------------------
 # bind
@@ -265,7 +248,6 @@ export PATH=$PATH:/usr/local/go/bin
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
-# [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 
 # -------------------------------------
 # gcloud
