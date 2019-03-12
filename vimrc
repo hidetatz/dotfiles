@@ -1,7 +1,8 @@
+set rtp+=~/.config/vim
 set nocompatible
-set viminfo+=n~/.config/nvim/viminfo
+set viminfo+=n~/.config/vim/viminfo
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.config/vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'cocopon/iceberg.vim'
   Plug 'hashivim/vim-terraform'
