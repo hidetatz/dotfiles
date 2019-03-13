@@ -133,31 +133,31 @@ function aws_logs_fzf() {
 }
 
 function go_get() {
-	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-
-	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
-	cat $DOT_FILES/packages/go | while read line
-	do
+  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  
+  [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
+  cat $DOT_FILES/packages/go | while read line
+  do
     ghq list | grep github.com/$line || go get -u github.com/$line
-	done
+  done
 }
 
 function ghq_get() {
-	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/ghq
-	cat $DOT_FILES/packages/ghq | while read line
-	do
+  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/ghq
+  cat $DOT_FILES/packages/ghq | while read line
+  do
     ghq list | grep github.com/$line || ghq get $line
-	done
+  done
 }
 
 function brew_get() {
-	DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-	[ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/brew
-	cat $DOT_FILES/packages/brew | while read line
-	do
+  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/brew
+  cat $DOT_FILES/packages/brew | while read line
+  do
     brew list | grep $line || brew install $line
-	done
+  done
 }
 
 # -------------------------------------
@@ -248,7 +248,6 @@ export PATH=$PATH:/usr/local/go/bin
 # -------------------------------------
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 
 # -------------------------------------
 # gcloud
