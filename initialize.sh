@@ -57,9 +57,6 @@ function setup_dotfiles() {
 #   [ -e $XDG_CONFIG_HOME/tmux/plugins/tpm ] || git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
 #   # kubectl
 #   which kubectl > /dev/null 2>&1 | gcloud components install kubectl
-#   # vim-plug
-#   [ -e $XDG_CONFIG_HOME/vim/autoload/ ] | curl -fLo $XDG_CONFIG_HOME/vim/autoload/plug.vim \
-#     --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 # }
 
 set -e

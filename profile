@@ -136,27 +136,27 @@ function goget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   
   [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
-  cat $DOT_FILES/packages/go | while read line
+  cat $DOT_FILES/packages/go > /dev/null 2>&1 | while read line
   do
-    ghq list | grep github.com/$line || go get -u github.com/$line
+    ghq list | grep github.com/$line || echo "installing ${line}..."; go get -u github.com/$line
   done
 }
 
 function ghqget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/ghq
-  cat $DOT_FILES/packages/ghq | while read line
+  cat $DOT_FILES/packages/ghq > /dev/null 2>&1 | while read line
   do
-    ghq list | grep github.com/$line || ghq get $line
+    ghq list | grep github.com/$line || echo "installing ${line}..."; ghq get $line
   done
 }
 
 function brewget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/brew
-  cat $DOT_FILES/packages/brew | while read line
+  cat $DOT_FILES/packages/brew > /dev/null 2>&1 | while read line
   do
-    brew list | grep $line || brew install $line
+    brew list | grep $line || echo "installing ${line}..."; brew install $line
   done
 }
 
