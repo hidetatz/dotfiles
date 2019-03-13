@@ -2,27 +2,30 @@
 
 function setup_git_ssh_key() {
   set +xe
-  ssh-keygen -t rsa -f $XDG_CONFIG_HOME/ssh/github_mac -P ""
+	name=`uname`-`hostname`
+	key_name=github_${name}
+
+  ssh-keygen -t rsa -f $XDG_CONFIG_HOME/ssh/${key_name} -P ""
   
   echo "Input GitHub token(to register public key to GitHub)"
   read -sp "Token: " token 
   
-  publickey=`cat $XDG_CONFIG_HOME/ssh/github_mac.pub`
+  publickey=`cat $XDG_CONFIG_HOME/ssh/${key_name}.pub`
   
   curl -XPOST \
     -H "Content-Type: application/json" \
     -H "Authorization: token ${token}" \
-    -d "{\"title\": \"fromscript\", \"key\": \"${publickey}\"}" \
+    -d "{\"title\": \"${name}\", \"key\": \"${publickey}\"}" \
     'https://api.github.com/user/keys'
   set -xe
-  chmod 600 $XDG_CONFIG_HOME/ssh/github_mac
-  rm $XDG_CONFIG_HOME/ssh/github_mac.pub
+  chmod 600 $XDG_CONFIG_HOME/ssh/${key_name}
+  rm $XDG_CONFIG_HOME/ssh/${key_name}.pub
 
 cat << EOS >> $HOME/.ssh/config
 
 Host github github.com
   HostName github.com
-  IdentityFile ~/.config/ssh/github_mac
+  IdentityFile ~/.config/ssh/${key_name}
   User git
 EOS
 }
@@ -44,25 +47,20 @@ function setup_dotfiles() {
   ln -sf $DOTFILES/profile.pvt  $XDG_CONFIG_HOME/bash/profile.pvt
   ln -sf $DOTFILES/tmux.conf    $XDG_CONFIG_HOME/tmux/tmux.conf
   ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
-  ln -sf $DOTFILES/init.vim     $XDG_CONFIG_HOME/nvim/init.vim
-  ln -sf $DOTFILES/bash_profile $HOME/.bash_profile
+  ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/vim/vimrc
 }
 
-function install_tools() {
-  which snap > /dev/null 2>&1 || apt install snap
-}
-
-function after_install_tools() {
-  # fzf
-  /usr/local/opt/fzf/install --no-zsh --no-fish --key-bindings --completion --no-update-rc --xdg
-  # tmux plugin manager
-  [ -e $XDG_CONFIG_HOME/tmux/plugins/tpm ] || git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
-  # kubectl
-  which kubectl > /dev/null 2>&1 | gcloud components install kubectl
-  # vim-plug
-  [ -e $XDG_CONFIG_HOME/vim/autoload/ ] | curl -fLo $XDG_CONFIG_HOME/vim/autoload/plug.vim \
-    --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-}
+# function after_install_tools() {
+#   # fzf
+#   /usr/local/opt/fzf/install --no-zsh --no-fish --key-bindings --completion --no-update-rc --xdg
+#   # tmux plugin manager
+#   [ -e $XDG_CONFIG_HOME/tmux/plugins/tpm ] || git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
+#   # kubectl
+#   which kubectl > /dev/null 2>&1 | gcloud components install kubectl
+#   # vim-plug
+#   [ -e $XDG_CONFIG_HOME/vim/autoload/ ] | curl -fLo $XDG_CONFIG_HOME/vim/autoload/plug.vim \
+#     --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# }
 
 set -e
 
@@ -72,7 +70,7 @@ set -e
 [ -e $HOME/.config/tmux ] || mkdir -p $HOME/.config/tmux
 [ -e $HOME/.config/kube ] || mkdir -p $HOME/.config/kube
 [ -e $HOME/.config/docker ] || mkdir -p $HOME/.config/docker
-[ -e $HOME/.config/nvim ] || mkdir -p $HOME/.config/nvim
+[ -e $HOME/.config/vim ] || mkdir -p $HOME/.config/vim
 
 export GOPATH=$HOME/ghq
 export PATH=$PATH:$HOME/ghq/bin
@@ -82,8 +80,11 @@ cd $HOME
 setup_git_ssh_key
 download_gitconfig
 setup_dotfiles
-install_tools
-after_install_tools
+brewget
+goget
+ghqget
+# install_tools
+# after_install_tools
 
 set +e
 
@@ -91,6 +92,7 @@ rm -rf $HOME/.bash_history
 rm -rf $HOME/.bash_sessions
 rm -rf $HOME/.viminfo
 
+echo "rm -rf ~/.bash_sessions" | sudo tee -a /etc/profile
 echo "source ~/.config/bash/profile" | sudo tee -a /etc/profile
 
 echo "setup successfully finished!!"

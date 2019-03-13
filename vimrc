@@ -2,6 +2,12 @@ set rtp+=~/.config/vim
 set nocompatible
 set viminfo+=n~/.config/vim/viminfo
 
+if empty(glob('~/.config/vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source ~/.config/vim/vimrc
+endif
+
 call plug#begin('~/.config/vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
