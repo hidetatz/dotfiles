@@ -132,7 +132,7 @@ function aws_logs_fzf() {
   cw tail --follow --timestamp $group:$stream
 }
 
-function go_get() {
+function goget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   
   [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
@@ -142,7 +142,7 @@ function go_get() {
   done
 }
 
-function ghq_get() {
+function ghqget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/ghq
   cat $DOT_FILES/packages/ghq | while read line
@@ -151,13 +151,31 @@ function ghq_get() {
   done
 }
 
-function brew_get() {
+function brewget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/brew
   cat $DOT_FILES/packages/brew | while read line
   do
     brew list | grep $line || brew install $line
   done
+}
+
+function _go() {
+  [ "$1" = "" ] && go && return
+	[ "$1" = "get" ] && echo "use goget" && return
+	go $@
+}
+
+function _ghq() {
+  [ "$1" = "" ] && ghq && return
+	[ "$1" = "get" ] && echo "use ghqget" && return
+	ghq $@
+}
+
+function _brew() {
+  [ "$1" = "" ] && brew && return
+	[ "$1" = "install" ] && echo "use brewget" && return
+	brwe $@
 }
 
 # -------------------------------------
@@ -225,6 +243,9 @@ alias kp='kube_port_forward'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias af='aws_logs_fzf'
+alias go='_go'
+alias ghq='_ghq'
+alias brew='_brew'
 
 # -------------------------------------
 # bind

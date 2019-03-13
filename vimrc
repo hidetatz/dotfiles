@@ -36,8 +36,7 @@ set hidden
 " set expandtab
 set autoindent
 set backspace=indent,eol,start
-" set clipboard+=unnamed
-set clipboard=unnamedplus,autoselect,exclude:cons\\\\|linux
+set clipboard+=unnamed
 
 
 augroup vimrcEx
