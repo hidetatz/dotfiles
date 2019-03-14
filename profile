@@ -134,27 +134,23 @@ function aws_logs_fzf() {
 
 function goget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  
-  [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/go
-  cat $DOT_FILES/packages/go > /dev/null 2>&1 | while read line
+  cat $DOT_FILES/packages/go | while read line
   do
-    ghq list | grep github.com/$line || echo "installing ${line}..."; go get -u github.com/$line
+    ghq list | grep $line || echo "installing ${line}..."; go get -u $line
   done
 }
 
 function ghqget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/ghq
-  cat $DOT_FILES/packages/ghq > /dev/null 2>&1 | while read line
+  cat $DOT_FILES/packages/ghq | while read line
   do
-    ghq list | grep github.com/$line || echo "installing ${line}..."; ghq get $line
+    ghq list | grep $line || echo "installing ${line}..."; ghq get $line
   done
 }
 
 function brewget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  [ "$1" = "" ] || echo $1 >> $DOT_FILES/packages/brew
-  cat $DOT_FILES/packages/brew > /dev/null 2>&1 | while read line
+  cat $DOT_FILES/packages/brew | while read line
   do
     brew list | grep $line || echo "installing ${line}..."; brew install $line
   done
@@ -162,20 +158,30 @@ function brewget() {
 
 function _go() {
   [ "$1" = "" ] && go && return
-	[ "$1" = "get" ] && echo "use goget" && return
-	go $@
+  [ "$1" != "get" ] && go $@ && return
+  # go get *
+  if ["$2" = "-u" ]; then
+    echo $3 >> $DOT_FILES/packages/go
+    cat $DOT_FILES/packages/go | sort | uniq > $DOT_FILES/packages/go
+  else
+    echo $2 >> $DOT_FILES/packages/go
+    cat $DOT_FILES/packages/go | sort | uniq > $DOT_FILES/packages/go
+  fi
+  go $@
 }
 
 function _ghq() {
   [ "$1" = "" ] && ghq && return
-	[ "$1" = "get" ] && echo "use ghqget" && return
-	ghq $@
+  [ "$1" = "get" ] && echo $2 >> $DOT_FILES/packages/ghq \
+    && cat $DOT_FILES/packages/ghq | sort | uniq > $DOT_FILES/packages/ghq
+  ghq $@
 }
 
 function _brew() {
   [ "$1" = "" ] && brew && return
-	[ "$1" = "install" ] && echo "use brewget" && return
-	brwe $@
+  [ "$1" = "install" ] && echo $2 >> $DOT_FILES/packages/brew && \
+    cat $DOT_FILES/packages/brew | sort | uniq > $DOT_FILES/packages/brew
+  brew $@
 }
 
 # -------------------------------------
