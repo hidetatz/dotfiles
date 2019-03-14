@@ -3,6 +3,7 @@ github.com/golang/dep/cmd/dep
 github.com/junegunn/fzf
 github.com/kazegusuri/grpcurl
 github.com/motemen/ghq
+github.com/oxequa/realize
 github.com/saibing/bingo
 github.com/sourcegraph/go-langserver
 github.com/yagi5/gjson
