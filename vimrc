@@ -80,6 +80,14 @@ nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearc
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
 nnoremap Y y$
 
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+
 "----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
