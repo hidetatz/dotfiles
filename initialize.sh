@@ -48,6 +48,7 @@ function setup_dotfiles() {
   ln -sf $DOTFILES/tmux.conf    $XDG_CONFIG_HOME/tmux/tmux.conf
   ln -sf $DOTFILES/gitconfig    $XDG_CONFIG_HOME/git/config
   ln -sf $DOTFILES/vimrc        $XDG_CONFIG_HOME/vim/vimrc
+  ln -sf $DOTFILES/scripts      $XDG_CONFIG_HOME/
 }
 
 # function after_install_tools() {
