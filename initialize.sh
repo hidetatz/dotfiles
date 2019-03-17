@@ -90,6 +90,7 @@ rm -rf $HOME/.bash_history
 rm -rf $HOME/.bash_sessions
 rm -rf $HOME/.viminfo
 
+
 echo "rm -rf ~/.bash_sessions" | sudo tee -a /etc/profile
 echo "source ~/.config/bash/profile" | sudo tee -a /etc/profile
 

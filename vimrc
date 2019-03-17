@@ -14,7 +14,7 @@ call plug#begin('~/.config/vim/plugged')
   Plug 'cocopon/iceberg.vim'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
-  Plug 'SirVer/ultisnips'
+  " Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitivE' 
   Plug 'tpope/vim-surround'

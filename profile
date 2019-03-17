@@ -77,24 +77,19 @@ function gcloud_pj() {
 }
 
 function kube_get_namespace() {
-  echo $(find $GOPATH/src/github.com/kouzoh/microservices-terraform/* -iname "*.tf" | grep -v 'microservices-platform' | xargs grep 'ygnmhdtt@' | awk -F '/' '{ print $11"-"$12 }' | sed -e 's/-development/-dev/' | sed -e 's/-production/-prod/' | fzf)
+	k get ns | grep -v STATUS | fzf | awk '{print$1}'
 }
 
 function kube_get_pod() {
-  ns=$1
-  echo $(kubectl get pods -n $ns | grep -v "AGE" | fzf | awk '{print $1}')
+  kubectl get pods | grep -v "AGE" | fzf | awk '{print $1}'
 }
 
 function kube_exec_pod() {
-  ns=$(kube_get_namespace)
-  po=$(kube_get_pod $ns)
-  kubectl exec -it $po '/bin/sh' -n $ns
+  kubectl exec -it $(kube_get_pod) bash
 }
 
 function kube_log_pod() {
-  ns=$(kube_get_namespace)
-  po=$(kube_get_pod $ns)
-  kubectl logs -f $po -n $ns
+  kubectl logs -f $(kubectl config current-context)
 }
 
 function kube_port_forward() {
@@ -103,9 +98,7 @@ function kube_port_forward() {
     return
   fi
   port=$1
-  ns=$(kube_get_namespace)
-  po=$(kube_get_pod $ns)
-  kubectl port-forward $po $port -n $ns
+  kubectl port-forward $(kube_get_pod) $port
 }
 
 function kube_ctx() {
@@ -167,7 +160,7 @@ function _go() {
     echo $2 >> $DOT_FILES/packages/go
   fi
   f=`cat $DOT_FILES/packages/go | sort | uniq`
-	echo "$f" > $DOT_FILES/packages/go
+  echo "$f" > $DOT_FILES/packages/go
   `which go` $@
 }
 
@@ -175,9 +168,9 @@ function _ghq() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && ghq && return
   if [ "$1" = "get" ]; then
-	  echo $2 >> $DOT_FILES/packages/ghq
+    echo $2 >> $DOT_FILES/packages/ghq
     f=`cat $DOT_FILES/packages/ghq | sort | uniq`
-	  echo "$f" > $DOT_FILES/packages/ghq
+    echo "$f" > $DOT_FILES/packages/ghq
   fi
   `which ghq` $@
 }
@@ -186,11 +179,19 @@ function _brew() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && brew && return
   if [ "$1" = "install" ]; then
-	  echo $2 >> $DOT_FILES/packages/brew
+    echo $2 >> $DOT_FILES/packages/brew
     f=`cat $DOT_FILES/packages/brew | sort | uniq`
-	  echo "$f" > $DOT_FILES/packages/brew
+    echo "$f" > $DOT_FILES/packages/brew
   fi
   `which brew` $@
+}
+
+function k_stop_nodes() {
+  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl drain --ignore-daemonsets XXX
+}
+
+function k_start_nodes() {
+  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl uncordon XXX
 }
 
 # -------------------------------------
@@ -261,6 +262,7 @@ alias af='aws_logs_fzf'
 alias go='_go'
 alias ghq='_ghq'
 alias brew='_brew'
+
 
 # -------------------------------------
 # bind
