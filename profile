@@ -77,11 +77,11 @@ function gcloud_pj() {
 }
 
 function kube_get_namespace() {
-	k get ns | grep -v STATUS | fzf | awk '{print$1}'
+	k get ns | grep -v STATUS | fzf | awk '{print $1}'
 }
 
 function kube_get_pod() {
-  kubectl get pods | grep -v "AGE" | fzf | awk '{print $1}'
+  k get po | grep -v "AGE" | fzf | awk '{print $1}'
 }
 
 function kube_exec_pod() {
