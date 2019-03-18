@@ -19,7 +19,7 @@
 [core]
     pager = LESSCHARSET=utf-8 less
     sshCommand = "ssh -F $HOME/.config/ssh/config -o UserKnownHostsFile=$HOME/.config/ssh/known_hosts"
-    editor = "vim -u /Users/yagi5/.config/vim/vimrc"
+    editor = "vim -u ~/.config/vim/vimrc"
 
 [color]
     ui = true
