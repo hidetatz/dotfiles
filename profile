@@ -92,6 +92,14 @@ function kube_log_pod() {
   kubectl logs -f $(kubectl config current-context)
 }
 
+function kube_stop_nodes() {
+  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl drain --ignore-daemonsets XXX
+}
+
+function kube_start_nodes() {
+  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl uncordon XXX
+}
+
 function kube_port_forward() {
   if [ $# -ne 1 ]; then
     echo "specify port"
@@ -184,14 +192,6 @@ function _brew() {
     echo "$f" > $DOT_FILES/packages/brew
   fi
   `which brew` $@
-}
-
-function k_stop_nodes() {
-  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl drain --ignore-daemonsets XXX
-}
-
-function k_start_nodes() {
-  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl uncordon XXX
 }
 
 # -------------------------------------
