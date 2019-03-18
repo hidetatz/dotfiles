@@ -262,6 +262,8 @@ alias af='aws_logs_fzf'
 alias go='_go'
 alias ghq='_ghq'
 alias brew='_brew'
+alias docker_rmi_all='docker rmi --force $(docker images -qa)'
+alias docker_rm_all='docker rm --force $(docker kill $(docker ps -aq))'
 
 
 # -------------------------------------
