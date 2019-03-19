@@ -162,7 +162,7 @@ augroup go
   nnoremap <leader>f :GoFillStruct<CR>
   nnoremap <leader>t :GoAddTags
   nnoremap <leader>s :GoRemoveTags<CR>
-  nnoremap <leader>r <Plug>(go-run)
+  nnoremap <leader>r :GoRun<CR>
   nnoremap <Leader>c <Plug>(go-coverage-toggle)
   nnoremap <leader>b :<C-u>call <SID>build_go_files()<CR>
   :highlight goErr cterm=bold ctermfg=lightblue

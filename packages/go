@@ -1,4 +1,5 @@
 github.com/go-vgo/robotgo
+github.com/go-yaml/yaml
 github.com/golang/dep/cmd/dep
 github.com/junegunn/fzf
 github.com/kazegusuri/grpcurl
@@ -8,3 +9,4 @@ github.com/saibing/bingo
 github.com/sourcegraph/go-langserver
 github.com/yagi5/gjson
 github.com/yagi5/gotest
+gopkg.in/yaml.v2
