@@ -174,7 +174,7 @@ function _go() {
 
 function _ghq() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  [ "$1" = "" ] && ghq && return
+  [ "$1" = "" ] && `which ghq` && return
   if [ "$1" = "get" ]; then
     echo $2 >> $DOT_FILES/packages/ghq
     f=`cat $DOT_FILES/packages/ghq | sort | uniq`
@@ -185,7 +185,7 @@ function _ghq() {
 
 function _brew() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  [ "$1" = "" ] && brew && return
+  [ "$1" = "" ] && `which brew` && return
   if [ "$1" = "install" ]; then
     echo $2 >> $DOT_FILES/packages/brew
     f=`cat $DOT_FILES/packages/brew | sort | uniq`
