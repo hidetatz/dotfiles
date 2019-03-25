@@ -77,7 +77,7 @@ function gcloud_pj() {
 }
 
 function kube_get_namespace() {
-	k get ns | grep -v STATUS | fzf | awk '{print $1}'
+  k get ns | grep -v STATUS | fzf | awk '{print $1}'
 }
 
 function kube_get_pod() {
@@ -185,7 +185,10 @@ function _ghq() {
 function __brew() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which brew` && return
-  [ "$1" == "cask" ] && __brewcask $@ && return
+  if [ "$1" == "cask" ]; then
+    __brewcask $@ 
+    return
+  fi
   [ "$1" != "install" ] && `which brew` $@ && return
   echo $2 >> $DOT_FILES/packages/brew
   f=`cat $DOT_FILES/packages/brew | sort | uniq`
