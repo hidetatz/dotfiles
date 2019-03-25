@@ -182,10 +182,10 @@ function _ghq() {
   `which ghq` $@
 }
 
-function _brew() {
+function __brew() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which brew` && return
-  [ "$1" == "cask" ] && _brewcask $@ && return
+  [ "$1" == "cask" ] && __brewcask $@ && return
   [ "$1" != "install" ] && `which brew` $@ && return
   echo $2 >> $DOT_FILES/packages/brew
   f=`cat $DOT_FILES/packages/brew | sort | uniq`
@@ -193,7 +193,7 @@ function _brew() {
   `which brew` $@
 }
 
-function _brewcask() {
+function __brewcask() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$2" = "" ] && `which brew` && return
   [ "$2" != "install" ] && `which brew` $@ && return
@@ -270,7 +270,7 @@ alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_
 alias af='aws_logs_fzf'
 alias go='_go'
 alias ghq='_ghq'
-alias brew='_brew'
+alias brew='__brew'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm --force $(docker kill $(docker ps -aq))'
 
