@@ -175,22 +175,31 @@ function _go() {
 function _ghq() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which ghq` && return
-  if [ "$1" = "get" ]; then
-    echo $2 >> $DOT_FILES/packages/ghq
-    f=`cat $DOT_FILES/packages/ghq | sort | uniq`
-    echo "$f" > $DOT_FILES/packages/ghq
-  fi
+  [ "$1" != "get" ] && `which ghq` $@ && return
+  echo $2 >> $DOT_FILES/packages/ghq
+  f=`cat $DOT_FILES/packages/ghq | sort | uniq`
+  echo "$f" > $DOT_FILES/packages/ghq
   `which ghq` $@
 }
 
 function _brew() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which brew` && return
-  if [ "$1" = "install" ]; then
-    echo $2 >> $DOT_FILES/packages/brew
-    f=`cat $DOT_FILES/packages/brew | sort | uniq`
-    echo "$f" > $DOT_FILES/packages/brew
-  fi
+  [ "$1" == "cask" ] && _brewcask $@ && return
+  [ "$1" != "install" ] && `which brew` $@ && return
+  echo $2 >> $DOT_FILES/packages/brew
+  f=`cat $DOT_FILES/packages/brew | sort | uniq`
+  echo "$f" > $DOT_FILES/packages/brew
+  `which brew` $@
+}
+
+function _brewcask() {
+  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  [ "$2" = "" ] && `which brew` && return
+  [ "$2" != "install" ] && `which brew` $@ && return
+  echo $3 >> $DOT_FILES/packages/brewcask
+  c=`cat $DOT_FILES/packages/brewcask | sort | uniq`
+  echo "$c" > $DOT_FILES/packages/brewcask
   `which brew` $@
 }
 
