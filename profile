@@ -23,6 +23,8 @@ shopt -s histappend
 for f in ~/.config/scripts/*; do source $f; done
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
 
+source <(kubectl completion bash)
+
 # -------------------------------------
 # functions
 # -------------------------------------
