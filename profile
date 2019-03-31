@@ -115,7 +115,7 @@ function kube_ctx() {
 
 function history_get_from_datastore() {
   pwd=`dirs +0`
-  histdatastore get $pwd | fzf --no-sort
+  histdatastore get $pwd | fzf --no-sort --tac
 }
 
 function aws_logs_fzf() {
