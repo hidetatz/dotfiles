@@ -1,49 +1,81 @@
 set rtp+=~/.config/vim
-set nocompatible
-set viminfo+=n~/.config/vim/viminfo
-
-if empty(glob('~/.config/vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source ~/.config/vim/vimrc
-endif
 
 call plug#begin('~/.config/vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'cespare/vim-toml'
   Plug 'cocopon/iceberg.vim'
+  Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
+  Plug 'elzr/vim-json', {'for' : 'json'}
+  Plug 'ervandew/supertab'
+  Plug 'fatih/vim-go'
+  Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
-  " Plug 'SirVer/ultisnips'
+  Plug 'SirVer/ultisnips'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-fugitivE' 
+  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
-
-  " go
-  Plug 'fatih/vim-go'
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 call plug#end()
 
+"----------------------------------------------------------------------------
+" Settings
+"----------------------------------------------------------------------------
+filetype off
 filetype plugin indent on
+set nocompatible
 
-"----------------------------------------------------------------------------
-" Edit
-"----------------------------------------------------------------------------
-let mapleader = ","
+syntax on
+colorscheme iceberg
 set encoding=utf-8
 set ambiwidth=double
-set tabstop=2
-set shiftwidth=2
+set autoread
 set hidden
-
-" set expandtab
 set autoindent
 set backspace=indent,eol,start
 set clipboard+=unnamed
+set noerrorbells
+set number
+set ruler
+set background=dark
+set showcmd
+set incsearch
+set hlsearch
+set ignorecase
+set ttimeout
+set ttimeoutlen=50
+set noswapfile
+set autowrite
+set pumheight=10
+set conceallevel=2
+set nocursorcolumn
+set shortmess+=c
+set belloff+=ctrlg
+set nobackup
+set splitright
+set splitbelow
+set statusline=%<%f\ %h%m%r%{Fugitivestatusline()}%=%-14.(%l,%c%V%)\ %P
 
+augroup filetypedetect
+  command! -nargs=* -complete=help Help vertical belowright help <args>
+  autocmd FileType help wincmd L
+  
+  autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
+  autocmd BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
+  autocmd BufNewFile,BufRead *.hcl setf conf
+  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+  autocmd BufRead,BufNewFile *.gotmpl set filetype=gotexttmpl
+  autocmd BufNewFile,BufRead *.txt setlocal noet ts=4 sw=4
+  autocmd BufNewFile,BufRead *.md setlocal noet ts=4 sw=4
+  autocmd BufNewFile,BufRead *.html setlocal noet ts=4 sw=4
+  autocmd BufNewFile,BufRead *.vim setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd BufNewFile,BufRead *.hcl setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd BufNewFile,BufRead *.sh setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd BufNewFile,BufRead *.proto setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd FileType json setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
+augroup END
 
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -51,31 +83,13 @@ augroup vimrcEx
 augroup END
 
 "----------------------------------------------------------------------------
-" UI
-"----------------------------------------------------------------------------
-syntax on
-set number
-set ruler
-set statusline=%<%f\ %{fugitive#statusline()}\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-set background=dark
-set showcmd
-colorscheme iceberg
-
-"----------------------------------------------------------------------------
-" etc
-"----------------------------------------------------------------------------
-set incsearch
-set hlsearch
-set ignorecase
-set ttimeout
-set ttimeoutlen=50
-
-"----------------------------------------------------------------------------
 " Common key mappings
 "----------------------------------------------------------------------------
+let mapleader = ","
 noremap x "_x
 noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
 nnoremap Y y$
@@ -87,6 +101,7 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
+map <C-f> :echo expand("%:p")<cr>
 
 "----------------------------------------------------------------------------
 " fzf.vim
@@ -98,8 +113,6 @@ set rtp+=~/ghq/src/github.com/junegunn/fzf
 nnoremap ; :Buffers
 nnoremap t :Files
 
-" Default fzf layout
-" - down / up / left / right
 let g:fzf_layout = { 'down': '~30%' }
 
 command! -bang -nargs=* GGrep
@@ -108,16 +121,16 @@ command! -bang -nargs=* GGrep
   \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 nmap m :GGrep
 
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
-" deoplete.nvim
+" supertab
 "----------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
+let g:SuperTabDefaultCompletionType = "context"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"  
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
 
-"----------------------------------------------------------------------------
-" Go
 "----------------------------------------------------------------------------
 
 " run :GoBuild or :GoTestCompile based on the go file
@@ -143,7 +156,7 @@ let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
 let g:go_play_open_browser = 0 " don't open the go playground url automatically
-" let g:go_def_mode = 'gopls'
+let g:go_def_mode = 'gopls'
 " let g:go_auto_type_info = 1
 " let g:go_auto_sameids = 1
 

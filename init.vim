@@ -21,8 +21,8 @@ call plug#begin('~/.local/share/nvim/plugged')
 
   " go
   Plug 'fatih/vim-go'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 call plug#end()
 
 filetype plugin indent on
@@ -36,6 +36,7 @@ set ambiwidth=double
 set tabstop=2
 set shiftwidth=2
 set hidden
+set completeopt+=noselect
 
 " set expandtab
 set autoindent
@@ -114,7 +115,16 @@ command! -bang -nargs=? -complete=dir Files
 let g:deoplete#enable_at_startup = 1
 
 "----------------------------------------------------------------------------
-" Go
+" deoplete-go
+"----------------------------------------------------------------------------
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#unimported_packages = 1
+let g:python3_host_skip_check = 1
+let g:deoplete#sources#go = 'vim-go'
+
 "----------------------------------------------------------------------------
 
 " run :GoBuild or :GoTestCompile based on the go file
