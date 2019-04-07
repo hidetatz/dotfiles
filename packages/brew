@@ -1,7 +1,17 @@
+
+avr-gcc
+avr-gcc@7
+avr-gcc@8_1
+avrdude
+dfu-programmer
+gcc-arm-none-eabi
 git
 jq
+leico/avr/avr-binutils
+leico/avr/avr-gcc
 neovim
 nvim
+osx-cross
 perl
 python3
 ruby

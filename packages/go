@@ -1,6 +1,8 @@
+-t
 github.com/go-vgo/robotgo
 github.com/go-yaml/yaml
 github.com/golang/dep/cmd/dep
+github.com/itchyny/bed/cmd/bed
 github.com/junegunn/fzf
 github.com/kazegusuri/grpcurl
 github.com/motemen/ghq
