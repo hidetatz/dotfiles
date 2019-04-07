@@ -56,27 +56,6 @@ set splitright
 set splitbelow
 set statusline=%<%f\ %h%m%r%{Fugitivestatusline()}%=%-14.(%l,%c%V%)\ %P
 
-augroup filetypedetect
-  command! -nargs=* -complete=help Help vertical belowright help <args>
-  autocmd FileType help wincmd L
-  
-  autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
-  autocmd BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
-  autocmd BufNewFile,BufRead *.hcl setf conf
-  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-  autocmd BufRead,BufNewFile *.gotmpl set filetype=gotexttmpl
-  autocmd BufNewFile,BufRead *.txt setlocal noet ts=4 sw=4
-  autocmd BufNewFile,BufRead *.md setlocal noet ts=4 sw=4
-  autocmd BufNewFile,BufRead *.html setlocal noet ts=4 sw=4
-  autocmd BufNewFile,BufRead *.vim setlocal expandtab shiftwidth=2 tabstop=2
-  autocmd BufNewFile,BufRead *.hcl setlocal expandtab shiftwidth=2 tabstop=2
-  autocmd BufNewFile,BufRead *.sh setlocal expandtab shiftwidth=2 tabstop=2
-  autocmd BufNewFile,BufRead *.proto setlocal expandtab shiftwidth=2 tabstop=2
-  autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2
-  autocmd FileType json setlocal expandtab shiftwidth=2 tabstop=2
-  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
-augroup END
-
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
   \ exe "normal g`\"" | endif
