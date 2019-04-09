@@ -9,7 +9,8 @@ endif
 call plug#begin('~/.config/vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'cespare/vim-toml'
+  Plug 'ConradIrwin/vim-bracketed-paste'
+  Plug 'cespare/vim-toml', {'for' : 'toml'}
   Plug 'cocopon/iceberg.vim'
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'elzr/vim-json', {'for' : 'json'}
@@ -18,6 +19,7 @@ call plug#begin('~/.config/vim/plugged')
   Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
+  Plug 'Raimondi/delimitMate'
   Plug 'sirver/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
