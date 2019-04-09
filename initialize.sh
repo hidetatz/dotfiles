@@ -2,8 +2,8 @@
 
 function setup_git_ssh_key() {
   set +xe
-	name=`uname`-`hostname`
-	key_name=github_${name}
+  name=`uname`-`hostname`
+  key_name=github_${name}
 
   ssh-keygen -t rsa -f $XDG_CONFIG_HOME/ssh/${key_name} -P ""
   

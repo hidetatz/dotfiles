@@ -1,47 +1,66 @@
-set rtp+=~/.config/vim
-set nocompatible
-set viminfo+=n~/.config/nvim/viminfo
+set rtp+=~/.config/nvim
 
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source ~/.config/nvim/init.vim
 endif
 
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin('~/.config/vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'cespare/vim-toml'
   Plug 'cocopon/iceberg.vim'
+  Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
+  Plug 'elzr/vim-json', {'for' : 'json'}
+  Plug 'ervandew/supertab'
+  Plug 'fatih/vim-go'
+  Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf.vim'
-  Plug 'SirVer/ultisnips'
+  Plug 'sirver/ultisnips'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-fugitivE' 
+  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
-
-  " go
-  Plug 'fatih/vim-go'
-  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  " Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 call plug#end()
 
-filetype plugin indent on
+"----------------------------------------------------------------------------
+" Settings
+"----------------------------------------------------------------------------
 
-"----------------------------------------------------------------------------
-" Edit
-"----------------------------------------------------------------------------
-let mapleader = ","
+filetype off
+filetype plugin indent on
+set nocompatible
+syntax on
+colorscheme iceberg
 set encoding=utf-8
 set ambiwidth=double
-set tabstop=2
-set shiftwidth=2
+set autoread
 set hidden
-set completeopt+=noselect
-
-" set expandtab
 set autoindent
 set backspace=indent,eol,start
 set clipboard+=unnamed
+set noerrorbells
+set number
+set ruler
+set background=dark
+set showcmd
+set incsearch
+set hlsearch
+set ignorecase
+set ttimeout
+set ttimeoutlen=50
+set noswapfile
+set autowrite
+set pumheight=10
+set conceallevel=2
+set nocursorcolumn
+set shortmess+=c
+set belloff+=ctrlg
+set nobackup
+set splitright
+set splitbelow
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -49,38 +68,21 @@ augroup vimrcEx
 augroup END
 
 "----------------------------------------------------------------------------
-" UI
-"----------------------------------------------------------------------------
-syntax on
-set number
-set ruler
-set statusline=%<%f\ %{fugitive#statusline()}\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-set background=dark
-set showcmd
-colorscheme iceberg
-
-"----------------------------------------------------------------------------
-" etc
-"----------------------------------------------------------------------------
-set incsearch
-set hlsearch
-set ignorecase
-set ttimeout
-set ttimeoutlen=50
-
-"----------------------------------------------------------------------------
 " Common key mappings
 "----------------------------------------------------------------------------
+let mapleader = ","
 noremap x "_x
 noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
 nnoremap Y y$
 
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
-
+inoremap <C-b> <Left>
+inoremap <C-f> <Right>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
@@ -96,8 +98,6 @@ set rtp+=~/ghq/src/github.com/junegunn/fzf
 nnoremap ; :Buffers
 nnoremap t :Files
 
-" Default fzf layout
-" - down / up / left / right
 let g:fzf_layout = { 'down': '~30%' }
 
 command! -bang -nargs=* GGrep
@@ -106,25 +106,24 @@ command! -bang -nargs=* GGrep
   \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 nmap m :GGrep
 
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
-" deoplete.nvim
+" supertab
 "----------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
+
+let g:SuperTabDefaultCompletionType = "context"
 
 "----------------------------------------------------------------------------
-" deoplete-go
+" ultisnips
 "----------------------------------------------------------------------------
-let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-let g:deoplete#sources#go#package_dot = 1
-let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-let g:deoplete#sources#go#pointer = 1
-let g:deoplete#sources#go#unimported_packages = 1
-let g:python3_host_skip_check = 1
-let g:deoplete#sources#go = 'vim-go'
 
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+"----------------------------------------------------------------------------
+" Go
 "----------------------------------------------------------------------------
 
 " run :GoBuild or :GoTestCompile based on the go file

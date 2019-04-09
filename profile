@@ -13,10 +13,10 @@ export BOTO_PATH="$XDG_CONFIG_HOME/boto/boto"
 export LC_ALL=en_US.UTF-8
 export LESS='-i -M -R -W -q -S'
 export LESSHISTSIZE=0
-export EDITOR="vim"
+export EDITOR="nvim"
 export KUBECONFIG="$XDG_CONFIG_HOME/kube/config"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
+export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 shopt -s histappend
 
 # for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
@@ -251,8 +251,8 @@ GIT_PS1_SHOWUPSTREAM=
 
 alias ls='ls -GF'
 alias ll='ls -alh'
-# alias vi="nvim"
-alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
+alias vi="nvim"
+# alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
