@@ -11,7 +11,6 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
-  Plug 'cocopon/iceberg.vim'
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'elzr/vim-json', {'for' : 'json'}
   Plug 'ervandew/supertab'
@@ -24,6 +23,10 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
+  ":color scheme
+  Plug 'cocopon/iceberg.vim'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'tyrannicaltoucan/vim-deep-space'
 call plug#end()
 
 "----------------------------------------------------------------------------
@@ -34,7 +37,10 @@ filetype off
 filetype plugin indent on
 set nocompatible
 syntax on
-colorscheme iceberg
+" colorscheme iceberg
+" colorscheme nord
+colorscheme deep-space
+set termguicolors
 set encoding=utf-8
 set ambiwidth=double
 set autoread
