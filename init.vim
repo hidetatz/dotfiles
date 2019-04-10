@@ -6,7 +6,7 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source ~/.config/nvim/init.vim
 endif
 
-call plug#begin('~/.config/vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
