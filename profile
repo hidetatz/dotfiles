@@ -247,14 +247,12 @@ GIT_PS1_SHOWUPSTREAM=
 
 # -------------------------------------
 # alias
-# -------------------------------------
-
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="nvim"
 # alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
-alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config | fzf | awk "{print \$2}")'
+alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.config/ssh/config | fzf | awk "{print \$2}")'
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
 alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'
