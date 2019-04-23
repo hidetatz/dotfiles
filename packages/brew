@@ -3,6 +3,7 @@ avr-gcc
 avr-gcc@7
 avr-gcc@8_1
 avrdude
+awscli
 bash
 dfu-programmer
 gcc-arm-none-eabi
