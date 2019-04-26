@@ -277,7 +277,7 @@ alias ghq='_ghq'
 alias brew='__brew'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
-
+alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://")/tree/$(git rev-parse --abbrev-ref HEAD)'
 
 # -------------------------------------
 # bind
