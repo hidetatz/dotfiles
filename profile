@@ -162,7 +162,11 @@ function brewget() {
 function _go() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which go` && return
-  [ "$1" != "get" ] && `which go` $@ && return
+  if [ "$1" != "get" ]; then
+    `which go` $@
+    return
+  fi
+
   # go get *
   if [ "$2" = "-u" ]; then
     echo $3 >> $DOT_FILES/packages/go
@@ -277,7 +281,7 @@ alias ghq='_ghq'
 alias brew='__brew'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
-alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://")/tree/$(git rev-parse --abbrev-ref HEAD)'
+alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")/tree/$(git rev-parse --abbrev-ref HEAD)'
 
 # -------------------------------------
 # bind
