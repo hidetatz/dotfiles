@@ -135,6 +135,13 @@ function aws_logs_fzf() {
   cw tail --follow --timestamp $group:$stream
 }
 
+function open_circleci() {
+  repo=$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")
+  [ -z "$repo" ] && echo "it's not git repository here!" && return
+  branch=$(git rev-parse --abbrev-ref HEAD)
+  open https://circleci.com/gh/${repo}/tree/${branch}
+}
+
 function goget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   cat $DOT_FILES/packages/go | while read line
@@ -281,7 +288,8 @@ alias ghq='_ghq'
 alias brew='__brew'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
-alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")/tree/$(git rev-parse --abbrev-ref HEAD)'
+# alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")/tree/$(git rev-parse --abbrev-ref HEAD)'
+alias ci='open_circleci'
 
 # -------------------------------------
 # bind
