@@ -139,7 +139,7 @@ function goget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   cat $DOT_FILES/packages/go | while read line
   do
-    ghq list | grep $line || go get -u $line
+    ghq list | grep $line || echo "installing ${line}..."; go get -u $line
   done
 }
 
