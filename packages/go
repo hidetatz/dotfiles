@@ -14,4 +14,5 @@ github.com/stamblerre/gocode
 github.com/yagi5/gjson
 github.com/yagi5/gotest
 golang.org/x/tools/cmd/gopls
+gopkg.in/src-d/go-git.v4
 gopkg.in/yaml.v2
