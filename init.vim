@@ -182,6 +182,9 @@ augroup go
   nnoremap <leader>b :<C-u>call <SID>build_go_files()<CR>
   :highlight goErr cterm=bold ctermfg=lightblue
   :match goErr /\<err\>/
+
+  " for buoto/gotests-vim
+  nnoremap <Leader>j :GoTestsAll
 augroup END
 
 "----------------------------------------------------------------------------

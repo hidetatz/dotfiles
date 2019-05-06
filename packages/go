@@ -1,4 +1,5 @@
 github.com/Code-Hex/funcy-mock
+github.com/Code-Hex/funcy-mock/cmd/funcygen
 github.com/cweill/gotests/...
 github.com/erroneousboat/slack-term
 github.com/go-vgo/robotgo
