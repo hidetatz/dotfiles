@@ -74,8 +74,8 @@ function gcloud_account() {
 }
 
 function gcloud_pj() {
-  [ -e $HOME/.config/gcloud/active_config ] || (echo "" && return)
-  echo $(cat $HOME/.config/gcloud/active_config)
+  [ -e $HOME/.config/gcloud/configurations/config_default ] || (echo "" && return)
+  echo $(cat $HOME/.config/gcloud/configurations/config_default | grep project | awk '{print $3}')
 }
 
 function kube_get_namespace() {
