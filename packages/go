@@ -1,3 +1,5 @@
+github.com/Code-Hex/funcy-mock
+github.com/cweill/gotests/...
 github.com/erroneousboat/slack-term
 github.com/go-vgo/robotgo
 github.com/go-yaml/yaml
@@ -9,6 +11,7 @@ github.com/junegunn/fzf
 github.com/kazegusuri/grpcurl
 github.com/motemen/ghq
 github.com/oxequa/realize
+github.com/rs/zerolog
 github.com/saibing/bingo
 github.com/sourcegraph/go-langserver
 github.com/stamblerre/gocode

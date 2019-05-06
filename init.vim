@@ -23,10 +23,10 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
-  ":color scheme
   Plug 'cocopon/iceberg.vim'
   Plug 'arcticicestudio/nord-vim'
   Plug 'tyrannicaltoucan/vim-deep-space'
+  Plug 'buoto/gotests-vim'
 call plug#end()
 
 "----------------------------------------------------------------------------
