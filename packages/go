@@ -10,12 +10,14 @@ github.com/google/uuid
 github.com/itchyny/bed/cmd/bed
 github.com/junegunn/fzf
 github.com/kazegusuri/grpcurl
+github.com/laher/goxc
 github.com/motemen/ghq
 github.com/oxequa/realize
 github.com/rs/zerolog
 github.com/saibing/bingo
 github.com/sourcegraph/go-langserver
 github.com/stamblerre/gocode
+github.com/tcnksm/ghr
 github.com/yagi5/gjson
 github.com/yagi5/gotest
 golang.org/x/oauth2
