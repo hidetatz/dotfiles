@@ -15,5 +15,6 @@ nvim
 osx-cross
 perl
 python3
+redis
 ruby
 stern
