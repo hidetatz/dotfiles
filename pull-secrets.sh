@@ -2,6 +2,8 @@
 
 set -eu
 
+export PATH=$PATH:$HOME/.config/google-cloud-sdk/bin
+
 echo "Download secrets from GCS, need authentication"
 gcloud auth login
 

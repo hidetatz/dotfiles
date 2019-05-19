@@ -4,7 +4,6 @@ github.com/davidrjenni/reftools/cmd/fillstruct
 github.com/fatih/gomodifytags 
 github.com/fatih/motion 
 github.com/golang/dep/cmd/dep 
-github.com/golang/lint/golint 
 github.com/josharian/impl 
 github.com/kazegusuri/grpcurl 
 github.com/koron/iferr 
@@ -17,6 +16,7 @@ github.com/yagi5/gjson
 github.com/yagi5/gotest 
 github.com/yagi5/gotests/... 
 github.com/zmb3/gogetdoc 
+golang.org/x/lint/golint
 golang.org/x/tools/cmd/goimports 
 golang.org/x/tools/cmd/gopls 
 golang.org/x/tools/cmd/gorename 
