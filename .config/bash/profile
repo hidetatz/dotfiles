@@ -152,7 +152,7 @@ function open_circleci() {
 
 function goget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  cat $DOT_FILES/packages/go | while read line
+  cat $DOT_FILES/.config/packages/go | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; go get -u $line
   done
@@ -160,9 +160,9 @@ function goget() {
 
 function ghqget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  cat $DOT_FILES/packages/ghq | while read line
+  cat $DOT_FILES/.config/packages/ghq | while read line
   do
-    ghq list | grep $line || echo "installing ${line}..."; ghq get $line
+    ghq list | grep $line || echo "installing ${line}..."; ghq get -shallow $line
   done
 }
 

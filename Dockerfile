@@ -7,6 +7,12 @@ ARG GCLOUD_VERSION=196.0.0
 # If package can be installed by apt, use apt
 # If not, setup stage
 
+# install kubectl
+# FROM ubuntu:18.10 as kubectl_builder
+# RUN apt-get update && apt-get install -y curl ca-certificates
+# RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+# RUN chmod 755 /usr/local/bin/kubectl
+
 # install terraform
 FROM ubuntu:${UBUNTU_VERSION} as terraform_builder
 ARG TERRAFORM_VERSION
@@ -34,19 +40,22 @@ RUN apt-get update && apt-get install -y wget ca-certificates python
 RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz && \
     tar xzvf google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz && \
     ./google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --command-completion=false && \
-    mv google-cloud-sdk/bin/gcloud /usr/local/bin/ && \
+    ./google-cloud-sdk/bin/gcloud components update --quiet && \
+    ./google-cloud-sdk/bin/gcloud components install kubectl --quiet && \
+    mv google-cloud-sdk /tmp/ && \
     rm google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz
 
 # base OS
 FROM ubuntu:${UBUNTU_VERSION}
 ARG GO_VERSION
+# ARG GCLOUD_VERSION
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG="en_US.UTF-8"
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
-RUN apt-get update -qq && apt-get upgrade -y && apt-get install -qq -y \
+RUN apt update -qq && apt upgrade -y && apt install -qq -y \
 	ca-certificates \
 	clang \
 	cmake \
@@ -64,6 +73,9 @@ RUN apt-get update -qq && apt-get upgrade -y && apt-get install -qq -y \
 	locales \
 	man \
 	neovim \
+	net-tools \
+	python \
+	ssh \
 	sudo \
 	tmux \
 	tree \
@@ -82,25 +94,47 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE
 
-RUN echo "source ~/.config/bash/profile" | tee -a /etc/profile
+RUN echo "source /home/yagi5/.config/bash/profile" | tee -a /etc/profile
 
-RUN groupadd -g 1001 yagi5 && useradd -g yagi5 -u 1001 yagi5 && mkdir /home/yagi5 && chown yagi5:yagi5 /home/yagi5
+RUN mkdir /run/sshd && \
+    sed 's/#Port 22/Port 2222/' -i /etc/ssh/sshd_config && \
+    sed 's/#PubkeyAuthentication/PubkeyAuthentication/' -i /etc/ssh/sshd_config && \
+    sed 's/#AuthorizedKeysFile/AuthorizedKeysFile/' -i /etc/ssh/sshd_config && \
+    sed 's/.ssh\/authorized_keys/\/home\/yagi5\/.ssh\/authorized_keys/' -i /etc/ssh/sshd_config && \
+    sed 's/#PasswordAuthentication yes/PasswordAuthentication no/' -i /etc/ssh/sshd_config
+
+RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo >/dev/null
+
+RUN groupadd -g 1002 wheel && \
+    groupadd -g 1001 yagi5 && \
+    useradd -g yagi5 -u 1001 yagi5 && \
+    gpasswd -a yagi5 wheel && \
+    mkdir /home/yagi5 && \
+    chown yagi5:yagi5 /home/yagi5 && \
+    chsh -s /bin/bash yagi5
 USER 1001
 
-
-RUN mkdir -p /home/yagi5/ghq/bin
+RUN mkdir /home/yagi5/.config && \
+    sudo chown -R yagi5:yagi5 /home/yagi5 && \
+    mkdir -p /home/yagi5/ghq/bin && \
+    mkdir /home/yagi5/.ssh && \
+    curl -fsL https://github.com/yagi5.keys > /home/yagi5/.ssh/authorized_keys && \
+    chmod 700 /home/yagi5/.ssh && \
+    chmod 600 /home/yagi5/.ssh/authorized_keys
 
 COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
-COPY --from=gcloud_builder /usr/local/bin/gcloud /usr/local/bin/
-# COPY config /home/yagi5/.config
+COPY --from=gcloud_builder /tmp/google-cloud-sdk /home/yagi5/.config/google-cloud-sdk/
 
-#  RUN git clone https://github.com/junegunn/fzf /home/yagi5/.config/fzf && \
-#      cd /home/yagi5/.config/fzf && \
-#      git remote set-url origin git@github.com:junegunn/fzf.git && \
-#      /home/yagi5/.config/fzf/install --bin --64 --no-bash --no-zsh --no-fish --no-key-bindings --no-completion --no-update-rc --xdg
+RUN git clone https://github.com/junegunn/fzf /home/yagi5/.config/fzf && \
+    cd /home/yagi5/.config/fzf && \
+    git remote set-url origin git@github.com:junegunn/fzf.git && \
+    /home/yagi5/.config/fzf/install --bin --64 --no-bash --no-zsh --no-fish --no-key-bindings --no-completion --no-update-rc --xdg
+
+EXPOSE 2222
 
 WORKDIR /home/yagi5
+COPY pull-secrets.sh /bin/pull-secrets.sh
 COPY entrypoint.sh /bin/entrypoint.sh
 CMD ["/bin/entrypoint.sh"]
