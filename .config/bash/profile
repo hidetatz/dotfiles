@@ -168,7 +168,7 @@ function ghqget() {
 
 function brewget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  cat $DOT_FILES/packages/brew | while read line
+  cat $DOT_FILES/.config/packages/brew | while read line
   do
     brew list | grep $line || echo "installing ${line}..."; brew install $line
   done
@@ -184,12 +184,12 @@ function _go() {
 
   # go get *
   if [ "$2" = "-u" ]; then
-    echo $3 >> $DOT_FILES/packages/go
+    echo $3 >> $DOT_FILES/.config/packages/go
   else
-    echo $2 >> $DOT_FILES/packages/go
+    echo $2 >> $DOT_FILES/.config/packages/go
   fi
-  f=`cat $DOT_FILES/packages/go | sort | uniq`
-  echo "$f" > $DOT_FILES/packages/go
+  f=`cat $DOT_FILES/.config/packages/go | sort | uniq`
+  echo "$f" > $DOT_FILES/.config/packages/go
   `which go` $@
 }
 
@@ -197,9 +197,9 @@ function _ghq() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which ghq` && return
   [ "$1" != "get" ] && `which ghq` $@ && return
-  echo $2 >> $DOT_FILES/packages/ghq
-  f=`cat $DOT_FILES/packages/ghq | sort | uniq`
-  echo "$f" > $DOT_FILES/packages/ghq
+  echo $2 >> $DOT_FILES/.config/packages/ghq
+  f=`cat $DOT_FILES/.config/packages/ghq | sort | uniq`
+  echo "$f" > $DOT_FILES/.config/packages/ghq
   `which ghq` $@
 }
 
@@ -211,9 +211,9 @@ function __brew() {
     return
   fi
   [ "$1" != "install" ] && `which brew` $@ && return
-  echo $2 >> $DOT_FILES/packages/brew
-  f=`cat $DOT_FILES/packages/brew | sort | uniq`
-  echo "$f" > $DOT_FILES/packages/brew
+  echo $2 >> $DOT_FILES/.config/packages/brew
+  f=`cat $DOT_FILES/.config/packages/brew | sort | uniq`
+  echo "$f" > $DOT_FILES/.config/packages/brew
   `which brew` $@
 }
 
@@ -221,9 +221,9 @@ function __brewcask() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$2" = "" ] && `which brew` && return
   [ "$2" != "install" ] && `which brew` $@ && return
-  echo $3 >> $DOT_FILES/packages/brewcask
-  c=`cat $DOT_FILES/packages/brewcask | sort | uniq`
-  echo "$c" > $DOT_FILES/packages/brewcask
+  echo $3 >> $DOT_FILES/.config/packages/brewcask
+  c=`cat $DOT_FILES/.config/packages/brewcask | sort | uniq`
+  echo "$c" > $DOT_FILES/.config/packages/brewcask
   `which brew` $@
 }
 

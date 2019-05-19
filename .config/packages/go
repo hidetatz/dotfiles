@@ -15,6 +15,8 @@ github.com/stamblerre/gocode
 github.com/yagi5/gjson 
 github.com/yagi5/gotest 
 github.com/yagi5/gotests/... 
+github.com/yagi5/hist-datastore/cmd/histdatastore
+github.com/yagi5/hist-datastore/cmd/cacheupdate
 github.com/zmb3/gogetdoc 
 golang.org/x/lint/golint
 golang.org/x/tools/cmd/goimports 

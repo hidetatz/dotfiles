@@ -21,6 +21,7 @@ source $HOME/.config/bash/profile
 
 /bin/pull-secrets.sh
 
+echo "Installing ghq..."
 go get github.com/motemen/ghq
 
 echo "Executing goget..."
@@ -29,4 +30,5 @@ goget
 echo "Executing ghqget..."
 ghqget
 
+echo ""
 sudo /usr/sbin/sshd -D
