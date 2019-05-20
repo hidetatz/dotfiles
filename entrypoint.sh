@@ -12,16 +12,17 @@ echo "Setup dotfiles..."
 echo "==========================="
 echo ""
 
+[ -e $HOME/.config/bash ] || mkdir $HOME/.config/bash
+[ -e $HOME/.config/git ]  || mkdir $HOME/.config/git
+[ -e $HOME/.config/nvim ] || mkdir $HOME/.config/nvim
+[ -e $HOME/.config/tmux ] || mkdir $HOME/.config/tmux
+
 git clone https://github.com/yagi5/dotfiles.git --depth=1 $HOME/ghq/src/github.com/yagi5/dotfiles
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/bash $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/docker $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/git $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/kube $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/nvim $HOME/.config/
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/bash/profile $HOME/.config/bash/profile
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/git/config $HOME/.config/git/config
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/nvim/init.vim $HOME/.config/nvim/init.vim
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
 ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/scripts $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/ssh $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/telepresence $HOME/.config/
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/tmux $HOME/.config/
 
 source $HOME/.config/bash/profile
 

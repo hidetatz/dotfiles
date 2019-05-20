@@ -8,7 +8,7 @@ run:
 	docker run -it -p 2222:2222 workspace
 
 ssh:
-	ssh yagi5@localhost -p 2222 -i ~/.config/ssh/github_mac
+	ssh yagi5@localhost -p 2222 -i ~/.config/ssh/github_mac -t tmux -f /home/yagi5/.config/tmux/tmux.conf new-session -sAD -s main
 
 update:
 	$$HOME/.config/google-cloud-sdk/bin
