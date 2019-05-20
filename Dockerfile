@@ -130,6 +130,5 @@ RUN git clone https://github.com/junegunn/fzf /home/yagi5/.config/fzf && \
 EXPOSE 2222
 
 WORKDIR /home/yagi5
-COPY pull-secrets.sh /bin/pull-secrets.sh
 COPY entrypoint.sh /bin/entrypoint.sh
 CMD ["/bin/entrypoint.sh"]

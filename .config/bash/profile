@@ -3,6 +3,8 @@
 # -------------------------------------
 
 export XDG_CONFIG_HOME=$HOME/.config
+export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
+export SECRETS="$DOT_FILES/.config/secrets"
 export HISTCONTROL=ignoreboth:erasedups
 export HISTFILE=$XDG_CONFIG_HOME/bash/bash_history
 export HISTSIZE=90000
@@ -180,7 +182,6 @@ function open_circleci() {
 }
 
 function goget() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   cat $DOT_FILES/.config/packages/go | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; go get -u $line
@@ -188,7 +189,6 @@ function goget() {
 }
 
 function ghqget() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   cat $DOT_FILES/.config/packages/ghq | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; ghq get -shallow $line
@@ -196,15 +196,13 @@ function ghqget() {
 }
 
 function ghqprivget() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
-  cat $DOT_FILES/.config/secrets/ghq.private | while read line
+  cat $SECRETS/ghq.private | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; ghq get -shallow $line
   done
 }
 
 function brewget() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   cat $DOT_FILES/.config/packages/brew | while read line
   do
     brew list | grep $line || echo "installing ${line}..."; brew install $line
@@ -212,7 +210,6 @@ function brewget() {
 }
 
 function _go() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which go` && return
   if [ "$1" != "get" ]; then
     `which go` $@
@@ -231,7 +228,6 @@ function _go() {
 }
 
 function _ghq() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which ghq` && return
   [ "$1" != "get" ] && `which ghq` $@ && return
   echo $2 >> $DOT_FILES/.config/packages/ghq
@@ -241,7 +237,6 @@ function _ghq() {
 }
 
 function __brew() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$1" = "" ] && `which brew` && return
   if [ "$1" == "cask" ]; then
     __brewcask $@ 
@@ -255,7 +250,6 @@ function __brew() {
 }
 
 function __brewcask() {
-  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   [ "$2" = "" ] && `which brew` && return
   [ "$2" != "install" ] && `which brew` $@ && return
   echo $3 >> $DOT_FILES/.config/packages/brewcask
