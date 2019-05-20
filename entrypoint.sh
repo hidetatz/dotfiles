@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -e
 
 export PATH=$PATH:$HOME/.config/google-cloud-sdk/bin
 export PATH=$PATH:$HOME/ghq/bin
