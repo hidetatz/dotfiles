@@ -23,8 +23,6 @@ shopt -s histappend
 for f in ~/.config/scripts/*; do source $f; done
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
 
-source <(kubectl completion bash)
-
 #OktaAWSCLI
 if [[ -f "$HOME/.okta/bash_functions" ]]; then
     . "$HOME/.okta/bash_functions"
@@ -32,6 +30,37 @@ fi
 if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
     PATH="$HOME/.okta/bin:$PATH"
 fi
+
+# -------------------------------------
+# bind
+# -------------------------------------
+
+# necessary for history_get_from_datastore
+bind '"\er": redraw-current-line'
+bind '"\e^": history-expand-line'
+bind '"\C-r": " \C-e\C-u\C-y\ey\C-u`history_get_from_datastore`\e\C-e\er\e^"'
+
+# -------------------------------------
+# golang
+# -------------------------------------
+
+export GOPATH="$HOME/ghq"
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:/usr/local/go/bin
+
+# -------------------------------------
+# fzf
+# -------------------------------------
+
+PATH=$PATH:$XDG_CONFIG_HOME/fzf/bin
+export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
+
+# -------------------------------------
+# gcloud
+# -------------------------------------
+
+PATH=$PATH:$XDG_CONFIG_HOME/google-cloud-sdk/bin
+source <(kubectl completion bash)
 
 # -------------------------------------
 # functions
@@ -298,35 +327,6 @@ alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
 # alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")/tree/$(git rev-parse --abbrev-ref HEAD)'
 alias ci='open_circleci'
-
-# -------------------------------------
-# bind
-# -------------------------------------
-
-# necessary for history_get_from_datastore
-bind '"\er": redraw-current-line'
-bind '"\e^": history-expand-line'
-bind '"\C-r": " \C-e\C-u\C-y\ey\C-u`history_get_from_datastore`\e\C-e\er\e^"'
-
-# -------------------------------------
-# golang
-# -------------------------------------
-
-export GOPATH="$HOME/ghq"
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:/usr/local/go/bin
-
-# -------------------------------------
-# fzf
-# -------------------------------------
-
-export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
-
-# -------------------------------------
-# gcloud
-# -------------------------------------
-
-PATH=$PATH:$XDG_CONFIG_HOME/google-cloud-sdk/bin
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)
