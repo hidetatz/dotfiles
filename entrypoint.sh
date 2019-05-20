@@ -16,6 +16,7 @@ echo ""
 [ -e $HOME/.config/git ]  || mkdir $HOME/.config/git
 [ -e $HOME/.config/nvim ] || mkdir $HOME/.config/nvim
 [ -e $HOME/.config/tmux ] || mkdir $HOME/.config/tmux
+[ -e $HOME/.config/ssh ] || mkdir $HOME/.config/ssh
 
 git clone https://github.com/yagi5/dotfiles.git --depth=1 $HOME/ghq/src/github.com/yagi5/dotfiles
 ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/bash/profile $HOME/.config/bash/profile
