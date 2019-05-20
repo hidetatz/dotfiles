@@ -56,7 +56,7 @@ echo "==========================="
 echo ""
 
 ghqget
-ghqgetpriv
+ghqprivget
 
 echo ""
 echo "==========================="
