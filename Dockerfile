@@ -74,7 +74,7 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
 	man \
 	neovim \
 	net-tools \
-	python \
+	python3 \
 	ssh \
 	sudo \
 	tmux \

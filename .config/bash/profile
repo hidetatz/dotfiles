@@ -195,6 +195,14 @@ function ghqget() {
   done
 }
 
+function ghqprivget() {
+  DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+  cat $DOT_FILES/.config/packages/ghq.private | while read line
+  do
+    ghq list | grep $line || echo "installing ${line}..."; ghq get -shallow $line
+  done
+}
+
 function brewget() {
   DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
   cat $DOT_FILES/.config/packages/brew | while read line
