@@ -5,7 +5,7 @@ build:
 	DOCKER_BUILDKIT=1 docker build -t workspace .
 
 run:
-	docker run -it -d -p 2222:2222 workspace
+	docker run -it -p 2222:2222 workspace
 
 ssh:
 	ssh yagi5@localhost -p 2222 -i ~/.config/ssh/github_mac
