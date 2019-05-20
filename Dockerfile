@@ -7,12 +7,6 @@ ARG GCLOUD_VERSION=196.0.0
 # If package can be installed by apt, use apt
 # If not, setup stage
 
-# install kubectl
-# FROM ubuntu:18.10 as kubectl_builder
-# RUN apt-get update && apt-get install -y curl ca-certificates
-# RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-# RUN chmod 755 /usr/local/bin/kubectl
-
 # install terraform
 FROM ubuntu:${UBUNTU_VERSION} as terraform_builder
 ARG TERRAFORM_VERSION
@@ -48,7 +42,6 @@ RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud
 # base OS
 FROM ubuntu:${UBUNTU_VERSION}
 ARG GO_VERSION
-# ARG GCLOUD_VERSION
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG="en_US.UTF-8"
@@ -56,36 +49,36 @@ ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
 RUN apt update -qq && apt upgrade -y && apt install -qq -y \
-        build-essential
-        ca-certificates \
-        clang \
-        cmake \
-        curl \
-        default-libmysqlclient-dev \
-        default-mysql-client \
-        dnsutils \
-        docker.io \
-        gdb \
-        git \
-        git-crypt \
-        hugo \
-        jq \
-        less \
-        locales \
-        man \
-        neovim \
-        net-tools \
-        python \
-        python3 \
-        ssh \
-        sudo \
-        tmux \
-        tree \
-        unzip \
-        wget \
-        zip \
-        --no-install-recommends \
-        && rm -rf /var/lib/apt/lists/*
+    build-essential \
+    ca-certificates \
+    clang \
+    cmake \
+    curl \
+    default-libmysqlclient-dev \
+    default-mysql-client \
+    dnsutils \
+    docker.io \
+    gdb \
+    git \
+    git-crypt \
+    hugo \
+    jq \
+    less \
+    locales \
+    man \
+    neovim \
+    net-tools \
+    python \
+    python3 \
+    ssh \
+    sudo \
+    tmux \
+    tree \
+    unzip \
+    wget \
+    zip \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
