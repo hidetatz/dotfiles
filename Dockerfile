@@ -56,35 +56,36 @@ ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
 RUN apt update -qq && apt upgrade -y && apt install -qq -y \
-	ca-certificates \
-	clang \
-	cmake \
-	curl \
-	default-libmysqlclient-dev \
-	default-mysql-client \
-	dnsutils \
-	docker.io \
-	gdb \
-	git \
-	git-crypt \
-	hugo \
-	jq \
-	less \
-	locales \
-	man \
-	neovim \
-	net-tools \
-	python \
-	python3 \
-	ssh \
-	sudo \
-	tmux \
-	tree \
-	unzip \
-	wget \
-	zip \
-	--no-install-recommends \
-	&& rm -rf /var/lib/apt/lists/*
+        build-essential
+        ca-certificates \
+        clang \
+        cmake \
+        curl \
+        default-libmysqlclient-dev \
+        default-mysql-client \
+        dnsutils \
+        docker.io \
+        gdb \
+        git \
+        git-crypt \
+        hugo \
+        jq \
+        less \
+        locales \
+        man \
+        neovim \
+        net-tools \
+        python \
+        python3 \
+        ssh \
+        sudo \
+        tmux \
+        tree \
+        unzip \
+        wget \
+        zip \
+        --no-install-recommends \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
