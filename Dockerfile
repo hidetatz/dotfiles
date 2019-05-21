@@ -52,6 +52,7 @@ ENV LANGUAGE="en_US.UTF-8"
 RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common add-apt-repository ppa:neovim-ppa/stable
 
 RUN apt update -qq && apt upgrade -y && apt install -qq -y \
+    bash-completion \
     build-essential \
     ca-certificates \
     clang \
