@@ -48,9 +48,10 @@ ENV LANG="en_US.UTF-8"
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
-RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common # add-apt-repositoyr command depents on this
+# add-apt-repositoyr command depents on software-properties-common
+RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common add-apt-repository ppa:neovim-ppa/stable
 
-RUN apt update -qq && apt upgrade -y && add-apt-repository ppa:neovim-ppa/stable && apt install -qq -y \
+RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     build-essential \
     ca-certificates \
     clang \
@@ -127,11 +128,6 @@ COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
 COPY --from=gcloud_builder /tmp/google-cloud-sdk /home/yagi5/.config/google-cloud-sdk/
-
-# RUN git clone https://github.com/junegunn/fzf /home/yagi5/.config/fzf && \
-#     cd /home/yagi5/.config/fzf && \
-#     git remote set-url origin git@github.com:junegunn/fzf.git && \
-#     /home/yagi5/.config/fzf/install --bin --64 --no-bash --no-zsh --no-fish --no-key-bindings --no-completion --no-update-rc --xdg
 
 EXPOSE 2222
 
