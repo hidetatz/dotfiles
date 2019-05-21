@@ -96,10 +96,11 @@ echo "Start sshd on background"
 echo "============================================"
 echo ""
 
-sudo /usr/sbin/sshd -D &
+sudo /usr/sbin/sshd -D
 
 echo ""
 echo "============================================"
-echo "Setup process is done! do 'make ssh'"
+echo "Setup process is done!"
+echo "detach from container by Ctrl-p + Ctrl-q and do 'make ssh'"
 echo "============================================"
 echo ""
