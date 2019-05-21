@@ -189,17 +189,11 @@ function goget() {
 }
 
 function ghqget() {
-  cat $DOT_FILES/.config/packages/ghq | while read line
-  do
-    ghq list | grep $line || echo "installing ${line}..."; ghq get -shallow $line
-  done
+  ghq import -u --shallow --parallel < $DOT_FILES/.config/packages/ghq
 }
 
 function ghqprivget() {
-  cat $SECRETS/ghq.private | while read line
-  do
-    ghq list | grep $line || echo "installing ${line}..."; ghq get -shallow $line
-  done
+  ghq import -u --shallow --parallel < cat $SECRETS/ghq.private
 }
 
 function brewget() {

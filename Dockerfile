@@ -48,7 +48,9 @@ ENV LANG="en_US.UTF-8"
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
-RUN apt update -qq && apt upgrade -y && apt install -qq -y \
+RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common # add-apt-repositoyr command depents on this
+
+RUN apt update -qq && apt upgrade -y && add-apt-repository ppa:neovim-ppa/stable && apt install -qq -y \
     build-essential \
     ca-certificates \
     clang \
@@ -65,11 +67,15 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     jq \
     less \
     locales \
-    man \
     neovim \
+    man \
     net-tools \
     python \
+    python-dev \
+    python-pip \
     python3 \
+    python3-dev \
+    python3-pip \
     ssh \
     sudo \
     tmux \
@@ -77,6 +83,8 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     unzip \
     wget \
     zip \
+    # for neovim
+    software-properties-common \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
