@@ -17,6 +17,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
   Plug 'hashivim/vim-terraform'
+  Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
   Plug 'Raimondi/delimitMate'
   Plug 'sirver/ultisnips'
@@ -102,6 +103,7 @@ inoremap <C-l> <Right>
 " for fzf installed by homebrew
 set rtp+=/usr/local/opt/fzf
 set rtp+=~/ghq/src/github.com/junegunn/fzf
+set rtp+=~/.config/fzf/bin
 
 nnoremap ; :Buffers
 nnoremap t :Files
