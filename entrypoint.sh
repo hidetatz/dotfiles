@@ -57,7 +57,6 @@ ln -s $SECRETS/known_hosts $HOME/.config/ssh/known_hosts
 ln -s $SECRETS/github_mac  $HOME/.config/ssh/github_mac
 ln -s $SECRETS/profile.pvt $HOME/.config/bash/profile.pvt
 
-
 echo ""
 echo "============================================"
 echo "Installing ghq..."
