@@ -67,7 +67,6 @@ RUN apt update -qq && apt upgrade -y && add-apt-repository ppa:neovim-ppa/stable
     jq \
     less \
     locales \
-    neovim \
     man \
     net-tools \
     python \
@@ -76,6 +75,7 @@ RUN apt update -qq && apt upgrade -y && add-apt-repository ppa:neovim-ppa/stable
     python3 \
     python3-dev \
     python3-pip \
+    neovim \
     ssh \
     sudo \
     tmux \
@@ -83,8 +83,6 @@ RUN apt update -qq && apt upgrade -y && add-apt-repository ppa:neovim-ppa/stable
     unzip \
     wget \
     zip \
-    # for neovim
-    software-properties-common \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 

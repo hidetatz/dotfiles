@@ -189,11 +189,11 @@ function goget() {
 }
 
 function ghqget() {
-  ghq import -u --shallow --parallel < $DOT_FILES/.config/packages/ghq
+  ghq import -u --parallel < $DOT_FILES/.config/packages/ghq
 }
 
 function ghqprivget() {
-  ghq import -u --shallow --parallel < $SECRETS/ghq.private
+  ghq import -u --parallel < $SECRETS/ghq.private
 }
 
 function brewget() {

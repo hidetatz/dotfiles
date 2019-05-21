@@ -8,9 +8,9 @@ export GOPATH=$HOME/ghq
 export XDG_CONFIG_HOME=$HOME/.config
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Setup dotfiles..."
-echo "==========================="
+echo "============================================"
 echo ""
 
 [ -e $HOME/.config/bash ] || mkdir $HOME/.config/bash
@@ -30,17 +30,17 @@ ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/scripts        $HOME/.con
 source $HOME/.config/bash/profile
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Download secrets from GCS, login first"
-echo "==========================="
+echo "============================================"
 echo ""
 
 gcloud auth login
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Pulling secrets from GCS..."
-echo "==========================="
+echo "============================================"
 echo ""
 
 gsutil cp gs://blackhole-yagi5/config              $SECRETS
@@ -59,42 +59,47 @@ ln -s $SECRETS/profile.pvt $HOME/.config/bash/profile.pvt
 
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Installing ghq..."
-echo "==========================="
+echo "============================================"
 echo ""
 
 go get github.com/motemen/ghq
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Executing goget..."
-echo "==========================="
+echo "============================================"
 echo ""
 
 goget
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Executing ghqget..."
-echo "==========================="
+echo "============================================"
 echo ""
 
 ghqget
 
 echo ""
-echo "==========================="
+echo "============================================"
 echo "Executing ghqprivget..."
-echo "==========================="
+echo "============================================"
 echo ""
 
 ghqprivget
 
 echo ""
-echo "==========================="
-echo "Setup done! sshd start"
-echo "do 'make ssh'"
-echo "==========================="
+echo "============================================"
+echo "Start sshd on background"
+echo "============================================"
 echo ""
 
-sudo /usr/sbin/sshd -D
+sudo /usr/sbin/sshd -D &
+
+echo ""
+echo "============================================"
+echo "Setup process is done! do 'make ssh'"
+echo "============================================"
+echo ""
