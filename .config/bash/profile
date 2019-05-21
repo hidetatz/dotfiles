@@ -193,7 +193,7 @@ function ghqget() {
 }
 
 function ghqprivget() {
-  ghq import -u --shallow --parallel < cat $SECRETS/ghq.private
+  ghq import -u --shallow --parallel < $SECRETS/ghq.private
 }
 
 function brewget() {
