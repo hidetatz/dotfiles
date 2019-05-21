@@ -4,7 +4,7 @@ dest="$$base/.config/secrets"
 build:
 	DOCKER_BUILDKIT=1 docker build -t workspace .
 
-run:
+run: build
 	docker run -it -p 2222:2222 workspace
 
 ssh:
