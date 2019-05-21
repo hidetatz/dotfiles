@@ -37,13 +37,6 @@ echo ""
 
 gcloud auth login
 
-# [ -e $dest/config ]              && rm $dest/config
-# [ -e $dest/github_mac ]          && rm $dest/github_mac
-# [ -e $dest/known_hosts ]         && rm $dest/known_hosts
-# [ -e $dest/profile.pvt ]         && rm $dest/profile.pvt
-# [ -e $dest/ghq.private ]         && rm $dest/ghq.private
-# [ -e $dest/hist-datastore.json ] && rm $dest/hist-datastore.json
-
 echo ""
 echo "==========================="
 echo "Pulling secrets from GCS..."
@@ -100,6 +93,7 @@ ghqprivget
 echo ""
 echo "==========================="
 echo "Setup done! sshd start"
+echo "do 'make ssh'"
 echo "==========================="
 echo ""
 
