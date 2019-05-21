@@ -92,11 +92,9 @@ ghqprivget
 
 echo ""
 echo "============================================"
-echo "Start sshd on background"
+echo "Starting sshd on background"
 echo "============================================"
 echo ""
-
-sudo /usr/sbin/sshd -D
 
 echo ""
 echo "============================================"
@@ -104,3 +102,5 @@ echo "Setup process is done!"
 echo "detach from container by Ctrl-p + Ctrl-q and do 'make ssh'"
 echo "============================================"
 echo ""
+
+sudo /usr/sbin/sshd -D
