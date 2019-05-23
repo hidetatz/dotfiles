@@ -88,6 +88,13 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt update -qq && apt install -qq -y \
+    python-setuptools \
+    python3-setuptools \
+    && \
+    pip install neovim && \
+    pip3 install neovim
+
 RUN wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz
