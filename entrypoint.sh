@@ -7,6 +7,12 @@ export PATH=$PATH:$HOME/ghq/bin
 export GOPATH=$HOME/ghq
 export XDG_CONFIG_HOME=$HOME/.config
 
+# using docker start
+if [ -e $HOME/ghq/src/github.com/yagi5/dotfiles ]; then
+	sudo /usr/sbin/sshd -D
+	return
+fi
+
 echo ""
 echo "============================================"
 echo "Setup dotfiles..."
