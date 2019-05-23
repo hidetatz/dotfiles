@@ -49,7 +49,7 @@ ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
 # add-apt-repositoyr command depents on software-properties-common
-RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common add-apt-repository ppa:neovim-ppa/stable
+RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common && add-apt-repository ppa:neovim-ppa/stable
 
 RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     bash-completion \
