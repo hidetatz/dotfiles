@@ -5,10 +5,10 @@ build:
 	DOCKER_BUILDKIT=1 docker build -t workspace .
 
 run: build
-	docker run -it -p 2222:2222 workspace
+	docker run -it -p 1024-8000:1024-8000 workspace
 
 ssh:
-	ssh yagi5@localhost -p 2222 -i ~/.config/ssh/github_mac -t tmux -f /home/yagi5/.config/tmux/tmux.conf new-session -A -s main
+	ssh yagi5@localhost -p 2222 -i ~/.ssh/github_mac -t tmux -f /home/yagi5/.config/tmux/tmux.conf new-session -A -s main
 
 update:
 	[ -e $$HOME/.config/ssh/config ]       && gsutil cp $$HOME/.config/ssh/config       gs://blackhole-yagi5/config

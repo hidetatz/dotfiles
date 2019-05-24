@@ -137,7 +137,7 @@ COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
 COPY --from=gcloud_builder /tmp/google-cloud-sdk /home/yagi5/.config/google-cloud-sdk/
 
-EXPOSE 2222
+EXPOSE 1024-8000
 
 WORKDIR /home/yagi5
 COPY entrypoint.sh /bin/entrypoint.sh
