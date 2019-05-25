@@ -5,7 +5,7 @@ build:
 	DOCKER_BUILDKIT=1 docker build -t workspace .
 
 run: build
-	docker run -it --network host workspace
+	docker run -it --expose 1313 --expose 2222 -p 1313:1313 -p 2222:2222 workspace
 
 ssh:
 	ssh yagi5@localhost -p 2222 -i ~/.ssh/github_mac -t tmux -f /home/yagi5/.config/tmux/tmux.conf new-session -A -s main
