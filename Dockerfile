@@ -125,8 +125,9 @@ RUN groupadd -g 1002 wheel && \
 USER 1001
 
 RUN mkdir /home/yagi5/.config && \
-    sudo chown -R yagi5:yagi5 /home/yagi5 && \
     mkdir -p /home/yagi5/ghq/bin && \
+    mkdir -p /home/yagi5/ghq/src && \
+    sudo chown -R yagi5:yagi5 /home/yagi5 && \
     mkdir /home/yagi5/.ssh && \
     curl -fsL https://github.com/yagi5.keys > /home/yagi5/.ssh/authorized_keys && \
     chmod 700 /home/yagi5/.ssh && \
@@ -139,4 +140,6 @@ COPY --from=gcloud_builder /tmp/google-cloud-sdk /home/yagi5/.config/google-clou
 
 WORKDIR /home/yagi5
 COPY entrypoint.sh /bin/entrypoint.sh
-CMD ["/bin/entrypoint.sh"]
+COPY sshd.sh /bin/sshd.sh
+
+CMD ["/bin/sshd.sh"]
