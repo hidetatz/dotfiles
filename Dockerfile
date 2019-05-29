@@ -3,6 +3,7 @@ ARG GO_VERSION=1.12.5
 ARG TERRAFORM_VERSION=0.11.11
 ARG PROTOC_VERSION=3.6.1
 ARG GCLOUD_VERSION=196.0.0
+ARG DOCKER_COMPOSE_VERSION=1.24.0
 
 # If package can be installed by apt, use apt
 # If not, setup stage
@@ -38,6 +39,13 @@ RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud
     ./google-cloud-sdk/bin/gcloud components install kubectl --quiet && \
     mv google-cloud-sdk /tmp/ && \
     rm google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz
+
+# install docker-compose
+FROM ubuntu:${UBUNTU_VERSION} as docker_compose_builder
+ARG DOCKER_COMPOSE_VERSION
+RUN apt-get update && apt-get install -y wget ca-certificates
+RUN curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
 
 # base OS
 FROM ubuntu:${UBUNTU_VERSION}
@@ -137,6 +145,7 @@ COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
 COPY --from=gcloud_builder /tmp/google-cloud-sdk /home/yagi5/.config/google-cloud-sdk/
+COPY --from=docker_compose_builder /usr/local/bin/docker-compose /user/local/bin/
 
 WORKDIR /home/yagi5
 COPY entrypoint.sh /bin/entrypoint.sh
