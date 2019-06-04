@@ -69,6 +69,9 @@ set belloff+=ctrlg
 set nobackup
 set splitright
 set splitbelow
+set tabstop=4
+set shiftwidth=4
+set expandtab
 set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 augroup vimrcEx
