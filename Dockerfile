@@ -48,6 +48,7 @@ RUN apt-get update && apt-get install -y wget ca-certificates
 RUN curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
+# install jsonnet
 FROM ubuntu:${UBUNTU_VERSION} as jsonnet_builder
 ARG JSONNET_VERSION
 RUN apt-get update && apt-get install -y wget ca-certificates

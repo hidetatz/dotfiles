@@ -34,6 +34,8 @@ call plug#end()
 " Settings
 "----------------------------------------------------------------------------
 
+autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
+
 filetype off
 filetype plugin indent on
 set nocompatible
