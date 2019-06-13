@@ -254,6 +254,10 @@ function __brewcask() {
   `which brew` $@
 }
 
+function go_test_fzf() {
+  go test -timeout 30s -count=1 `go list ./... | fzf` -run "^(Test.*)$" -v | gotest
+}
+
 # -------------------------------------
 # prompt
 # -------------------------------------
@@ -325,6 +329,7 @@ alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
 # alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")/tree/$(git rev-parse --abbrev-ref HEAD)'
 alias ci='open_circleci'
+alias gt='go_test_fzf'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)

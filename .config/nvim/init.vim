@@ -35,6 +35,8 @@ call plug#end()
 "----------------------------------------------------------------------------
 
 autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
+autocmd ColorScheme * highlight iCursor guifg=white
+autocmd ColorScheme * highlight Cursor guifg=white
 
 filetype off
 filetype plugin indent on
@@ -182,7 +184,8 @@ augroup go
   nnoremap <leader>I :GoImplements<CR>
   nnoremap <leader>k :GoKeyify<CR>
   nnoremap <leader>f :GoFillStruct<CR>
-  nnoremap <leader>t :GoAddTags
+  nnoremap <leader>t :GoTest<CR>
+  nnoremap <leader>T :GoAddTags<CR>
   nnoremap <leader>s :GoRemoveTags<CR>
   nnoremap <leader>r :GoRun<CR>
   nnoremap <Leader>c <Plug>(go-coverage-toggle)
