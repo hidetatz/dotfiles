@@ -5,10 +5,11 @@ build:
 	DOCKER_BUILDKIT=1 docker build -t workspace .
 
 run: build
-	docker run -it -v ghqvol:/home/yagi5/ghq --expose 1313 --expose 2222 --expose 52224 -p 1313:1313 -p 2222:2222 -p 52224:52224 workspace
+	docker run -it -v ghqvol:/home/yagi5/ghq --expose 1313 --expose 2222 --expose 52224 -p 1313:1313 -p 2222:2222 workspace
 
 ssh:
-	ssh yagi5@localhost -p 2222 -i ~/.ssh/github_mac -t /bin/entrypoint.sh
+	./clipboard_text_listener.pl &
+	ssh yagi5@localhost -p 2222 -i ~/.ssh/github_mac -R 52224:localhost:52224 -t /bin/entrypoint.sh
 
 update:
 	[ -e $$HOME/.config/ssh/config ]       && gsutil cp $$HOME/.config/ssh/config       gs://blackhole-yagi5/config
