@@ -204,3 +204,21 @@ let g:terraform_align=1
 let g:terraform_fold_sections=1
 let g:terraform_remap_spacebar=1
 let g:terraform_fmt_on_save = 1
+
+"----------------------------------------------------------------------------
+" yank to remote
+"----------------------------------------------------------------------------
+let g:y2r_config = {
+            \   'tmp_file': '/tmp/exchange_file',
+            \   'host': 'localhost',
+            \   'port': 52224,
+            \}
+function Yank2Remote()
+    call writefile(split(@", '\n'), g:y2r_config.tmp_file, 'b')
+    let s:params = ['echo change_on_install; cat %s | nc -w1 %s %s']
+    for s:item in ['tmp_file', 'host', 'port']
+        let s:params += [shellescape(g:y2r_config[s:item])]
+    endfor
+    let s:ret = system(call(function('printf'), s:params))
+endfunction
+nnoremap <silent> <unique> <Leader>y :call Yank2Remote()<CR>

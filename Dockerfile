@@ -91,6 +91,7 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     locales \
     man \
     net-tools \
+    netcat \
     python \
     python-dev \
     python-pip \
@@ -102,6 +103,7 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     sudo \
     tmux \
     tree \
+    tzdata \
     unzip \
     wget \
     zip \
@@ -122,7 +124,8 @@ RUN wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz && \
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen --purge $LANG && \
     dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE
+    update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE \ 
+    ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 RUN echo "source /home/yagi5/.config/bash/profile" | tee -a /etc/profile
 
