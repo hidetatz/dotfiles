@@ -208,8 +208,15 @@ let g:terraform_fmt_on_save = 1
 "----------------------------------------------------------------------------
 " yank to remote
 "----------------------------------------------------------------------------
-function Yank2Remote()
-  call writefile(split(@", '\n'), '/tmp/exchange_file', 'b')
-  let s:ret = system('(echo change_on_install; cat /tmp/exchange_file) | nc -w1 localhost 52224')
+function! Yank2Remote()
+  " write current register value into /tmp/yank_new
+  call writefile(split(@", '\n'), '/tmp/yank_new', 'b')
+  let s:diff = system('diff /tmp/yank_new /tmp/yank_now')
+  if s:diff != ''
+    " yank is updated, try to update yank_now and send it
+    call writefile(split(@", '\n'), '/tmp/yank_now', 'b')
+    let s:ret = system('(echo change_on_install; cat /tmp/yank_now) | nc -w1 localhost 52224 &')
+  endif
 endfunction
-nnoremap <silent> <unique> <C-y> :call Yank2Remote()<CR>
+
+autocmd CursorMoved,CursorHold * :call Yank2Remote()
