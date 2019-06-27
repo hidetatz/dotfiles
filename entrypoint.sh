@@ -103,6 +103,7 @@ function run_tmux() {
   tmux -f /home/yagi5/.config/tmux/tmux.conf new-session -A -s main
 }
 
+sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 if [ -e $HOME/.config/tmux/tmux.conf -a -e $HOME/ghq/src/github.com/yagi5/dotfiles ]; then
   # configuration files and source code are given through docker volume
   echo ""
