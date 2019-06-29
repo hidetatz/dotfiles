@@ -1,3 +1,4 @@
+# Define packages versions
 ARG UBUNTU_VERSION=18.10
 ARG GO_VERSION=1.12.5
 ARG TERRAFORM_VERSION=0.11.11
@@ -47,7 +48,7 @@ RUN apt-get update && apt-get install -y wget ca-certificates
 RUN wget https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
-# base OS
+# base image
 FROM ubuntu:${UBUNTU_VERSION}
 ARG GO_VERSION
 
@@ -59,6 +60,7 @@ ENV LANGUAGE="en_US.UTF-8"
 # add-apt-repositoyr command depents on software-properties-common
 RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common && add-apt-repository ppa:neovim-ppa/stable
 
+# Install some packages by apt
 RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     bash-completion \
     build-essential \
@@ -80,6 +82,8 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     man \
     net-tools \
     netcat \
+    nodejs \
+    npm \
     python \
     python-dev \
     python-pip \
@@ -98,6 +102,7 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
+# Install neovim
 RUN apt update -qq && apt install -qq -y \
     python-setuptools \
     python3-setuptools \
@@ -105,18 +110,22 @@ RUN apt update -qq && apt install -qq -y \
     pip install neovim && \
     pip3 install neovim
 
+# Install go
 RUN wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz
 
+# Configure locale and lang
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen --purge $LANG && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=$LANG LC_ALL=$LC_ALL LANGUAGE=$LANGUAGE \ 
     ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
+# Use customized bash profile because I use XDG_CONFIG_HOME
 RUN echo "source /home/yagi5/.config/bash/profile" | tee -a /etc/profile
 
+# Setup sshd
 RUN mkdir /run/sshd && \
     sed 's/#Port 22/Port 2222/' -i /etc/ssh/sshd_config && \
     sed 's/#PubkeyAuthentication/PubkeyAuthentication/' -i /etc/ssh/sshd_config && \
@@ -124,9 +133,9 @@ RUN mkdir /run/sshd && \
     sed 's/.ssh\/authorized_keys/\/home\/yagi5\/.ssh\/authorized_keys/' -i /etc/ssh/sshd_config && \
     sed 's/#PasswordAuthentication yes/PasswordAuthentication no/' -i /etc/ssh/sshd_config
 
-RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo >/dev/null
-
-RUN groupadd -g 1002 wheel && \
+# Setup user and group
+RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo >/dev/null \
+    groupadd -g 1002 wheel && \
     groupadd -g 1001 yagi5 && \
     useradd -g yagi5 -u 1001 yagi5 && \
     gpasswd -a yagi5 wheel && \
@@ -135,6 +144,7 @@ RUN groupadd -g 1002 wheel && \
     chsh -s /bin/bash yagi5
 USER 1001
 
+# Setup keys
 RUN mkdir /home/yagi5/.config && \
     mkdir -p /home/yagi5/ghq/bin && \
     mkdir -p /home/yagi5/ghq/src && \
@@ -154,4 +164,5 @@ WORKDIR /home/yagi5
 COPY entrypoint.sh /bin/entrypoint.sh
 COPY sshd.sh /bin/sshd.sh
 
+# Run sshd
 CMD ["/bin/sshd.sh"]
