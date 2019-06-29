@@ -154,6 +154,8 @@ RUN mkdir /home/yagi5/.config && \
     chmod 700 /home/yagi5/.ssh && \
     chmod 600 /home/yagi5/.ssh/authorized_keys
 
+RUN npm install -g firebase-tools
+
 COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
