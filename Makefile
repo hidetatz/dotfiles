@@ -19,5 +19,5 @@ update:
 	[ -e $$SECRETS/ghq.private ]           && gsutil cp $$SECRETS/ghq.private           gs://blackhole-yagi5/ghq.private
 	[ -e $$SECRETS/hist-datastore.json ]   && gsutil cp $$SECRETS/hist-datastore.json   gs://blackhole-yagi5/hist-datastore.json
 	git add .
-	git commit -m 'update'
+	git commit -m "$(MSG)"
 	git push origin master
