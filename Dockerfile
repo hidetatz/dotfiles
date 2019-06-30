@@ -134,10 +134,9 @@ RUN mkdir /run/sshd && \
     sed 's/#PasswordAuthentication yes/PasswordAuthentication no/' -i /etc/ssh/sshd_config
 
 # Setup user and group
-RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo >/dev/null \
-    groupadd -g 1001 yagi5 && \
+RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo >/dev/null
+RUN groupadd -g 1001 yagi5 && \
     groupadd -g 1002 wheel && \
-    groupadd -g 1003 docker && \
     useradd -g yagi5 -u 1001 yagi5 && \
     gpasswd -a yagi5 wheel && \
     gpasswd -a yagi5 docker && \
@@ -156,7 +155,7 @@ RUN mkdir /home/yagi5/.config && \
     chmod 700 /home/yagi5/.ssh && \
     chmod 600 /home/yagi5/.ssh/authorized_keys
 
-RUN npm install -g firebase-tools
+RUN sudo npm install -g firebase-tools
 
 COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
