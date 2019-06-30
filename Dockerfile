@@ -135,10 +135,12 @@ RUN mkdir /run/sshd && \
 
 # Setup user and group
 RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" | EDITOR='tee -a' visudo >/dev/null \
-    groupadd -g 1002 wheel && \
     groupadd -g 1001 yagi5 && \
+    groupadd -g 1002 wheel && \
+    groupadd -g 1003 docker && \
     useradd -g yagi5 -u 1001 yagi5 && \
     gpasswd -a yagi5 wheel && \
+    gpasswd -a yagi5 docker && \
     mkdir /home/yagi5 && \
     chown yagi5:yagi5 /home/yagi5 && \
     chsh -s /bin/bash yagi5

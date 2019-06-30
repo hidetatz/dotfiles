@@ -5,7 +5,7 @@ build:
 	DOCKER_BUILDKIT=1 docker build -t workspace .
 
 run: build
-	docker run -it -v ghqvol:/home/yagi5/ghq --expose 1313 --expose 2222 --expose 52224 -p 1313:1313 -p 2222:2222 workspace
+	docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v ghqvol:/home/yagi5/ghq --expose 1313 --expose 2222 --expose 52224 -p 1313:1313 -p 2222:2222 workspace
 
 ssh:
 	./clipboard_text_listener.pl -encoding utf8 &
