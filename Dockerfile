@@ -145,6 +145,8 @@ RUN groupadd -g 1001 yagi5 && \
     chsh -s /bin/bash yagi5
 USER 1001
 
+RUN sudo npm install -g firebase-tools
+
 # Setup keys
 RUN mkdir /home/yagi5/.config && \
     mkdir -p /home/yagi5/ghq/bin && \
@@ -155,13 +157,13 @@ RUN mkdir /home/yagi5/.config && \
     chmod 700 /home/yagi5/.ssh && \
     chmod 600 /home/yagi5/.ssh/authorized_keys
 
-RUN sudo npm install -g firebase-tools
-
 COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
 COPY --from=gcloud_builder /tmp/google-cloud-sdk /home/yagi5/.config/google-cloud-sdk/
 COPY --from=docker_compose_builder /usr/local/bin/docker-compose /usr/local/bin/
+
+RUN sudo chown -R yagi5:yagi5 /home/yagi5/.config
 
 WORKDIR /home/yagi5
 COPY entrypoint.sh /bin/entrypoint.sh
