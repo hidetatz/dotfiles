@@ -148,8 +148,7 @@ USER 1001
 RUN sudo npm install -g firebase-tools
 
 # Setup keys
-RUN mkdir /home/yagi5/.config && \
-    mkdir -p /home/yagi5/ghq/bin && \
+RUN mkdir -p /home/yagi5/ghq/bin && \
     mkdir -p /home/yagi5/ghq/src && \
     sudo chown -R yagi5:yagi5 /home/yagi5 && \
     mkdir /home/yagi5/.ssh && \
