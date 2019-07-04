@@ -128,19 +128,19 @@ function kube_get_pod() {
 }
 
 function kube_exec_pod() {
-  kubectl exec -it $(kube_get_pod) bash
+  k exec -it $(kube_get_pod) bash
 }
 
 function kube_log_pod() {
-  kubectl logs -f $(kubectl config current-context)
+  k logs -f $(kube_get_pod)
 }
 
 function kube_stop_nodes() {
-  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl drain --ignore-daemonsets XXX
+  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX k drain --ignore-daemonsets XXX
 }
 
 function kube_start_nodes() {
-  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX kubectl uncordon XXX
+  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX k uncordon XXX
 }
 
 function kube_port_forward() {
@@ -313,7 +313,7 @@ alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias ap='export AWS_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
-alias k='kubectl'
+alias k='kubectl -n $KUBE_NAMESPACE'
 alias gcf='gcloud_config_set_fzf'
 alias kc='kube_ctx'
 alias ke='kube_exec_pod'
