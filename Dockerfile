@@ -45,7 +45,8 @@ RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud
 FROM ubuntu:${UBUNTU_VERSION} as docker_compose_builder
 ARG DOCKER_COMPOSE_VERSION
 RUN apt-get update && apt-get install -y wget ca-certificates
-RUN wget https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && \
+RUN wget https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64 && \
+    mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
 # base image
