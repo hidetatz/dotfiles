@@ -24,7 +24,8 @@ function setup_dotfiles() {
   [ -e $HOME/.config/tmux ] || mkdir $HOME/.config/tmux
   [ -e $HOME/.config/ssh ]  || mkdir $HOME/.config/ssh
   
-  git clone https://github.com/tmux-plugins/tpm   --depth=1 $HOME/.config/tmux/plugins/tpm
+  git clone https://github.com/tmux-plugins/tpm --depth=1 $HOME/.config/tmux/plugins/tpm
+  git clone https://github.com/tmux-plugins/tmux-resurrect --depth=1 $HOME/.config/tmux/plugins/tmux-resurrect
   
   ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/bash/profile   $HOME/.config/bash/profile
   ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/git/config     $HOME/.config/git/config
