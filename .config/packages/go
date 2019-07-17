@@ -5,6 +5,7 @@ github.com/gobuffalo/packr/v2/packr2
 github.com/golang/dep/cmd/dep 
 github.com/gomodule/redigo/redis
 github.com/goreleaser/goreleaser
+github.com/k0kubun/tetris
 github.com/yagi5/gjson 
 github.com/yagi5/gotest 
 github.com/yagi5/hist-datastore/cmd/cacheupdate
