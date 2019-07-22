@@ -24,6 +24,7 @@ shopt -s histappend
 # for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
 for f in ~/.config/scripts/*; do source $f; done
 [ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
+[ -e $DOT_FILES/.config/secrets/profile.pvt ] && source $DOT_FILES/.config/secrets/profile.pvt
 
 #OktaAWSCLI
 if [[ -f "$HOME/.okta/bash_functions" ]]; then
