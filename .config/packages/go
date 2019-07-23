@@ -7,6 +7,7 @@ github.com/gomodule/redigo/redis
 github.com/goreleaser/goreleaser
 github.com/haya14busa/reviewdog/cmd/reviewdog
 github.com/k0kubun/tetris
+github.com/morikuni/aec
 github.com/wercker/stern
 github.com/yagi5/gjson 
 github.com/yagi5/gotest 
