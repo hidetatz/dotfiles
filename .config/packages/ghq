@@ -2,6 +2,7 @@
 eagletmt/hako
 google.golang.org/grpc
 https://github.com/cweill/gotests
+https://github.com/direnv/direnv
 https://github.com/golang/playground
 https://github.com/google/jsonnet
 https://github.com/kazeburo/chocon
