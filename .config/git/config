@@ -52,6 +52,9 @@
     st = stash
     sp = stash pop
     url =! bash -c 'git config --get remote.origin.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
+    showpr = "!f() { echo https://github.com/$(dirname $PWD | xargs basename)/$(basename $PWD)/$(git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1 | cut -f5 -d' ' | sed -e 's%#%pull/%'); }; f"
+
+
 
 [http]
     cookiefile = $HOME/.config/git/cookies
