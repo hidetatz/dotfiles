@@ -122,41 +122,8 @@ function gcloud_pj() {
   echo $(cat $HOME/.config/gcloud/configurations/config_default | grep project | awk '{print $3}')
 }
 
-function kube_get_namespace() {
-  k get ns | grep -v STATUS | fzf | awk '{print $1}'
-}
-
-function kube_get_pod() {
-  k get po | grep -v "AGE" | fzf | awk '{print $1}'
-}
-
-function kube_exec_pod() {
-  k exec -it $(kube_get_pod) bash
-}
-
-function kube_log_pod() {
-  k logs -f $(kube_get_pod)
-}
-
-function kube_stop_nodes() {
-  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX k drain --ignore-daemonsets XXX
-}
-
-function kube_start_nodes() {
-  k get no | awk '{print $1}' | grep -v NAME | xargs -IXXX k uncordon XXX
-}
-
-function kube_port_forward() {
-  if [ $# -ne 1 ]; then
-    echo "specify port"
-    return
-  fi
-  port=$1
-  kubectl port-forward $(kube_get_pod) $port
-}
-
-function kube_ctx() {
-  kubectl config get-contexts --no-headers --output='name' | fzf | xargs kubectl config use-context
+function export_kube_ctx() {
+  export KUBE_CONTEXT=$(kubectl config get-contexts --no-headers --output='name' | fzf)
 }
 
 function history_get_from_datastore() {
@@ -273,12 +240,12 @@ function go_test_fzf() {
 # CYAN="\[\e[36m\]"
 # RESET="\[\e[0m\]"
 
-KUBE_PS1_SYMBOL_COLOR=green
-KUBE_PS1_CTX_COLOR=green
-KUBE_PS1_NS_COLOR=green
+# KUBE_PS1_SYMBOL_COLOR=green
+# KUBE_PS1_CTX_COLOR=green
+# KUBE_PS1_NS_COLOR=green
 
 PS1='
-$(kube_ps1) 
+(\[\e[32m\e[40m\]$KUBE_CONTEXT\[\e[0m\]:\[\e[32m\e[40m\]$KUBE_NAMESPACE\[\e[0m\])
 (\[\e[33m\e[40m\]g\[\e[0m\] |\[\e[33m\e[40m\]$(gcloud_account)\[\e[0m\]:\[\e[33m\e[40m\]$(gcloud_pj)\[\e[0m\])
 '
 PS1=$PS1'\[\e[36m\e[40m\]\w\[\e[0m\]'
@@ -303,7 +270,6 @@ GIT_PS1_SHOWUPSTREAM=
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="nvim"
-# alias vi="vim -u $XDG_CONFIG_HOME/vim/vimrc"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.config/ssh/config | fzf | awk "{print \$2}")'
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
@@ -316,12 +282,9 @@ alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias ap='export AWS_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
-alias k='kubectl -n $KUBE_NAMESPACE'
+alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
-alias kc='kube_ctx'
-alias ke='kube_exec_pod'
-alias kl='kube_log_pod'
-alias kp='kube_port_forward'
+alias kc='export_kube_ctx'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias af='aws_logs_fzf'
@@ -330,7 +293,6 @@ alias ghq='_ghq'
 alias brew='__brew'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
-# alias ci='open https://circleci.com/gh/$(git remote get-url --push origin | sed -e "s/github.com://" | sed -e "s/.git//")/tree/$(git rev-parse --abbrev-ref HEAD)'
 alias ci='open_circleci'
 alias gt='go_test_fzf'
 

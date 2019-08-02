@@ -208,6 +208,17 @@ let g:terraform_remap_spacebar=1
 let g:terraform_fmt_on_save = 1
 
 "----------------------------------------------------------------------------
+" Kubernetes
+"----------------------------------------------------------------------------
+
+autocmd! BufWritePost *.yaml :call Kubeval()
+
+function! Kubeval()
+  let result = system('kubeval ' . bufname(""))
+  echo result
+endfunction
+
+"----------------------------------------------------------------------------
 " yank to remote
 "----------------------------------------------------------------------------
 function! Yank2Remote()
