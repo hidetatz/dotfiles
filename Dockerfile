@@ -1,5 +1,6 @@
 # Define packages versions
 ARG UBUNTU_VERSION=18.10
+ARG NEOVIM_VERSION=0.3.8
 ARG GO_VERSION=1.12.5
 ARG TERRAFORM_VERSION=0.11.11
 ARG PROTOC_VERSION=3.6.1
@@ -8,6 +9,17 @@ ARG DOCKER_COMPOSE_VERSION=1.24.0
 
 # If package can be installed by apt, use apt
 # If not, setup stage
+
+# install neovim
+FROM ubuntu:${UBUNTU_VERSION} as neovim_builder
+ARG NEOVIM_VERSION
+RUN apt-get update && apt-get install -y wget ca-certificates
+RUN wget https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim.appimage && \
+    chmod u+x nvim.appimage && \
+    ./nvim.appimage --appimage-extract && \
+    mv ./squashfs-root/usr/bin/nvim /usr/local/bin && \
+    rm nvim.appimage && \
+    rm squashfs-root
 
 # install terraform
 FROM ubuntu:${UBUNTU_VERSION} as terraform_builder
@@ -58,9 +70,6 @@ ENV LANG="en_US.UTF-8"
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
 
-# add-apt-repositoyr command depents on software-properties-common
-RUN apt update -qq && apt upgrade -y && apt install -qq -y software-properties-common && add-apt-repository ppa:neovim-ppa/stable
-
 # Install some packages by apt
 RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     bash-completion \
@@ -102,14 +111,6 @@ RUN apt update -qq && apt upgrade -y && apt install -qq -y \
     zip \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-
-# Install neovim
-RUN apt update -qq && apt install -qq -y \
-    python-setuptools \
-    python3-setuptools \
-    && \
-    pip install neovim && \
-    pip3 install neovim
 
 # Install go
 RUN wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz && \
@@ -157,6 +158,7 @@ RUN mkdir -p /home/yagi5/ghq/bin && \
     chmod 700 /home/yagi5/.ssh && \
     chmod 600 /home/yagi5/.ssh/authorized_keys
 
+COPY --from=neovim_builder /usr/local/bin/nvim /usr/local/bin/
 COPY --from=terraform_builder /usr/local/bin/terraform /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/bin/protoc /usr/local/bin/
 COPY --from=protobuf_builder /usr/local/include/google/ /usr/local/include/google
