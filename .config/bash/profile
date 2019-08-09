@@ -269,7 +269,7 @@ GIT_PS1_SHOWUPSTREAM=
 # alias
 alias ls='ls -GF'
 alias ll='ls -alh'
-alias vi="nvim"
+alias vi="VIMRUNTIME=/usr/share/nvim/runtime/ nvim"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.config/ssh/config | fzf | awk "{print \$2}")'
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"

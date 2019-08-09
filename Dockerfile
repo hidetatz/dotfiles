@@ -18,8 +18,8 @@ RUN wget https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/n
     chmod u+x nvim.appimage && \
     ./nvim.appimage --appimage-extract && \
     mv ./squashfs-root/usr/bin/nvim /usr/local/bin && \
-    rm nvim.appimage && \
-    rm squashfs-root
+    rm -rf nvim.appimage && \
+    rm -rf squashfs-root
 
 # install terraform
 FROM ubuntu:${UBUNTU_VERSION} as terraform_builder
