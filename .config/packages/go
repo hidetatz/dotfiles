@@ -8,6 +8,7 @@ github.com/goreleaser/goreleaser
 github.com/haya14busa/reviewdog/cmd/reviewdog
 github.com/instrumenta/kubeval
 github.com/k0kubun/tetris
+github.com/kelseyhightower/envconfig
 github.com/morikuni/aec
 github.com/wercker/stern
 github.com/yagi5/gjson 
