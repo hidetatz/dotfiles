@@ -1,17 +1,8 @@
-github.com/c-bata/go-prompt
 github.com/cweill/gotests/... 
-github.com/go-bindata/go-bindata/...
-github.com/gobuffalo/packr/v2/packr2
 github.com/golang/dep/cmd/dep 
-github.com/gomodule/redigo/redis
 github.com/goreleaser/goreleaser
-github.com/haya14busa/reviewdog/cmd/reviewdog
-github.com/instrumenta/kubeval
-github.com/k0kubun/tetris
 github.com/kelseyhightower/envconfig
-github.com/morikuni/aec
 github.com/wercker/stern
-github.com/yagi5/gjson 
 github.com/yagi5/gotest 
 github.com/yagi5/hist-datastore/cmd/cacheupdate
 github.com/yagi5/hist-datastore/cmd/histdatastore
