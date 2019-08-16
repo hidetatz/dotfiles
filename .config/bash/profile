@@ -21,20 +21,12 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker" # not working?
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 shopt -s histappend
 
-# for file in $(find $XDG_CONFIG_HOME/scripts/ -type f); do source ${file} ; done
-for f in ~/.config/scripts/*; do source $f; done
-[ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && source $XDG_CONFIG_HOME/bash/profile.pvt
-[ -e $DOT_FILES/.config/secrets/profile.pvt ] && source $DOT_FILES/.config/secrets/profile.pvt
-
-#OktaAWSCLI
-if [[ -f "$HOME/.okta/bash_functions" ]]; then
-    . "$HOME/.okta/bash_functions"
-fi
-if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
-    PATH="$HOME/.okta/bin:$PATH"
-fi
-
-source /usr/share/bash-completion/completions/git
+[ -e $XDG_CONFIG_HOME/scripts ]                       && for f in ~/.config/scripts/*; do source $f; done
+[ -e $XDG_CONFIG_HOME/bash/profile.pvt ]              && . $XDG_CONFIG_HOME/bash/profile.pvt
+[ -e $DOT_FILES/.config/secrets/profile.pvt ]         && . $DOT_FILES/.config/secrets/profile.pvt
+[ -e /usr/share/bash-completion/completions/git ]     && . /usr/share/bash-completion/completions/git
+[ -e /usr/local/etc/bash_completion ]                 && . /usr/local/etc/bash_completion
+[ -e /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
 
 # -------------------------------------
 # bind
@@ -100,26 +92,6 @@ function ghq-cd-fzf {
   fi
 }
 
-function gcloud_config_set_fzf() {
-  gcloud config configurations activate $(gcloud config configurations list | fzf | awk '{print $4}')
-}
-
-function gcloud_account() {
-  [ -e $HOME/.config/gcloud/active_config ] || (echo "" && return)
-  pj=$(cat $HOME/.config/gcloud/active_config)
-  if [ -z "$pj" ]; then
-    account=""
-  else
-    account=$(cat $HOME/.config/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
-  fi
-  echo $account
-}
-
-function gcloud_pj() {
-  [ -e $HOME/.config/gcloud/configurations/config_default ] || (echo "" && return)
-  echo $(cat $HOME/.config/gcloud/configurations/config_default | grep project | awk '{print $3}')
-}
-
 function export_kube_ctx() {
   export KUBE_CONTEXT=$(kubectl config get-contexts --no-headers --output='name' | fzf)
 }
@@ -127,21 +99,6 @@ function export_kube_ctx() {
 function history_get_from_datastore() {
   pwd=`dirs +0`
   histdatastore get $pwd | fzf --no-sort
-}
-
-function aws_logs_fzf() {
-  export AWS_DEFAULT_REGION=ap-northeast-1
-  group=$(cw ls groups | fzf --no-sort)
-  if [ $? != 0 ]; then
-    return
-  fi
-  stream=$(aws logs describe-log-streams --log-group-name=$group --order-by=LastEventTime | \
-    jq .logStreams[].logStreamName | tr -d '"' | fzf --no-sort --tac --reverse)
-  if [ $? != 0 ]; then
-    return
-  fi
-  echo "cw tail --follow --timestamp $group:$stream"
-  cw tail --follow --timestamp $group:$stream
 }
 
 function open_circleci() {
@@ -164,13 +121,6 @@ function ghqget() {
 
 function ghqprivget() {
   ghq import -u --parallel < $SECRETS/ghq.private
-}
-
-function brewget() {
-  cat $DOT_FILES/.config/packages/brew | while read line
-  do
-    brew list | grep $line || echo "installing ${line}..."; brew install $line
-  done
 }
 
 function _go() {
@@ -198,28 +148,6 @@ function _ghq() {
   f=`cat $DOT_FILES/.config/packages/ghq | sort | uniq`
   echo "$f" > $DOT_FILES/.config/packages/ghq
   `which ghq` $@
-}
-
-function __brew() {
-  [ "$1" = "" ] && `which brew` && return
-  if [ "$1" == "cask" ]; then
-    __brewcask $@ 
-    return
-  fi
-  [ "$1" != "install" ] && `which brew` $@ && return
-  echo $2 >> $DOT_FILES/.config/packages/brew
-  f=`cat $DOT_FILES/.config/packages/brew | sort | uniq`
-  echo "$f" > $DOT_FILES/.config/packages/brew
-  `which brew` $@
-}
-
-function __brewcask() {
-  [ "$2" = "" ] && `which brew` && return
-  [ "$2" != "install" ] && `which brew` $@ && return
-  echo $3 >> $DOT_FILES/.config/packages/brewcask
-  c=`cat $DOT_FILES/.config/packages/brewcask | sort | uniq`
-  echo "$c" > $DOT_FILES/.config/packages/brewcask
-  `which brew` $@
 }
 
 function go_test_fzf() {
@@ -257,19 +185,13 @@ GIT_PS1_SHOWSTASHSTATE=false
 GIT_PS1_SHOWUPSTREAM=
 
 # -------------------------------------
-# completion
-# -------------------------------------
-
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-[ -f /usr/local/etc/bash_completion.d/git-prompt.sh ] && . /usr/local/etc/bash_completion.d/git-prompt.sh
-
-# -------------------------------------
 # alias
+# -------------------------------------
+
 alias ls='ls -GF'
 alias ll='ls -alh'
-alias vi="VIMRUNTIME=/usr/share/nvim/runtime/ nvim"
+alias vi="nvim"
 alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
-alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.config/ssh/config | fzf | awk "{print \$2}")'
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
 alias gc='git co `git b | fzf | sed -e "s/\* //g" | awk "{print \$1}"`'
 alias gb='git b | fzf | xargs git branch -d'
@@ -285,10 +207,8 @@ alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
 alias st='stern worker -o json -n $(kube_get_namespace)'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
-alias af='aws_logs_fzf'
 alias go='_go'
 alias ghq='_ghq'
-alias brew='__brew'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
 alias docker_rm_all='docker rm $(docker ps -a -q)'
 alias ci='open_circleci'
