@@ -1,23 +1,10 @@
-base="$$HOME/ghq/src/github.com/yagi5/dotfiles"
-dest="$$base/.config/secrets"
-
-build:
-	DOCKER_BUILDKIT=1 docker build -t workspace .
-
-run: build
-	docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v ghqvol:/home/yagi5/ghq -v tmuxvol:/home/yagi5/.tmux --expose 1313 --expose 2222 --expose 52224 -p 1313:1313 -p 2222:2222 workspace
-
-ssh:
-	./clipboard_text_listener.pl -encoding utf8 &
-	ssh yagi5@localhost -p 2222 -i ~/.ssh/github_mac -R 52224:localhost:52224 -t /bin/entrypoint.sh
-
 update:
-	[ -e $$HOME/.config/ssh/config ]       && gsutil cp $$HOME/.config/ssh/config       gs://blackhole-yagi5/config
-	[ -e $$HOME/.config/ssh/github_mac ]   && gsutil cp $$HOME/.config/ssh/github_mac   gs://blackhole-yagi5/github_mac
-	[ -e $$HOME/.config/ssh/known_hosts ]  && gsutil cp $$HOME/.config/ssh/known_hosts  gs://blackhole-yagi5/known_hosts
-	[ -e $$HOME/.config/bash/profile.pvt ] && gsutil cp $$HOME/.config/bash/profile.pvt gs://blackhole-yagi5/profile.pvt
-	[ -e $$SECRETS/ghq.private ]           && gsutil cp $$SECRETS/ghq.private           gs://blackhole-yagi5/ghq.private
-	[ -e $$SECRETS/hist-datastore.json ]   && gsutil cp $$SECRETS/hist-datastore.json   gs://blackhole-yagi5/hist-datastore.json
+	[ -e $$HOME/.config/ssh/config ]       && gsutil cp $$HOME/.config/ssh/config                  gs://blackhole-yagi5/config
+	[ -e $$HOME/.config/ssh/github_mac ]   && gsutil cp $$HOME/.config/ssh/github_mac              gs://blackhole-yagi5/github_mac
+	[ -e $$HOME/.config/ssh/known_hosts ]  && gsutil cp $$HOME/.config/ssh/known_hosts             gs://blackhole-yagi5/known_hosts
+	[ -e $$HOME/.config/bash/profile.pvt ] && gsutil cp $$HOME/.config/bash/profile.pvt            gs://blackhole-yagi5/profile.pvt
+	[ -e $$HOME/.config/secrets/ghq.private ]           && gsutil cp $$HOME/.config/secrets/ghq.private         gs://blackhole-yagi5/ghq.private
+	[ -e $$HOME/.config/secrets/hist-datastore.json ]   && gsutil cp $$HOME/.config/secrets/hist-datastore.json gs://blackhole-yagi5/hist-datastore.json
 	git add .
 	git commit -m "$(MSG)"
 	git push origin master

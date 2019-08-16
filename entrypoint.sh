@@ -35,11 +35,11 @@ if ! [ -x "$(command -v gcloud)" ]; then
   curl -L -o google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz \
     "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86_64.tar.gz"
   tar -xzf "google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz"
-  https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86_64.tar.gz
   ./google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --command-completion=false && \
   ./google-cloud-sdk/bin/gcloud components update --quiet && \
   ./google-cloud-sdk/bin/gcloud components install kubectl --quiet
   mv google-cloud-sdk $HOME/.config/
+  rm google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz
 fi
 
 # Install some secrets from GCS
@@ -88,11 +88,11 @@ do
   ghq list | grep $line || echo "installing ${line}..."; go get -u $line
 done
 ghq import -u --parallel < $DOT_FILES/.config/packages/ghq
-ghq import -u --parallel < $SECRETS/ghq.private
+ghq import -u --parallel < $XDG_CONFIG_HOME/secrets/ghq.private
 
 if [ -e $XDG_CONFIG_HOME/Brewfile ]; then
-  brew bundle --file="$XDG_CONFIG_HOME/Brewfile" --force
-  brew bundle dump --file="$XDG_CONFIG_HOME/Brewfile"
+  brew bundle --file="$DOT_FILES/.config/brew/Brewfile" --force
+  brew bundle dump --file="$DOT_FILES/.config/brew/Brewfile"
 fi
 
 echo "source $HOME/.config/bash/profile" > $HOME/.bash_profile

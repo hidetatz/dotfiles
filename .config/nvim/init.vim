@@ -44,7 +44,7 @@ set nocompatible
 "syntax on
 " colorscheme iceberg
 " colorscheme nord
-"colorscheme deep-space
+colorscheme deep-space
 set termguicolors
 set encoding=utf-8
 set ambiwidth=double
