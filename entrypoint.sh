@@ -16,6 +16,7 @@ export GOPATH="$HOME/ghq"
 
 mkdir -p $HOME/ghq/src/github.com/yagi5
 mkdir -p $HOME/.cache
+touch -f $HOME/.cache/hist-datastore
 mkdir -p $XDG_CONFIG_HOME/secrets
 mkdir -p $XDG_CONFIG_HOME/ssh
 mkdir -p $XDG_CONFIG_HOME/bash
@@ -23,6 +24,11 @@ mkdir -p $XDG_CONFIG_HOME/git
 mkdir -p $XDG_CONFIG_HOME/nvim
 mkdir -p $XDG_CONFIG_HOME/tmux
 mkdir -p $XDG_CONFIG_HOME/brew
+
+# Install brew
+if ! [ -x "$(command -v brew)" ]; then
+  $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
 
 # Install gcloud
 if ! [ -x "$(command -v gcloud)" ]; then
@@ -84,7 +90,6 @@ done
 ghq import -u --parallel < $DOT_FILES/.config/packages/ghq
 ghq import -u --parallel < $SECRETS/ghq.private
 
-# Install brew
 if [ -e $XDG_CONFIG_HOME/Brewfile ]; then
   brew bundle --file="$XDG_CONFIG_HOME/Brewfile" --force
   brew bundle dump --file="$XDG_CONFIG_HOME/Brewfile"
