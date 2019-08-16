@@ -41,10 +41,10 @@ autocmd ColorScheme * highlight Cursor guifg=white
 filetype off
 filetype plugin indent on
 set nocompatible
-syntax on
+"syntax on
 " colorscheme iceberg
 " colorscheme nord
-colorscheme deep-space
+"colorscheme deep-space
 set termguicolors
 set encoding=utf-8
 set ambiwidth=double

@@ -63,6 +63,22 @@ source <(kubectl completion bash)
 # functions
 # -------------------------------------
 
+function gcloud_account() {
+  [ -e $HOME/.config/gcloud/active_config ] || (echo "" && return)
+  pj=$(cat $HOME/.config/gcloud/active_config)
+  if [ -z "$pj" ]; then
+    account=""
+  else
+    account=$(cat $HOME/.config/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
+  fi
+  echo $account
+}
+
+function gcloud_pj() {
+  [ -e $HOME/.config/gcloud/configurations/config_default ] || (echo "" && return)
+  echo $(cat $HOME/.config/gcloud/configurations/config_default | grep project | awk '{print $3}')
+}
+
 function git_show_fzf() {
   while true
   do
