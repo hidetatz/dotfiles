@@ -2,7 +2,7 @@
 
 set -e
 
-GO_VERSION="1.12.8"
+GO_VERSION="1.12.9"
 GCLOUD_VERSION="245.0.0"
 
 export XDG_CONFIG_HOME=$HOME/.config
@@ -67,9 +67,10 @@ ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/git/config     $XDG_CONFI
 ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/scripts        $XDG_CONFIG_HOME/
 
 # Install Go
+# TODO: check the version is the same as $GO_VERSION
 if ! [ -x "$(command -v go)" ]; then
   curl -L -o go${GO_VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.darwin-amd64.tar.gz"
-  tar -C /usr/local -xzf "go${GO_VERSION}.darwin-amd64.tar.gz"
+  sudo tar -C /usr/local -xzf "go${GO_VERSION}.darwin-amd64.tar.gz"
   rm -f "go${GO_VERSION}.darwin-amd64.tar.gz"
 fi
 
