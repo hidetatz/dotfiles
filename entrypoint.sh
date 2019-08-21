@@ -38,7 +38,7 @@ if ! [ -x "$(command -v gcloud)" ]; then
   ./google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --command-completion=false && \
   ./google-cloud-sdk/bin/gcloud components update --quiet && \
   ./google-cloud-sdk/bin/gcloud components install kubectl --quiet
-  mv google-cloud-sdk $HOME/.config/
+  mv google-cloud-sdk $XDG_CONFIG_HOME
   rm google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz
 fi
 
@@ -60,11 +60,11 @@ if ! [ -e $HOME/ghq/src/github.com/yagi5/dotfiles ]; then
 fi
 
 # Install Dotfiles
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/tmux/tmux.conf $XDG_CONFIG_HOME/tmux/tmux.conf
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/nvim/init.vim  $XDG_CONFIG_HOME/nvim/init.vim
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/bash/profile   $XDG_CONFIG_HOME/bash/profile
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/git/config     $XDG_CONFIG_HOME/git/config
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/.config/scripts        $XDG_CONFIG_HOME/
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/tmux/tmux.conf $XDG_CONFIG_HOME/tmux/tmux.conf
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/nvim/init.vim  $XDG_CONFIG_HOME/nvim/init.vim
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile   $XDG_CONFIG_HOME/bash/profile
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/git/config     $XDG_CONFIG_HOME/git/config
+ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/scripts        $XDG_CONFIG_HOME/
 
 # Install Go
 # TODO: check the version is the same as $GO_VERSION
@@ -84,16 +84,16 @@ if ! [ -x "$(command -v ghq)" ]; then
   go get github.com/motemen/ghq
 fi
 
-cat $DOT_FILES/.config/packages/go | while read line
+cat $DOT_FILES/config/packages/go | while read line
 do
   ghq list | grep $line || echo "installing ${line}..."; go get -u $line
 done
-ghq import -u --parallel < $DOT_FILES/.config/packages/ghq
+ghq import -u --parallel < $DOT_FILES/config/packages/ghq
 ghq import -u --parallel < $XDG_CONFIG_HOME/secrets/ghq.private
 
 if [ -e $XDG_CONFIG_HOME/Brewfile ]; then
-  brew bundle --file="$DOT_FILES/.config/brew/Brewfile" --force
-  brew bundle dump --file="$DOT_FILES/.config/brew/Brewfile"
+  brew bundle --file="$DOT_FILES/config/brew/Brewfile" --force
+  brew bundle dump --file="$DOT_FILES/config/brew/Brewfile"
 fi
 
 echo "source $HOME/.config/bash/profile" > $HOME/.bash_profile
