@@ -125,14 +125,14 @@ function open_circleci() {
 }
 
 function goget() {
-  cat $DOT_FILES/.config/packages/go | while read line
+  cat $DOT_FILES/config/packages/go | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; go get -u $line
   done
 }
 
 function ghqget() {
-  ghq import -u --parallel < $DOT_FILES/.config/packages/ghq
+  ghq import -u --parallel < $DOT_FILES/config/packages/ghq
 }
 
 function ghqprivget() {
@@ -148,21 +148,21 @@ function _go() {
 
   # go get *
   if [ "$2" = "-u" ]; then
-    echo $3 >> $DOT_FILES/.config/packages/go
+    echo $3 >> $DOT_FILES/config/packages/go
   else
-    echo $2 >> $DOT_FILES/.config/packages/go
+    echo $2 >> $DOT_FILES/config/packages/go
   fi
-  f=`cat $DOT_FILES/.config/packages/go | sort | uniq`
-  echo "$f" > $DOT_FILES/.config/packages/go
+  f=`cat $DOT_FILES/config/packages/go | sort | uniq`
+  echo "$f" > $DOT_FILES/config/packages/go
   `which go` $@
 }
 
 function _ghq() {
   [ "$1" = "" ] && `which ghq` && return
   [ "$1" != "get" ] && `which ghq` $@ && return
-  echo $2 >> $DOT_FILES/.config/packages/ghq
-  f=`cat $DOT_FILES/.config/packages/ghq | sort | uniq`
-  echo "$f" > $DOT_FILES/.config/packages/ghq
+  echo $2 >> $DOT_FILES/config/packages/ghq
+  f=`cat $DOT_FILES/config/packages/ghq | sort | uniq`
+  echo "$f" > $DOT_FILES/config/packages/ghq
   `which ghq` $@
 }
 

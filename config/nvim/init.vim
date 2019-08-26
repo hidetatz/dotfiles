@@ -19,6 +19,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
+  Plug 'rhysd/vim-clang-format'
   Plug 'Raimondi/delimitMate'
   Plug 'sirver/ultisnips'
   Plug 'tpope/vim-commentary'
@@ -220,15 +221,15 @@ endfunction
 "----------------------------------------------------------------------------
 " yank to remote
 "----------------------------------------------------------------------------
-function! Yank2Remote()
-  " write current register value into /tmp/yank_new
-  call writefile(split(@", '\n'), '/tmp/yank_new', 'b')
-  let s:diff = system('diff /tmp/yank_new /tmp/yank_now')
-  if s:diff != ''
-    " yank is updated, try to update yank_now and send it
-    call writefile(split(@", '\n'), '/tmp/yank_now', 'b')
-    let s:ret = system('(echo change_on_install; cat /tmp/yank_now) | nc -w1 localhost 52224 &')
-  endif
-endfunction
+" function! Yank2Remote()
+"   " write current register value into /tmp/yank_new
+"   call writefile(split(@", '\n'), '/tmp/yank_new', 'b')
+"   let s:diff = system('diff /tmp/yank_new /tmp/yank_now')
+"   if s:diff != ''
+"     " yank is updated, try to update yank_now and send it
+"     call writefile(split(@", '\n'), '/tmp/yank_now', 'b')
+"     let s:ret = system('(echo change_on_install; cat /tmp/yank_now) | nc -w1 localhost 52224 &')
+"   endif
+" endfunction
 
-autocmd CursorMoved,CursorHold * :call Yank2Remote()
+" autocmd CursorMoved,CursorHold * :call Yank2Remote()
