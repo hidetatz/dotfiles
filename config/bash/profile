@@ -204,6 +204,7 @@ GIT_PS1_SHOWUPSTREAM=
 # alias
 # -------------------------------------
 
+alias t='vi $(fzf)'
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="nvim"
