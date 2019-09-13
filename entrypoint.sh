@@ -74,6 +74,13 @@ if ! [ -x "$(command -v go)" ]; then
   rm -f "go${GO_VERSION}.darwin-amd64.tar.gz"
 fi
 
+# Install rust
+if ! [ -x "$(command -v rustc)" ]; then
+  curl https://sh.rustup.rs -sSf | sh
+  rustup update
+  rustup component add rls rust-analysis rust-src
+fi
+
 # Install tmux plugins
 if ! [ -e $XDG_CONFIG_HOME/tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tmux-resurrect --depth=1 $XDG_CONFIG_HOME/tmux/plugins/tmux-resurrect

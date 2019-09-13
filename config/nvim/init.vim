@@ -17,7 +17,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'elzr/vim-json', {'for' : 'json'}
   Plug 'ervandew/supertab'
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go'}
   Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
@@ -112,6 +112,10 @@ inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
+" nnoremap <C-n> :cnext<CR>
+" nnoremap <C-m> :cprevious<CR>
+nnoremap <silent> ga :cclose<CR>
+
 "----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
@@ -161,33 +165,43 @@ if executable('gopls')
     autocmd BufWritePre *.go LspDocumentFormatSync
 endif
 
-" let g:LanguageClient_serverCommands = {
-"     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-"     \ 'go': ['gopls']
-"     \ }
+if executable('rls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
+endif
 
-nnoremap <leader>a :LspCodeAction
-" nnoremap <leader>d :LspDeclaration
+" For Go, not all features are supported.
+" https://github.com/golang/go/wiki/gopls#status
+
 nnoremap <leader>d :LspDefinition<CR>
-" nnoremap <leader>d :LspDocumentDiagnostics
-" nnoremap <leader>d :LspDocumentFormat
-" nnoremap <leader>d :LspDocumentRangeFormat
-" nnoremap <leader>d :LspDocumentSymbol
-" nnoremap <leader>d :LspHover
-" nnoremap <leader>d :LspImplementation
-" nnoremap <leader>d :LspNextError
-" nnoremap <leader>d :LspNextReference
-" nnoremap <leader>d :LspPeekDeclaration
-" nnoremap <leader>d :LspPeekDefinition
-" nnoremap <leader>d :LspPeekImplementation
-" nnoremap <leader>d :LspPeekTypeDefinition
-" nnoremap <leader>d :LspPreviousError
-" nnoremap <leader>d :LspPreviousReference
-" nnoremap <leader>d :LspReferences
-" nnoremap <leader>d :LspRename
-" nnoremap <leader>d :LspStatus
-" nnoremap <leader>d :LspTypeDefinition
-" nnoremap <leader>d :LspWorkspaceSymbol
+nnoremap <leader>h :LspHover<CR>
+" nnoremap <leader>i :LspImplementation<CR> // Not supported now
+nnoremap <C-n> :LspNextError<CR>
+nnoremap <C-m> :LspPreviousError<CR>
+nnoremap <leader>r :LspReferences<CR>
+nnoremap <leader>n :LspRename<CR>
+" nnoremap <leader>a :LspCodeAction<CR>          // List of actions
+" nnoremap <leader>d :LspDeclaration             // Not supported
+" nnoremap <leader>d :LspDocumentDiagnostics<CR> // Automatically run
+" nnoremap <leader>d :LspDocumentFormat<CR>      // Automatically run
+" nnoremap <leader>d :LspDocumentRangeFormat<CR> // doesn't need
+" nnoremap <leader>d :LspDocumentSymbol<CR>      // doesn't need
+" nnoremap <leader>d :LspNextReference<CR>
+" nnoremap <leader>d :LspPeekDeclaration<CR>
+" nnoremap <leader>d :LspPeekDefinition<CR>
+" nnoremap <leader>d :LspPeekImplementation<CR>
+" nnoremap <leader>d :LspPeekTypeDefinition<CR>
+" nnoremap <leader>d :LspPreviousError<CR>
+" nnoremap <leader>r :LspPreviousReference<CR>
+" nnoremap <leader>d :LspStatus<CR>
+" nnoremap <leader>d :LspTypeDefinition<CR>
+" nnoremap <leader>d :LspWorkspaceSymbol<CR>
+
+let g:lsp_signs_error = {'text': 'x'}
 
 "----------------------------------------------------------------------------
 " Go
@@ -220,23 +234,19 @@ let g:go_def_mode = 'gopls'
 
 " vim-go specific features
 augroup go
-  nnoremap <C-n> :cnext<CR>
-  nnoremap <C-m> :cprevious<CR>
-  nnoremap <leader>a :cclose<CR>
-  nnoremap <leader>o :GoDecls<CR>
+  nnoremap <leader>D :GoDecls<CR>
   nnoremap <leader>O :GoDeclsDir<CR>
-  nnoremap <leader>D :GoDoc<CR>
-  nnoremap <leader>i :GoInfo<CR>
-  nnoremap <leader>R :GoRename<CR>
-  nnoremap <leader>g :GoImpl<CR>
-  nnoremap <leader>I :GoImplements<CR>
-  nnoremap <leader>k :GoKeyify<CR>
-  nnoremap <leader>f :GoFillStruct<CR>
-  nnoremap <leader>t :GoTest<CR>
-  nnoremap <leader>T :GoAddTags<CR>
-  nnoremap <leader>s :GoRemoveTags<CR>
-  nnoremap <leader>r :GoRun<CR>
-  nnoremap <Leader>j :GoTestsAll
+  nnoremap <leader>G :GoDoc<CR>
+  nnoremap <leader>I :GoImpl<CR>
+  nnoremap <leader>i :GoImplements<CR> " the same as LspImplementation
+  nnoremap <leader>K :GoKeyify<CR>
+  nnoremap <leader>F :GoFillStruct<CR>
+  nnoremap <leader>T :GoTest<CR>
+  nnoremap <leader>A :GoAddTags<CR>
+  " nnoremap <leader>s :GoRemoveTags<CR>
+  nnoremap <leader>R :GoRun<CR>
+  nnoremap <leader>C :GoCoverage<CR>
+  " nnoremap <leader>j :GoTestsAll
   :highlight goErr cterm=bold ctermfg=lightblue
   :match goErr /\<err\>/
 augroup END
