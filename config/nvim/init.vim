@@ -9,8 +9,11 @@ endif
 call plug#begin('~/.config/nvim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'buoto/gotests-vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
+  Plug 'cocopon/iceberg.vim'
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'elzr/vim-json', {'for' : 'json'}
   Plug 'ervandew/supertab'
@@ -19,16 +22,18 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
-  Plug 'rhysd/vim-clang-format'
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
   Plug 'Raimondi/delimitMate'
+  Plug 'rhysd/vim-clang-format'
+  Plug 'rust-lang/rust.vim'
   Plug 'sirver/ultisnips'
+  Plug 'thomasfaingnaert/vim-lsp-snippets'
+  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
-  Plug 'cocopon/iceberg.vim'
-  Plug 'arcticicestudio/nord-vim'
   Plug 'tyrannicaltoucan/vim-deep-space'
-  Plug 'buoto/gotests-vim'
 call plug#end()
 
 "----------------------------------------------------------------------------
@@ -87,6 +92,7 @@ augroup END
 "----------------------------------------------------------------------------
 " Common key mappings
 "----------------------------------------------------------------------------
+
 let mapleader = ","
 noremap x "_x
 noremap <Esc><Esc> :nohl<CR>
@@ -109,6 +115,7 @@ inoremap <C-l> <Right>
 "----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
+
 " for fzf installed by homebrew
 set rtp+=/usr/local/opt/fzf
 set rtp+=~/ghq/src/github.com/junegunn/fzf
@@ -142,6 +149,47 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 "----------------------------------------------------------------------------
+" LSP
+"----------------------------------------------------------------------------
+
+if executable('gopls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'gopls',
+        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+        \ 'whitelist': ['go'],
+        \ })
+    autocmd BufWritePre *.go LspDocumentFormatSync
+endif
+
+" let g:LanguageClient_serverCommands = {
+"     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+"     \ 'go': ['gopls']
+"     \ }
+
+nnoremap <leader>a :LspCodeAction
+" nnoremap <leader>d :LspDeclaration
+nnoremap <leader>d :LspDefinition<CR>
+" nnoremap <leader>d :LspDocumentDiagnostics
+" nnoremap <leader>d :LspDocumentFormat
+" nnoremap <leader>d :LspDocumentRangeFormat
+" nnoremap <leader>d :LspDocumentSymbol
+" nnoremap <leader>d :LspHover
+" nnoremap <leader>d :LspImplementation
+" nnoremap <leader>d :LspNextError
+" nnoremap <leader>d :LspNextReference
+" nnoremap <leader>d :LspPeekDeclaration
+" nnoremap <leader>d :LspPeekDefinition
+" nnoremap <leader>d :LspPeekImplementation
+" nnoremap <leader>d :LspPeekTypeDefinition
+" nnoremap <leader>d :LspPreviousError
+" nnoremap <leader>d :LspPreviousReference
+" nnoremap <leader>d :LspReferences
+" nnoremap <leader>d :LspRename
+" nnoremap <leader>d :LspStatus
+" nnoremap <leader>d :LspTypeDefinition
+" nnoremap <leader>d :LspWorkspaceSymbol
+
+"----------------------------------------------------------------------------
 " Go
 "----------------------------------------------------------------------------
 
@@ -158,8 +206,9 @@ endfunction
 let g:go_fmt_autosave = 1
 let g:go_fmt_command = "goimports"
 let g:go_gocode_unimported_packages = 1
+let g:go_metalinter_command = "golangci-lint"
 let g:go_metalinter_autosave = 1
-let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_metalinter_enabeld = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
 let g:go_textobj_include_function_doc = 1 
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -167,18 +216,15 @@ let g:go_highlight_functions = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
-let g:go_play_open_browser = 0 " don't open the go playground url automatically
 let g:go_def_mode = 'gopls'
-" let g:go_auto_type_info = 1
-" let g:go_auto_sameids = 1
 
+" vim-go specific features
 augroup go
   nnoremap <C-n> :cnext<CR>
   nnoremap <C-m> :cprevious<CR>
   nnoremap <leader>a :cclose<CR>
   nnoremap <leader>o :GoDecls<CR>
   nnoremap <leader>O :GoDeclsDir<CR>
-  nnoremap <leader>d :GoDef<CR>
   nnoremap <leader>D :GoDoc<CR>
   nnoremap <leader>i :GoInfo<CR>
   nnoremap <leader>R :GoRename<CR>
@@ -190,18 +236,21 @@ augroup go
   nnoremap <leader>T :GoAddTags<CR>
   nnoremap <leader>s :GoRemoveTags<CR>
   nnoremap <leader>r :GoRun<CR>
-  nnoremap <Leader>c <Plug>(go-coverage-toggle)
-  nnoremap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  nnoremap <Leader>j :GoTestsAll
   :highlight goErr cterm=bold ctermfg=lightblue
   :match goErr /\<err\>/
-
-  " for buoto/gotests-vim
-  nnoremap <Leader>j :GoTestsAll
 augroup END
+
+"----------------------------------------------------------------------------
+" Rust
+"----------------------------------------------------------------------------
+
+let g:rustfmt_autosave = 1
 
 "----------------------------------------------------------------------------
 " vim-terraform
 "----------------------------------------------------------------------------
+
 let g:terraform_align=1
 let g:terraform_fold_sections=1
 let g:terraform_remap_spacebar=1
@@ -217,19 +266,3 @@ function! Kubeval()
   let result = system('kubeval ' . bufname(""))
   echo result
 endfunction
-
-"----------------------------------------------------------------------------
-" yank to remote
-"----------------------------------------------------------------------------
-" function! Yank2Remote()
-"   " write current register value into /tmp/yank_new
-"   call writefile(split(@", '\n'), '/tmp/yank_new', 'b')
-"   let s:diff = system('diff /tmp/yank_new /tmp/yank_now')
-"   if s:diff != ''
-"     " yank is updated, try to update yank_now and send it
-"     call writefile(split(@", '\n'), '/tmp/yank_now', 'b')
-"     let s:ret = system('(echo change_on_install; cat /tmp/yank_now) | nc -w1 localhost 52224 &')
-"   endif
-" endfunction
-
-" autocmd CursorMoved,CursorHold * :call Yank2Remote()
