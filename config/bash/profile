@@ -120,7 +120,7 @@ function export_kube_ctx() {
 
 function history_get_from_datastore() {
   pwd=`dirs +0`
-  histdatastore get $pwd | fzf --no-sort
+  histdatastore get $pwd | fzf --no-sort --tac
 }
 
 function open_circleci() {
@@ -176,6 +176,16 @@ function go_test_fzf() {
   go test -timeout 30s -count=1 `go list ./... | fzf` -run "^(Test.*)$" -v | gotest
 }
 
+function add_hist() {
+  (histdatastore put $pwd "$1" &)
+}
+
+function vifzf() {
+  file=$(fzf)
+  add_hist "vi $file"
+  vi $file
+}
+
 # -------------------------------------
 # prompt
 # -------------------------------------
@@ -210,7 +220,7 @@ GIT_PS1_SHOWUPSTREAM=
 # alias
 # -------------------------------------
 
-alias t='vi $(fzf)'
+alias t='vifzf'
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="nvim"
@@ -242,7 +252,7 @@ alias gt='go_test_fzf'
 # -------------------------------------
 
 preexec() {
-  pwd=`dirs +0`
+  # pwd=`dirs +0`
   (histdatastore put $pwd "$1" &)
 }
 
