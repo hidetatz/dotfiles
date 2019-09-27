@@ -156,14 +156,14 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " LSP
 "----------------------------------------------------------------------------
 
-if executable('gopls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'gopls',
-        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-        \ 'whitelist': ['go'],
-        \ })
-    autocmd BufWritePre *.go LspDocumentFormatSync
-endif
+" if executable('gopls')
+"     au User lsp_setup call lsp#register_server({
+"         \ 'name': 'gopls',
+"         \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+"         \ 'whitelist': ['go'],
+"         \ })
+"     autocmd BufWritePre *.go LspDocumentFormatSync
+" endif
 
 if executable('rls')
     au User lsp_setup call lsp#register_server({
@@ -177,13 +177,13 @@ endif
 " For Go, not all features are supported.
 " https://github.com/golang/go/wiki/gopls#status
 
-nnoremap <leader>d :LspDefinition<CR>
-nnoremap <leader>h :LspHover<CR>
-" nnoremap <leader>i :LspImplementation<CR> // Not supported now
-nnoremap <C-n> :LspNextError<CR>
-nnoremap <C-m> :LspPreviousError<CR>
-nnoremap <leader>r :LspReferences<CR>
-nnoremap <leader>n :LspRename<CR>
+" nnoremap <leader>d :LspDefinition<CR>
+" nnoremap <leader>h :LspHover<CR>
+" " nnoremap <leader>i :LspImplementation<CR> // Not supported now
+" nnoremap <C-n> :LspNextError<CR>
+" nnoremap <C-m> :LspPreviousError<CR>
+" nnoremap <leader>r :LspReferences<CR>
+" nnoremap <leader>n :LspRename<CR>
 " nnoremap <leader>a :LspCodeAction<CR>          // List of actions
 " nnoremap <leader>d :LspDeclaration             // Not supported
 " nnoremap <leader>d :LspDocumentDiagnostics<CR> // Automatically run
@@ -202,6 +202,28 @@ nnoremap <leader>n :LspRename<CR>
 " nnoremap <leader>d :LspWorkspaceSymbol<CR>
 
 let g:lsp_signs_error = {'text': 'x'}
+" nnoremap <leader>a :LspCodeAction
+" nnoremap <leader>d :LspDeclaration
+" nnoremap <leader>d :LspDefinition<CR>
+" nnoremap <leader>d :LspDocumentDiagnostics
+" nnoremap <leader>d :LspDocumentFormat
+" nnoremap <leader>d :LspDocumentRangeFormat
+" nnoremap <leader>d :LspDocumentSymbol
+" nnoremap <leader>d :LspHover
+" nnoremap <leader>d :LspImplementation
+" nnoremap <leader>d :LspNextError
+" nnoremap <leader>d :LspNextReference
+" nnoremap <leader>d :LspPeekDeclaration
+" nnoremap <leader>d :LspPeekDefinition
+" nnoremap <leader>d :LspPeekImplementation
+" nnoremap <leader>d :LspPeekTypeDefinition
+" nnoremap <leader>d :LspPreviousError
+" nnoremap <leader>d :LspPreviousReference
+" nnoremap <leader>d :LspReferences
+" nnoremap <leader>d :LspRename
+" nnoremap <leader>d :LspStatus
+" nnoremap <leader>d :LspTypeDefinition
+" nnoremap <leader>d :LspWorkspaceSymbol
 
 "----------------------------------------------------------------------------
 " Go
@@ -220,7 +242,7 @@ endfunction
 let g:go_fmt_autosave = 1
 let g:go_fmt_command = "goimports"
 let g:go_gocode_unimported_packages = 1
-let g:go_metalinter_command = "golangci-lint"
+" let g:go_metalinter_command = "golangci-lint"
 let g:go_metalinter_autosave = 1
 let g:go_metalinter_enabeld = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
 let g:go_textobj_include_function_doc = 1 
@@ -231,10 +253,19 @@ let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_build_constraints = 1
 let g:go_def_mode = 'gopls'
+autocmd! BufWritePost *.go :call Gofumpt()
+function! Gofumpt()
+  let result = system('gofumpt -s -w' . bufname(""))
+endfunction
 
 " vim-go specific features
 augroup go
-  nnoremap <leader>D :GoDecls<CR>
+  " nnoremap <leader>D :GoDecls<CR>
+  nnoremap <C-n> :cnext<CR>
+  nnoremap <C-m> :cprevious<CR>
+  nnoremap <leader>a :cclose<CR>
+  nnoremap <leader>o :GoDecls<CR>
+  nnoremap <leader>d :GoDef<CR>
   nnoremap <leader>O :GoDeclsDir<CR>
   nnoremap <leader>G :GoDoc<CR>
   nnoremap <leader>I :GoImpl<CR>

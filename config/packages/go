@@ -4,5 +4,6 @@ github.com/quasilyte/go-consistent
 github.com/yagi5/gotest
 github.com/yagi5/hist-datastore/cmd/cacheupdate
 github.com/yagi5/hist-datastore/cmd/histdatastore
+golang.org/x/tools/cmd/goimports
 golang.org/x/tools/gopls
 mvdan.cc/gofumpt
