@@ -119,8 +119,7 @@ function export_kube_ctx() {
 }
 
 function history_get_from_datastore() {
-  pwd=`dirs +0`
-  histdatastore get $pwd | fzf --no-sort --tac
+  histdatastore get $(dirs +0) | fzf --no-sort --tac
 }
 
 function open_circleci() {
@@ -177,7 +176,7 @@ function go_test_fzf() {
 }
 
 function add_hist() {
-  (histdatastore put $pwd "$1" &)
+  (histdatastore put $(dirs +0) "$1" &)
 }
 
 function vifzf() {
@@ -252,8 +251,7 @@ alias gt='go_test_fzf'
 # -------------------------------------
 
 preexec() {
-  # pwd=`dirs +0`
-  (histdatastore put $pwd "$1" &)
+  (histdatastore put $(dirs +0) "$1" &)
 }
 
 precmd() { 
