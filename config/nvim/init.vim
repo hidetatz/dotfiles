@@ -38,6 +38,7 @@ let g:deoplete#enable_at_startup = 1
 "----------------------------------------------------------------------------
 
 autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
+autocmd ColorScheme * highlight Cursor guifg=green guibg=green
 
 filetype off
 filetype plugin indent on
