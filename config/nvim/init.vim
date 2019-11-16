@@ -9,55 +9,43 @@ endif
 call plug#begin('~/.config/nvim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'arcticicestudio/nord-vim'
   Plug 'buoto/gotests-vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
-  Plug 'cocopon/iceberg.vim'
+  Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'elzr/vim-json', {'for' : 'json'}
-  Plug 'ervandew/supertab'
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go'}
-  Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
   Plug 'hashivim/vim-terraform'
+  Plug 'juliosueiras/vim-terraform-completion'
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
-  Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/vim-lsp'
   Plug 'Raimondi/delimitMate'
   Plug 'rhysd/vim-clang-format'
-  Plug 'rust-lang/rust.vim'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'sirver/ultisnips'
-  Plug 'thomasfaingnaert/vim-lsp-snippets'
-  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
   Plug 'tyrannicaltoucan/vim-deep-space'
 call plug#end()
 
+let g:deoplete#enable_at_startup = 1
+
 "----------------------------------------------------------------------------
 " Settings
 "----------------------------------------------------------------------------
 
 autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
-autocmd ColorScheme * highlight iCursor guifg=white
-autocmd ColorScheme * highlight Cursor guifg=white
 
 filetype off
 filetype plugin indent on
-set nocompatible
-"syntax on
-" colorscheme iceberg
-" colorscheme nord
 colorscheme deep-space
 set termguicolors
 set encoding=utf-8
 set ambiwidth=double
-set autoread
 set hidden
 set autoindent
-set backspace=indent,eol,start
 set clipboard+=unnamed
 set noerrorbells
 set number
@@ -70,6 +58,7 @@ set ignorecase
 set ttimeout
 set ttimeoutlen=50
 set noswapfile
+set updatetime=100
 set autowrite
 set pumheight=10
 set conceallevel=2
@@ -84,6 +73,7 @@ set shiftwidth=4
 set expandtab
 set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
+" Open last edited line
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
   \ exe "normal g`\"" | endif
@@ -95,13 +85,12 @@ augroup END
 
 let mapleader = ","
 noremap x "_x
+nnoremap Y y$
 noremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
-
-nnoremap Y y$
 
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
@@ -111,10 +100,6 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-
-" nnoremap <C-n> :cnext<CR>
-" nnoremap <C-m> :cprevious<CR>
-nnoremap <silent> ga :cclose<CR>
 
 "----------------------------------------------------------------------------
 " fzf.vim
@@ -139,93 +124,6 @@ nmap m :GGrep
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 "----------------------------------------------------------------------------
-" supertab
-"----------------------------------------------------------------------------
-
-let g:SuperTabDefaultCompletionType = "context"
-
-"----------------------------------------------------------------------------
-" ultisnips
-"----------------------------------------------------------------------------
-
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-"----------------------------------------------------------------------------
-" LSP
-"----------------------------------------------------------------------------
-
-" if executable('gopls')
-"     au User lsp_setup call lsp#register_server({
-"         \ 'name': 'gopls',
-"         \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-"         \ 'whitelist': ['go'],
-"         \ })
-"     autocmd BufWritePre *.go LspDocumentFormatSync
-" endif
-
-if executable('rls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-        \ 'whitelist': ['rust'],
-        \ })
-endif
-
-" For Go, not all features are supported.
-" https://github.com/golang/go/wiki/gopls#status
-
-" nnoremap <leader>d :LspDefinition<CR>
-" nnoremap <leader>h :LspHover<CR>
-" " nnoremap <leader>i :LspImplementation<CR> // Not supported now
-" nnoremap <C-n> :LspNextError<CR>
-" nnoremap <C-m> :LspPreviousError<CR>
-" nnoremap <leader>r :LspReferences<CR>
-" nnoremap <leader>n :LspRename<CR>
-" nnoremap <leader>a :LspCodeAction<CR>          // List of actions
-" nnoremap <leader>d :LspDeclaration             // Not supported
-" nnoremap <leader>d :LspDocumentDiagnostics<CR> // Automatically run
-" nnoremap <leader>d :LspDocumentFormat<CR>      // Automatically run
-" nnoremap <leader>d :LspDocumentRangeFormat<CR> // doesn't need
-" nnoremap <leader>d :LspDocumentSymbol<CR>      // doesn't need
-" nnoremap <leader>d :LspNextReference<CR>
-" nnoremap <leader>d :LspPeekDeclaration<CR>
-" nnoremap <leader>d :LspPeekDefinition<CR>
-" nnoremap <leader>d :LspPeekImplementation<CR>
-" nnoremap <leader>d :LspPeekTypeDefinition<CR>
-" nnoremap <leader>d :LspPreviousError<CR>
-" nnoremap <leader>r :LspPreviousReference<CR>
-" nnoremap <leader>d :LspStatus<CR>
-" nnoremap <leader>d :LspTypeDefinition<CR>
-" nnoremap <leader>d :LspWorkspaceSymbol<CR>
-
-let g:lsp_signs_error = {'text': 'x'}
-" nnoremap <leader>a :LspCodeAction
-" nnoremap <leader>d :LspDeclaration
-" nnoremap <leader>d :LspDefinition<CR>
-" nnoremap <leader>d :LspDocumentDiagnostics
-" nnoremap <leader>d :LspDocumentFormat
-" nnoremap <leader>d :LspDocumentRangeFormat
-" nnoremap <leader>d :LspDocumentSymbol
-" nnoremap <leader>d :LspHover
-" nnoremap <leader>d :LspImplementation
-" nnoremap <leader>d :LspNextError
-" nnoremap <leader>d :LspNextReference
-" nnoremap <leader>d :LspPeekDeclaration
-" nnoremap <leader>d :LspPeekDefinition
-" nnoremap <leader>d :LspPeekImplementation
-" nnoremap <leader>d :LspPeekTypeDefinition
-" nnoremap <leader>d :LspPreviousError
-" nnoremap <leader>d :LspPreviousReference
-" nnoremap <leader>d :LspReferences
-" nnoremap <leader>d :LspRename
-" nnoremap <leader>d :LspStatus
-" nnoremap <leader>d :LspTypeDefinition
-" nnoremap <leader>d :LspWorkspaceSymbol
-
-"----------------------------------------------------------------------------
 " Go
 "----------------------------------------------------------------------------
 
@@ -241,69 +139,84 @@ endfunction
 
 let g:go_fmt_autosave = 1
 let g:go_fmt_command = "goimports"
+let g:go_fmt_fail_silently = 0
+let g:go_list_type = "quickfix"
+let g:go_test_timeout = '10s'
+let g:go_textobj_include_function_doc = 1
+let g:go_auto_type_info = 1
+" let g:go_auto_sameids = 1
+
 let g:go_gocode_unimported_packages = 1
-" let g:go_metalinter_command = "golangci-lint"
-let g:go_metalinter_autosave = 1
-let g:go_metalinter_enabeld = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
-let g:go_textobj_include_function_doc = 1 
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
+let g:go_linters = [
+  \'vet',
+  \'errcheck',
+  \'golint',
+  \'unused',
+  \'structcheck',
+  \'gosimple',
+  \'varcheck',
+  \'ineffassign',
+  \'deadcode',
+  \'typecheck',
+  \'bodyclose',
+  \'gocyclo',
+  \'misspell',
+  \'unparam',
+  \'staticcheck',
+  \]
+let g:go_metalinter_enabled          = g:go_linters
+let g:go_metalinter_command          = 'golangci-lint'
+let g:go_metalinter_autosave         = 1
+let g:go_metalinter_autosave_enabled = g:go_linters
+
+let g:go_highlight_types             = 1
+let g:go_highlight_fields            = 1
+let g:go_highlight_functions         = 1
+let g:go_highlight_function_calls    = 1
+let g:go_highlight_operators         = 1
+let g:go_highlight_extra_types       = 1
+let g:go_highlight_generate_tags     = 1
 let g:go_highlight_build_constraints = 1
 let g:go_def_mode = 'gopls'
-autocmd! BufWritePost *.go :call Gofumpt()
-function! Gofumpt()
-  let result = system('gofumpt -s -w' . bufname(""))
-endfunction
+
+let g:deoplete#sources#go#pointer             = 1
+let g:deoplete#sources#go#gocode_binary       = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#builtin_objects     = 1
+let g:deoplete#sources#go#unimported_packages = 1
+
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+nnoremap <C-n> :cnext<CR>
+nnoremap <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
 
 " vim-go specific features
-augroup go
-  " nnoremap <leader>D :GoDecls<CR>
-  nnoremap <C-n> :cnext<CR>
-  nnoremap <C-m> :cprevious<CR>
-  nnoremap <leader>a :cclose<CR>
-  nnoremap <leader>o :GoDecls<CR>
-  nnoremap <leader>d :GoDef<CR>
-  nnoremap <leader>O :GoDeclsDir<CR>
-  nnoremap <leader>G :GoDoc<CR>
-  nnoremap <leader>I :GoImpl<CR>
-  nnoremap <leader>i :GoImplements<CR> " the same as LspImplementation
-  nnoremap <leader>K :GoKeyify<CR>
-  nnoremap <leader>F :GoFillStruct<CR>
-  nnoremap <leader>T :GoTest<CR>
-  nnoremap <leader>A :GoAddTags<CR>
-  " nnoremap <leader>s :GoRemoveTags<CR>
-  nnoremap <leader>R :GoRun<CR>
-  nnoremap <leader>C :GoCoverage<CR>
-  " nnoremap <leader>j :GoTestsAll
-  :highlight goErr cterm=bold ctermfg=lightblue
-  :match goErr /\<err\>/
-augroup END
-
-"----------------------------------------------------------------------------
-" Rust
-"----------------------------------------------------------------------------
-
-let g:rustfmt_autosave = 1
+autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>tf <Plug>(go-test-func)
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+autocmd FileType go nmap <Leader>et <Plug>(go-alternate-edit)
+autocmd FileType go nmap <Leader>d <Plug>(go-def)
+autocmd FileType go nmap <Leader>p <Plug>(go-def-pop)
+autocmd FileType go nmap <Leader>s <Plug>(go-def-stack)
+autocmd FileType go nmap <Leader>o <Plug>(go-decls-dir)
+autocmd FileType go nmap <Leader>doc <Plug>(go-doc)
+autocmd FileType go nmap <Leader>ds <Plug>(go-describe)
+autocmd FileType go nmap <Leader>i <Plug>(go-implements)
+autocmd FileType go nmap <Leader>rn <Plug>(go-rename)
+autocmd FileType go nmap <Leader>k <Plug>(go-keyify)
+autocmd FileType go nmap <Leader>ig <Plug>(go-impl)
+autocmd FileType go nmap <Leader>tg <Plug>(go-add-tags)
+autocmd FileType go nmap <Leader>f <Plug>(go-fill-struct)
+:highlight goErr cterm=bold ctermfg=lightblue
+:match goErr /\<err\>/
 
 "----------------------------------------------------------------------------
 " vim-terraform
 "----------------------------------------------------------------------------
 
-let g:terraform_align=1
-let g:terraform_fold_sections=1
-let g:terraform_remap_spacebar=1
-let g:terraform_fmt_on_save = 1
-
-"----------------------------------------------------------------------------
-" Kubernetes
-"----------------------------------------------------------------------------
-
-autocmd! BufWritePost *.yaml :call Kubeval()
-
-function! Kubeval()
-  let result = system('kubeval ' . bufname(""))
-  echo result
-endfunction
+let g:terraform_align          = 1
+let g:terraform_fold_sections  = 1
+let g:terraform_remap_spacebar = 1
+let g:terraform_fmt_on_save    = 1
