@@ -12,6 +12,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'buoto/gotests-vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
+  Plug 'dense-analysis/ale'
   Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'elzr/vim-json', {'for' : 'json'}
@@ -143,7 +144,7 @@ let g:go_fmt_fail_silently = 0
 let g:go_list_type = "quickfix"
 let g:go_test_timeout = '10s'
 let g:go_textobj_include_function_doc = 1
-let g:go_auto_type_info = 1
+" let g:go_auto_type_info
 " let g:go_auto_sameids = 1
 
 let g:go_gocode_unimported_packages = 1
@@ -209,8 +210,23 @@ autocmd FileType go nmap <Leader>k <Plug>(go-keyify)
 autocmd FileType go nmap <Leader>ig <Plug>(go-impl)
 autocmd FileType go nmap <Leader>tg <Plug>(go-add-tags)
 autocmd FileType go nmap <Leader>f <Plug>(go-fill-struct)
+autocmd FileType go nmap <Leader>cr <Plug>(go-callers)
+autocmd FileType go nmap <Leader>ce <Plug>(go-callees)
+autocmd FileType go nmap <Leader>rr <Plug>(go-referrers)
 :highlight goErr cterm=bold ctermfg=lightblue
 :match goErr /\<err\>/
+
+"----------------------------------------------------------------------------
+" ALE
+"----------------------------------------------------------------------------
+
+let b:ale_linters = {'go': ['golangci-lint']}
+let g:golangci_lint_opts = ""
+for linter in g:go_linters
+  let g:golangci_lint_opts = g:golangci_lint_opts . "--enable=" . linter . " "
+endfor
+let g:ale_go_golangci_lint_options = g:golangci_lint_opts
+let g:ale_go_golangci_lint_package = 0
 
 "----------------------------------------------------------------------------
 " vim-terraform
