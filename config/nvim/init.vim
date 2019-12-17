@@ -12,22 +12,20 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'buoto/gotests-vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
-  Plug 'dense-analysis/ale'
   Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+  Plug 'ervandew/supertab'
   Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
-  Plug 'elzr/vim-json', {'for' : 'json'}
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go'}
-  Plug 'hashivim/vim-terraform'
-  Plug 'juliosueiras/vim-terraform-completion'
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
-  Plug 'Raimondi/delimitMate'
+  Plug 'mh21/errormarker.vim'
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
   Plug 'rhysd/vim-clang-format'
+  Plug 'skywind3000/asyncrun.vim'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'sirver/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-surround'
   Plug 'tyrannicaltoucan/vim-deep-space'
 call plug#end()
 
@@ -81,6 +79,12 @@ augroup vimrcEx
   \ exe "normal g`\"" | endif
 augroup END
 
+" Close QuickFix when try to close Vim
+augroup QFClose
+  au!
+  au WinEnter * if winnr('$') == 1 && &buftype == "quickfix"|q|endif
+augroup END
+
 "----------------------------------------------------------------------------
 " Common key mappings
 "----------------------------------------------------------------------------
@@ -93,6 +97,9 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
+nnoremap <C-n> :cnext<CR>
+nnoremap <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
 
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
@@ -129,105 +136,61 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim
 " Go
 "----------------------------------------------------------------------------
 
-" run :GoBuild or :GoTestCompile based on the go file
-function! s:build_go_files()
-  let l:file = expand('%')
-  if l:file =~# '^\f\+_test\.go$'
-    call go#test#Test(0, 1)
-  elseif l:file =~# '^\f\+\.go$'
-    call go#cmd#Build(0)
-  endif
+function! GoFmt()
+  :silent !gofumports -w %
+  :silent !gofumpt -s -w %
+  :edit
 endfunction
 
-let g:go_fmt_autosave = 1
-let g:go_fmt_command = "goimports"
-let g:go_fmt_fail_silently = 0
-let g:go_list_type = "quickfix"
-let g:go_test_timeout = '10s'
-let g:go_textobj_include_function_doc = 1
-" let g:go_auto_type_info
-" let g:go_auto_sameids = 1
+function! GoRun()
+  :AsyncRun -strip go run "%:p:h" 
+endfunction
 
-let g:go_gocode_unimported_packages = 1
-let g:go_linters = [
-  \'vet',
-  \'errcheck',
-  \'golint',
-  \'unused',
-  \'structcheck',
-  \'gosimple',
-  \'varcheck',
-  \'ineffassign',
-  \'deadcode',
-  \'typecheck',
-  \'bodyclose',
-  \'gocyclo',
-  \'misspell',
-  \'unparam',
-  \'staticcheck',
-  \]
-let g:go_metalinter_enabled          = g:go_linters
-let g:go_metalinter_command          = 'golangci-lint'
-let g:go_metalinter_autosave         = 1
-let g:go_metalinter_autosave_enabled = g:go_linters
+function! GoBuildAndLint()
+  :AsyncRun -strip go build <root>/... && golangci-lint run "%:p:h" 
+    \ --disable-all 
+    \ --no-config
+    \ --enable=vet
+    \ --enable=errcheck
+    \ --enable=golint
+    \ --enable=unused
+    \ --enable=structcheck
+    \ --enable=gosimple
+    \ --enable=varcheck
+    \ --enable=ineffassign
+    \ --enable=deadcode
+    \ --enable=typecheck
+    \ --enable=bodyclose
+    \ --enable=gocyclo
+    \ --enable=misspell
+    \ --enable=unparam
+    \ --enable=staticcheck
+endfunction
 
-let g:go_highlight_types             = 1
-let g:go_highlight_fields            = 1
-let g:go_highlight_functions         = 1
-let g:go_highlight_function_calls    = 1
-let g:go_highlight_operators         = 1
-let g:go_highlight_extra_types       = 1
-let g:go_highlight_generate_tags     = 1
-let g:go_highlight_build_constraints = 1
-let g:go_def_mode = 'gopls'
+function! GoTest()
+  :AsyncRun -strip go test -timeout 30s -count=1 <root>/...
+endfunction
+
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+autocmd BufWritePost *.go :call GoFmt()
+autocmd BufWritePost *.go :call GoBuildAndLint()
+autocmd FileType go nmap <leader>t :<C-u>call GoTest()<CR>
+autocmd FileType go nmap <leader>r :<C-u>call GoRun()<CR>
+:highlight goErr cterm=bold ctermfg=lightblue
+:match goErr /\<err\>/
 
 let g:deoplete#sources#go#pointer             = 1
 let g:deoplete#sources#go#gocode_binary       = $GOPATH.'/bin/gocode'
 let g:deoplete#sources#go#builtin_objects     = 1
 let g:deoplete#sources#go#unimported_packages = 1
 
-autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-
-nnoremap <C-n> :cnext<CR>
-nnoremap <C-m> :cprevious<CR>
-nnoremap <leader>a :cclose<CR>
-
-" vim-go specific features
-autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-autocmd FileType go nmap <leader>r <Plug>(go-run)
-autocmd FileType go nmap <leader>t <Plug>(go-test)
-autocmd FileType go nmap <leader>tf <Plug>(go-test-func)
-autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-autocmd FileType go nmap <Leader>et <Plug>(go-alternate-edit)
-autocmd FileType go nmap <Leader>d <Plug>(go-def)
-autocmd FileType go nmap <Leader>p <Plug>(go-def-pop)
-autocmd FileType go nmap <Leader>s <Plug>(go-def-stack)
-autocmd FileType go nmap <Leader>o <Plug>(go-decls-dir)
-autocmd FileType go nmap <Leader>doc <Plug>(go-doc)
-autocmd FileType go nmap <Leader>ds <Plug>(go-describe)
-autocmd FileType go nmap <Leader>i <Plug>(go-implements)
-autocmd FileType go nmap <Leader>rn <Plug>(go-rename)
-autocmd FileType go nmap <Leader>k <Plug>(go-keyify)
-autocmd FileType go nmap <Leader>ig <Plug>(go-impl)
-autocmd FileType go nmap <Leader>tg <Plug>(go-add-tags)
-autocmd FileType go nmap <Leader>f <Plug>(go-fill-struct)
-autocmd FileType go nmap <Leader>cr <Plug>(go-callers)
-autocmd FileType go nmap <Leader>ce <Plug>(go-callees)
-autocmd FileType go nmap <Leader>rr <Plug>(go-referrers)
-:highlight goErr cterm=bold ctermfg=lightblue
-:match goErr /\<err\>/
-
-"----------------------------------------------------------------------------
-" ALE
-"----------------------------------------------------------------------------
-
-let b:ale_linters = {'go': ['golangci-lint']}
-let g:golangci_lint_opts = ""
-for linter in g:go_linters
-  let g:golangci_lint_opts = g:golangci_lint_opts . "--enable=" . linter . " "
-endfor
-let g:ale_go_golangci_lint_options = g:golangci_lint_opts
-let g:ale_go_golangci_lint_package = 0
+if executable('gopls')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'gopls',
+    \ 'cmd': {server_info->['gopls']},
+    \ 'whitelist': ['go'],
+    \ })
+endif
 
 "----------------------------------------------------------------------------
 " vim-terraform
@@ -237,3 +200,31 @@ let g:terraform_align          = 1
 let g:terraform_fold_sections  = 1
 let g:terraform_remap_spacebar = 1
 let g:terraform_fmt_on_save    = 1
+
+"----------------------------------------------------------------------------
+" asyncrun 
+"----------------------------------------------------------------------------
+
+autocmd User AsyncRunStart call asyncrun#quickfix_toggle(8, 1)
+let g:asyncrun_auto = "make"
+
+"----------------------------------------------------------------------------
+" supertab
+"----------------------------------------------------------------------------
+
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+"----------------------------------------------------------------------------
+" vim-lsp
+"----------------------------------------------------------------------------
+
+autocmd FileType * nmap <leader>d :LspDefinition<CR>
+let g:lsp_diagnostics_enabled = 0
+let g:lsp_insert_text_enabled = 0
+let g:lsp_text_edit_enabled = 0
+let g:lsp_signs_enabled = 0
+let g:lsp_virtual_text_enabled = 0
+let g:lsp_highlights_enabled = 0
+let g:lsp_textprop_enabled = 0
+let g:lsp_signature_help_enabled = 0
+let g:lsp_fold_enabled = 0
