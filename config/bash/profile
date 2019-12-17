@@ -105,6 +105,18 @@ function export_kube_ctx() {
   export KUBE_CONTEXT=$(kubectl config get-contexts --no-headers --output='name' | fzf)
 }
 
+function kube_describe_pod() {
+  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" describe pod 
+}
+
+function kube_logs_pod() {
+  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" logs
+}
+
+function kube_port_forward() {
+  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" port-forward {} $1
+}
+
 function history_get_from_datastore() {
   histdatastore get $(dirs +0) | fzf --no-sort --tac
 }
@@ -226,7 +238,7 @@ alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/ya
 alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
-alias st='stern worker -o json -n $(kube_get_namespace)'
+alias st='stern worker -o json -n $KUBE_NAMESPACE'
 alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias go='_go'
 alias ghq='_ghq'
@@ -235,6 +247,9 @@ alias docker_rm_all='docker rm $(docker ps -a -q)'
 alias ci='open_circleci'
 alias gt='go_test_fzf'
 alias jq='gojq'
+alias kdp='kube_describe_pod'
+alias klp='kube_logs_pod'
+alias kfp='kube_port_forward'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)
