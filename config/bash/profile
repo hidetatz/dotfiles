@@ -47,12 +47,6 @@ PATH=$PATH:$XDG_CONFIG_HOME/google-cloud-sdk/bin
 source <(kubectl completion bash)
 
 # -------------------------------------
-# Rust
-# -------------------------------------
-
-source $HOME/.cargo/env
-
-# -------------------------------------
 # functions
 # -------------------------------------
 

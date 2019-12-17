@@ -12,17 +12,16 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'buoto/gotests-vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
-  Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
   Plug 'ervandew/supertab'
-  Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
   Plug 'mh21/errormarker.vim'
   Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'rhysd/vim-clang-format'
   Plug 'skywind3000/asyncrun.vim'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'sirver/ultisnips'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
@@ -71,7 +70,7 @@ set splitbelow
 set tabstop=4
 set shiftwidth=4
 set expandtab
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)
 
 " Open last edited line
 augroup vimrcEx
@@ -147,7 +146,7 @@ function! GoRun()
 endfunction
 
 function! GoBuildAndLint()
-  :AsyncRun -strip go build <root>/... && golangci-lint run "%:p:h" 
+  :AsyncRun -strip go build <root>/... & golangci-lint run "%:p:h" 
     \ --disable-all 
     \ --no-config
     \ --enable=vet
@@ -176,13 +175,9 @@ autocmd BufWritePost *.go :call GoFmt()
 autocmd BufWritePost *.go :call GoBuildAndLint()
 autocmd FileType go nmap <leader>t :<C-u>call GoTest()<CR>
 autocmd FileType go nmap <leader>r :<C-u>call GoRun()<CR>
+autocmd FileType go nmap <leader>b :<C-u>call GoBuildAndLint()<CR>
 :highlight goErr cterm=bold ctermfg=lightblue
 :match goErr /\<err\>/
-
-let g:deoplete#sources#go#pointer             = 1
-let g:deoplete#sources#go#gocode_binary       = $GOPATH.'/bin/gocode'
-let g:deoplete#sources#go#builtin_objects     = 1
-let g:deoplete#sources#go#unimported_packages = 1
 
 if executable('gopls')
   au User lsp_setup call lsp#register_server({
@@ -193,20 +188,14 @@ if executable('gopls')
 endif
 
 "----------------------------------------------------------------------------
-" vim-terraform
-"----------------------------------------------------------------------------
-
-let g:terraform_align          = 1
-let g:terraform_fold_sections  = 1
-let g:terraform_remap_spacebar = 1
-let g:terraform_fmt_on_save    = 1
-
-"----------------------------------------------------------------------------
 " asyncrun 
 "----------------------------------------------------------------------------
 
-autocmd User AsyncRunStart call asyncrun#quickfix_toggle(8, 1)
 let g:asyncrun_auto = "make"
+
+augroup vimrc
+  autocmd QuickfixCmdPost * if len(getqflist()) != 0 | copen 8 | endif
+augroup END
 
 "----------------------------------------------------------------------------
 " supertab
@@ -219,6 +208,7 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 "----------------------------------------------------------------------------
 
 autocmd FileType * nmap <leader>d :LspDefinition<CR>
+let g:lsp_async_completion = 1
 let g:lsp_diagnostics_enabled = 0
 let g:lsp_insert_text_enabled = 0
 let g:lsp_text_edit_enabled = 0
