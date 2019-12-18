@@ -7,28 +7,40 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.config/nvim/plugged')
-  Plug 'airblade/vim-gitgutter'
-  Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'buoto/gotests-vim'
-  Plug 'ConradIrwin/vim-bracketed-paste'
-  Plug 'cespare/vim-toml', {'for' : 'toml'}
-  Plug 'ervandew/supertab'
+  " general
   Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
-  Plug 'mh21/errormarker.vim'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-fugitive'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'ConradIrwin/vim-bracketed-paste'
+  Plug 'ervandew/supertab'
+
+  " colorscheme
+  Plug 'tyrannicaltoucan/vim-deep-space'
+
+  " LSP
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/vim-lsp'
-  Plug 'rhysd/vim-clang-format'
-  Plug 'skywind3000/asyncrun.vim'
-  Plug 'sirver/ultisnips'
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-fugitive'
-  Plug 'tyrannicaltoucan/vim-deep-space'
-call plug#end()
 
-let g:deoplete#enable_at_startup = 1
+  " Language specific
+  Plug 'rhysd/vim-clang-format'
+  Plug 'cespare/vim-toml', {'for' : 'toml'}
+  Plug 'buoto/gotests-vim'
+
+  " AsyncRun
+  Plug 'skywind3000/asyncrun.vim'
+  Plug 'mh21/errormarker.vim'
+
+  " Snippets
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
+  " Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+call plug#end()
 
 "----------------------------------------------------------------------------
 " Settings
@@ -96,16 +108,16 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
-nnoremap <C-n> :cnext<CR>
-nnoremap <C-m> :cprevious<CR>
+nnoremap <C-j> :cnext<CR>
+nnoremap <C-k> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
+" inoremap <C-j> <Down>
+" inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
@@ -194,6 +206,7 @@ endif
 let g:asyncrun_auto = "make"
 
 augroup vimrc
+  " Show quickfix only it's not empty
   autocmd QuickfixCmdPost * if len(getqflist()) != 0 | copen 8 | endif
 augroup END
 
@@ -202,6 +215,20 @@ augroup END
 "----------------------------------------------------------------------------
 
 let g:SuperTabDefaultCompletionType = "<c-n>"
+
+"----------------------------------------------------------------------------
+" UltiSnips
+"----------------------------------------------------------------------------
+
+if has('python3')
+  let g:UltiSnipsExpandTrigger="<c-e>"
+  call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+    \ 'name': 'ultisnips',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+    \ }))
+endif
+
 
 "----------------------------------------------------------------------------
 " vim-lsp
