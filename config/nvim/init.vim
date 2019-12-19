@@ -12,6 +12,7 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-surround'
   Plug 'airblade/vim-gitgutter'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'ConradIrwin/vim-bracketed-paste'
@@ -37,8 +38,6 @@ call plug#begin('~/.config/nvim/plugged')
 
   " Snippets
   Plug 'SirVer/ultisnips'
-  Plug 'honza/vim-snippets'
-  " Plug 'thomasfaingnaert/vim-lsp-ultisnips'
   Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 call plug#end()
 
@@ -207,7 +206,7 @@ let g:asyncrun_auto = "make"
 
 augroup vimrc
   " Show quickfix only it's not empty
-  autocmd QuickfixCmdPost * if len(getqflist()) != 0 | copen 8 | endif
+  autocmd QuickfixCmdPost * if len(getqflist()) != 0 | copen 8 | else | cclose | endif
 augroup END
 
 "----------------------------------------------------------------------------
@@ -220,8 +219,10 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 " UltiSnips
 "----------------------------------------------------------------------------
 
+let g:UltiSnipsSnippetDirectories = [$GOPATH . "/src/github.com/yagi5/dotfiles/config/nvim/snippets"]
+
 if has('python3')
-  let g:UltiSnipsExpandTrigger="<c-e>"
+  let g:UltiSnipsExpandTrigger = "<c-e>"
   call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
     \ 'name': 'ultisnips',
     \ 'whitelist': ['*'],
