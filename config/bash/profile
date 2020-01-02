@@ -17,6 +17,8 @@ export XDG_CACHE_HOME=$DOT_FILES/cache
 export SECRETS=$DOT_FILES/secrets
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 
+export PATH=$PATH:$GOPATH/bin/nvim/bin
+
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
 [ -e $XDG_CONFIG_HOME/scripts ] && for f in $XDG_CONFIG_HOME/scripts/*; do source $f; done
@@ -232,6 +234,7 @@ alias jq='gojq'
 alias kdp='kube_describe_pod'
 alias klp='kube_logs_pod'
 alias kfp='kube_port_forward'
+alias screen='screen -c $XDG_CONFIG_HOME/screen/screenrc'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)

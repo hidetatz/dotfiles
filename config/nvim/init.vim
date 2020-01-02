@@ -19,7 +19,8 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'ervandew/supertab'
 
   " colorscheme
-  Plug 'tyrannicaltoucan/vim-deep-space'
+  "Plug 'tyrannicaltoucan/vim-deep-space'
+  Plug 'cocopon/iceberg.vim'
 
   " LSP
   Plug 'prabirshrestha/async.vim'
@@ -45,13 +46,14 @@ call plug#end()
 " Settings
 "----------------------------------------------------------------------------
 
-autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
-autocmd ColorScheme * highlight Cursor guifg=green guibg=green
+" autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
+" autocmd ColorScheme * highlight Cursor guifg=green guibg=green
 
 filetype off
 filetype plugin indent on
-colorscheme deep-space
-set termguicolors
+" colorscheme deep-space
+colorscheme iceberg
+" set termguicolors
 set encoding=utf-8
 set ambiwidth=double
 set hidden
@@ -154,7 +156,7 @@ function! GoRun()
 endfunction
 
 function! GoBuildAndLint()
-  :AsyncRun -strip go build <root>/... & golangci-lint run "%:p:h" 
+  :AsyncRun -strip go build <root>/... && golangci-lint run "%:p:h" 
     \ --disable-all 
     \ --no-config
     \ --enable=vet
@@ -226,7 +228,6 @@ if has('python3')
     \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
     \ }))
 endif
-
 
 "----------------------------------------------------------------------------
 " vim-lsp

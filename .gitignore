@@ -2,3 +2,6 @@ cache
 secrets
 gcloud
 google-cloud-sdk
+config/nvim/autoload/
+config/nvim/plugged/
+fzf/
