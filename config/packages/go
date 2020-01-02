@@ -1,8 +1,6 @@
 github.com/cweill/gotests/...
 github.com/itchyny/gojq/cmd/gojq
 github.com/ktr0731/evans
-github.com/mvdan/gofumpt
-github.com/mvdan/gofumpt/gofumports
 github.com/yagi5/gotest
 github.com/yagi5/hist-datastore/cmd/cacheupdate
 github.com/yagi5/hist-datastore/cmd/histdatastore
