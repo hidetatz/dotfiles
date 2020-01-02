@@ -19,8 +19,12 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'ervandew/supertab'
 
   " colorscheme
-  "Plug 'tyrannicaltoucan/vim-deep-space'
+  Plug 'tyrannicaltoucan/vim-deep-space'
   Plug 'cocopon/iceberg.vim'
+  Plug 'tlhr/anderson.vim'
+  Plug 'fcpg/vim-orbital'
+  Plug 'nanotech/jellybeans.vim'
+  Plug 'morhetz/gruvbox'
 
   " LSP
   Plug 'prabirshrestha/async.vim'
@@ -52,7 +56,11 @@ call plug#end()
 filetype off
 filetype plugin indent on
 " colorscheme deep-space
-colorscheme iceberg
+" colorscheme iceberg
+" colorscheme anderson
+" colorscheme orbital
+colorscheme gruvbox
+" colorscheme jellybeans
 " set termguicolors
 set encoding=utf-8
 set ambiwidth=double

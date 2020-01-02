@@ -234,7 +234,7 @@ alias jq='gojq'
 alias kdp='kube_describe_pod'
 alias klp='kube_logs_pod'
 alias kfp='kube_port_forward'
-alias screen='screen -c $XDG_CONFIG_HOME/screen/screenrc'
+alias screen='$GOPATH/bin/screen -c $XDG_CONFIG_HOME/screen/screenrc'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)
