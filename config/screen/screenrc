@@ -16,7 +16,8 @@ altscreen on
 defbce on
 term xterm-256color
 
-hardstatus alwayslastline "%{= cd} %-w%{= dd} %n %t* %{-}%+w"
+hardstatus alwaysfirstline "%{= cd} %-w%{= dd} %n %t* %{-}%+w"
+
 
 shell -$SHELL
 
