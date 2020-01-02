@@ -15,6 +15,7 @@ export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin:
 export XDG_CONFIG_HOME=$DOT_FILES/config
 export XDG_CACHE_HOME=$DOT_FILES/cache
 export SECRETS=$DOT_FILES/secrets
+export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
