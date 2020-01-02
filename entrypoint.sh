@@ -22,14 +22,6 @@ if ! [ -x "$(command -v gcloud)" ]; then
   curl https://sdk.cloud.google.com > install.sh
   bash install.sh --disable-prompts --install-dir=$DOT_FILES
   rm install.sh
-  # curl -L -o google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz \
-  #   "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86_64.tar.gz"
-  # tar -xzf "google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz"
-  # ./google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --command-completion=false && \
-  # ./google-cloud-sdk/bin/gcloud components update --quiet && \
-  # ./google-cloud-sdk/bin/gcloud components install kubectl --quiet
-  # mv google-cloud-sdk $DOT_FILES/
-  # rm google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz
 fi
 
 # Install some secrets from GCS
@@ -77,7 +69,7 @@ fi
 if ! [ -x "$(command -v nvim)" ]; then
   curl -LO https://github.com/neovim/neovim/releases/download/v0.4.3/nvim-macos.tar.gz
   tar xzf nvim-macos.tar.gz
-  sudo mv ./nvim-osx64/bin/nvim /usr/local/bin
+  sudo mv ./nvim-osx64/bin/nvim /usr/bin/
   rm nvim-macos.tar.gz
   rm -rf nvim-osx64
 fi

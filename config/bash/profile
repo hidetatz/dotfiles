@@ -18,7 +18,7 @@ export SECRETS=$XDG_CONFIG_HOME/secrets
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
-[ -e $XDG_CONFIG_HOME/scripts ] && for f in $XDG_COFIG_HOME/scripts/*; do source $f; done
+[ -e $XDG_CONFIG_HOME/scripts ] && for f in $XDG_CONFIG_HOME/scripts/*; do source $f; done
 [ -e $SECRETS/bash/profile.pvt ] && . $SECRETS/bash/profile.pvt
 
 # source <(stern --completion=bash)
