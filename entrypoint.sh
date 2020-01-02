@@ -78,8 +78,7 @@ cat $DOT_FILES/config/packages/go | while read line
 do
   ghq list | grep $line || echo "installing ${line}..."; go get -u $line
 done
-ghq import -u --parallel < $DOT_FILES/config/packages/ghq
-ghq import -u --parallel < $SECRETS/ghq.private
+ghq get -u --parallel < $DOT_FILES/config/packages/ghq
+ghq get -u --parallel < $SECRETS/ghq.private
 
 echo "source $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile" > $HOME/.bash_profile
-

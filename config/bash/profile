@@ -165,7 +165,7 @@ function add_hist() {
 function vifzf() {
   file=$(fzf)
   add_hist "vi $file"
-  vi $file
+  nvim $file
 }
 
 # -------------------------------------
