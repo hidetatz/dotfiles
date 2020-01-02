@@ -69,7 +69,7 @@ fi
 if ! [ -x "$(command -v nvim)" ]; then
   curl -LO https://github.com/neovim/neovim/releases/download/v0.4.3/nvim-macos.tar.gz
   tar xzf nvim-macos.tar.gz
-  sudo mv ./nvim-osx64/bin/nvim /usr/bin/
+  sudo mv ./nvim-osx64/bin/nvim $GOPATH/bin/nvim
   rm nvim-macos.tar.gz
   rm -rf nvim-osx64
 fi
