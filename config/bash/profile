@@ -7,13 +7,22 @@ export LESSHISTSIZE=0
 export EDITOR="nvim"
 shopt -s histappend
 
-export XDG_CONFIG_HOME=$HOME/.config
-export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
-export SECRETS="$DOT_FILES/.config/secrets"
-[ -e $XDG_CONFIG_HOME/scripts ]          && for f in ~/.config/scripts/*; do source $f; done
-[ -e $XDG_CONFIG_HOME/bash/profile.pvt ] && . $XDG_CONFIG_HOME/bash/profile.pvt
+# export GIT_SSH_COMMAND='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
 
-source <(stern --completion=bash)
+export GOPATH="$HOME/ghq"
+export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin:$DOT_FILES/fzf/bin
+export XDG_CONFIG_HOME=$DOT_FILES/config
+export XDG_CACHE_HOME=$DOT_FILES/cache
+export SECRETS=$XDG_CONFIG_HOME/secrets
+
+export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
+
+[ -e $XDG_CONFIG_HOME/scripts ] && for f in $XDG_COFIG_HOME/scripts/*; do source $f; done
+[ -e $SECRETS/bash/profile.pvt ] && . $SECRETS/bash/profile.pvt
+
+# source <(stern --completion=bash)
+source <(kubectl completion bash)
 
 # -------------------------------------
 # bind
@@ -25,45 +34,23 @@ bind '"\e^": history-expand-line'
 bind '"\C-r": " \C-e\C-u\C-y\ey\C-u`history_get_from_datastore`\e\C-e\er\e^"'
 
 # -------------------------------------
-# golang
-# -------------------------------------
-
-export GOPATH="$HOME/ghq"
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:/usr/local/go/bin
-
-# -------------------------------------
-# fzf
-# -------------------------------------
-
-PATH=$PATH:$XDG_CONFIG_HOME/fzf/bin
-export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
-
-# -------------------------------------
-# gcloud
-# -------------------------------------
-
-PATH=$PATH:$XDG_CONFIG_HOME/google-cloud-sdk/bin
-source <(kubectl completion bash)
-
-# -------------------------------------
 # functions
 # -------------------------------------
 
 function gcloud_account() {
-  [ -e $HOME/.config/gcloud/active_config ] || (echo "" && return)
+  [ -e $DOT_FILES/gcloud/active_config ] || (echo "" && return)
   pj=$(cat $HOME/.config/gcloud/active_config)
   if [ -z "$pj" ]; then
     account=""
   else
-    account=$(cat $HOME/.config/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
+    account=$(cat $DOT_FILES/gcloud/configurations/config_$pj | grep "account" | awk '{print $3}')
   fi
   echo $account
 }
 
 function gcloud_pj() {
-  [ -e $HOME/.config/gcloud/configurations/config_default ] || (echo "" && return)
-  echo $(cat $HOME/.config/gcloud/configurations/config_default | grep project | awk '{print $3}')
+  [ -e $DOT_FILES/gcloud/configurations/config_default ] || (echo "" && return)
+  echo $(cat $DOT_FILES/gcloud/configurations/config_default | grep project | awk '{print $3}')
 }
 
 function git_show_fzf() {
@@ -123,14 +110,14 @@ function open_circleci() {
 }
 
 function goget() {
-  cat $DOT_FILES/config/packages/go | while read line
+  cat $XDG_CONFIG_HOME/packages/go | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; go get -u $line
   done
 }
 
 function ghqget() {
-  ghq import -u --parallel < $DOT_FILES/config/packages/ghq
+  ghq import -u --parallel < $XDG_CONFIG_HOME/packages/ghq
 }
 
 function ghqprivget() {
@@ -146,21 +133,21 @@ function _go() {
 
   # go get *
   if [ "$2" = "-u" ]; then
-    echo $3 >> $DOT_FILES/config/packages/go
+    echo $3 >> $XDG_CONFIG_HOME/packages/go
   else
-    echo $2 >> $DOT_FILES/config/packages/go
+    echo $2 >> $XDG_CONFIG_HOME/packages/go
   fi
-  f=`cat $DOT_FILES/config/packages/go | sort | uniq`
-  echo "$f" > $DOT_FILES/config/packages/go
+  f=`cat $XDG_CONFIG_HOME/packages/go | sort | uniq`
+  echo "$f" > $XDG_CONFIG_HOME/packages/go
   `which go` $@
 }
 
 function _ghq() {
   [ "$1" = "" ] && `which ghq` && return
   [ "$1" != "get" ] && `which ghq` $@ && return
-  echo $2 >> $DOT_FILES/config/packages/ghq
-  f=`cat $DOT_FILES/config/packages/ghq | sort | uniq`
-  echo "$f" > $DOT_FILES/config/packages/ghq
+  echo $2 >> $XDG_CONFIG_HOME/packages/ghq
+  f=`cat $XDG_CONFIG_HOME/packages/ghq | sort | uniq`
+  echo "$f" > $XDG_CONFIG_HOME/packages/ghq
   `which ghq` $@
 }
 
@@ -216,7 +203,7 @@ alias t='vifzf'
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="nvim"
-alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+# alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
 alias dr="docker"
 alias drc="docker-compose"
@@ -233,7 +220,7 @@ alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
 alias st='stern worker -o json -n $KUBE_NAMESPACE'
-alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
+alias ssh='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
 alias go='_go'
 alias ghq='_ghq'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'

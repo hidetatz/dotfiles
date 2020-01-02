@@ -1,14 +1,14 @@
-set rtp+=~/.config/nvim
+set rtp+=$XDG_CONFIG_HOME/config/nvim
 
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+if empty(glob('$XDG_CONFIG_HOME/nvim/autoload/plug.vim'))
+  silent !curl -fLo $XDG_CONFIG_HOME/nvim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source ~/.config/nvim/init.vim
+  autocmd VimEnter * PlugInstall --sync | source $XDG_CONFIG_HOME/nvim/init.vim
 endif
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   " general
-  Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf', { 'dir': '$DOT_FILES/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
@@ -124,10 +124,7 @@ inoremap <C-l> <Right>
 " fzf.vim
 "----------------------------------------------------------------------------
 
-" for fzf installed by homebrew
-set rtp+=/usr/local/opt/fzf
-set rtp+=~/ghq/src/github.com/junegunn/fzf
-set rtp+=~/.config/fzf/bin
+set rtp+=$DOT_FILES/fzf/bin
 
 nnoremap ; :Buffers
 nnoremap t :Files
@@ -219,7 +216,7 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 " UltiSnips
 "----------------------------------------------------------------------------
 
-let g:UltiSnipsSnippetDirectories = [$GOPATH . "/src/github.com/yagi5/dotfiles/config/nvim/snippets"]
+let g:UltiSnipsSnippetDirectories = [$XDG_CONFIG_HOME . "/nvim/snippets"]
 
 if has('python3')
   let g:UltiSnipsExpandTrigger = "<c-e>"

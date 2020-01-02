@@ -2,69 +2,63 @@
 
 set -e
 
-GO_VERSION="1.12.9"
+GO_VERSION="1.13.5"
 GCLOUD_VERSION="245.0.0"
 
-export XDG_CONFIG_HOME=$HOME/.config
-export PATH=$PATH:$XDG_CONFIG_HOME/google-cloud-sdk/bin
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:$HOME/ghq/bin
-export PATH=$PATH:$GOPATH/bin
-export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
-export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 export GOPATH="$HOME/ghq"
+export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
+export SECRETS=$DOT_FILES/secrets
+export GIT_SSH_COMMAND='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
+export XDG_CONFIG_HOME=$DOT_FILES/config
+export XDG_CACHE_HOME=$DOT_FILES/cache
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
+
+export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 
 mkdir -p $HOME/ghq/src/github.com/yagi5
-mkdir -p $HOME/.cache
-touch -f $HOME/.cache/hist-datastore
-mkdir -p $XDG_CONFIG_HOME/secrets
-mkdir -p $XDG_CONFIG_HOME/ssh
-mkdir -p $XDG_CONFIG_HOME/bash
-mkdir -p $XDG_CONFIG_HOME/git
-mkdir -p $XDG_CONFIG_HOME/nvim
-mkdir -p $XDG_CONFIG_HOME/tmux
-mkdir -p $XDG_CONFIG_HOME/brew
-
-# Install brew
-if ! [ -x "$(command -v brew)" ]; then
-  $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-fi
 
 # Install gcloud
 if ! [ -x "$(command -v gcloud)" ]; then
-  curl -L -o google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz \
-    "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86_64.tar.gz"
-  tar -xzf "google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz"
-  ./google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --command-completion=false && \
-  ./google-cloud-sdk/bin/gcloud components update --quiet && \
-  ./google-cloud-sdk/bin/gcloud components install kubectl --quiet
-  mv google-cloud-sdk $XDG_CONFIG_HOME
-  rm google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz
+  curl https://sdk.cloud.google.com > install.sh
+  bash install.sh --disable-prompts --install-dir=$DOT_FILES
+  rm install.sh
+  # curl -L -o google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz \
+  #   "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86_64.tar.gz"
+  # tar -xzf "google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz"
+  # ./google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --command-completion=false && \
+  # ./google-cloud-sdk/bin/gcloud components update --quiet && \
+  # ./google-cloud-sdk/bin/gcloud components install kubectl --quiet
+  # mv google-cloud-sdk $DOT_FILES/
+  # rm google-cloud-sdk-${GCLOUD_VERSION}-darwin-x86-64.tar.gz
 fi
 
 # Install some secrets from GCS
 if ! [ -e $XDG_CONFIG_HOME/bash/profile.pvt ]; then
   gcloud auth login
-  gsutil cp gs://blackhole-yagi5/config              $XDG_CONFIG_HOME/ssh/config
-  gsutil cp gs://blackhole-yagi5/known_hosts         $XDG_CONFIG_HOME/ssh/known_hosts
-  gsutil cp gs://blackhole-yagi5/github_mac          $XDG_CONFIG_HOME/ssh/github_mac
-  gsutil cp gs://blackhole-yagi5/profile.pvt         $XDG_CONFIG_HOME/bash/profile.pvt
-  gsutil cp gs://blackhole-yagi5/ghq.private         $XDG_CONFIG_HOME/secrets
-  gsutil cp gs://blackhole-yagi5/hist-datastore.json $XDG_CONFIG_HOME/secrets
-  chmod 600 $XDG_CONFIG_HOME/ssh/github_mac
+  gsutil cp gs://blackhole-yagi5/config              $SECRETS/ssh/config
+  gsutil cp gs://blackhole-yagi5/github_mac          $SECRETS/ssh/github_mac
+  gsutil cp gs://blackhole-yagi5/profile.pvt         $SECRETS/bash/profile.pvt
+  gsutil cp gs://blackhole-yagi5/ghq.private         $SECRETS/ghq.private
+  gsutil cp gs://blackhole-yagi5/hist-datastore.json $SECRETS/hist-datastore.json
+  chmod 600 $SECRETS/ssh/github_mac
 fi
+
+rm -rf /tmp/dotfiles
+mv $DOT_FILES /tmp/
 
 # Download dotfiles
-if ! [ -e $HOME/ghq/src/github.com/yagi5/dotfiles ]; then
-  git clone git@github.com:yagi5/dotfiles.git $HOME/ghq/src/github.com/yagi5/dotfiles
+if ! [ -e $DOT_FILES ]; then
+  git clone https://github.com/yagi5/dotfiles.git $DOT_FILES
+  mv /tmp/dotfiles/secrets $DOT_FILES/
+  mv /tmp/dotfiles/gcloud $DOT_FILES/
+  mv /tmp/dotfiles/google-cloud-sdk $DOT_FILES/
+  rm -rf /tmp/dotfiles
 fi
 
-# Install Dotfiles
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/tmux/tmux.conf $XDG_CONFIG_HOME/tmux/tmux.conf
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/nvim/init.vim  $XDG_CONFIG_HOME/nvim/init.vim
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile   $XDG_CONFIG_HOME/bash/profile
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/git/config     $XDG_CONFIG_HOME/git/config
-ln -sf $HOME/ghq/src/github.com/yagi5/dotfiles/config/scripts        $XDG_CONFIG_HOME/
+mkdir -p $SECRETS/ssh
+mkdir -p $SECRETS/bash
+mkdir -p $XDG_CACHE_HOME
+touch -f $XDG_CACHE_HOME/hist-datastore
 
 # Install Go
 # TODO: check the version is the same as $GO_VERSION
@@ -74,14 +68,18 @@ if ! [ -x "$(command -v go)" ]; then
   rm -f "go${GO_VERSION}.darwin-amd64.tar.gz"
 fi
 
-# Install tmux plugins
-if ! [ -e $XDG_CONFIG_HOME/tmux/plugins/tpm ]; then
-  git clone https://github.com/tmux-plugins/tmux-resurrect --depth=1 $XDG_CONFIG_HOME/tmux/plugins/tmux-resurrect
-  git clone https://github.com/tmux-plugins/tpm            --depth=1 $XDG_CONFIG_HOME/tmux/plugins/tpm
-fi
-
+# Install ghq
 if ! [ -x "$(command -v ghq)" ]; then
   go get github.com/motemen/ghq
+fi
+
+# Install neovim
+if ! [ -x "$(command -v nvim)" ]; then
+  curl -LO https://github.com/neovim/neovim/releases/download/v0.4.3/nvim-macos.tar.gz
+  tar xzf nvim-macos.tar.gz
+  sudo mv ./nvim-osx64/bin/nvim /usr/local/bin
+  rm nvim-macos.tar.gz
+  rm -rf nvim-osx64
 fi
 
 cat $DOT_FILES/config/packages/go | while read line
@@ -89,11 +87,7 @@ do
   ghq list | grep $line || echo "installing ${line}..."; go get -u $line
 done
 ghq import -u --parallel < $DOT_FILES/config/packages/ghq
-ghq import -u --parallel < $XDG_CONFIG_HOME/secrets/ghq.private
+ghq import -u --parallel < $SECRETS/ghq.private
 
-if [ -e $XDG_CONFIG_HOME/Brewfile ]; then
-  brew bundle --file="$DOT_FILES/config/brew/Brewfile" --force
-  brew bundle dump --file="$DOT_FILES/config/brew/Brewfile"
-fi
+echo "source $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile" > $HOME/.bash_profile
 
-echo "source $HOME/.config/bash/profile" > $HOME/.bash_profile

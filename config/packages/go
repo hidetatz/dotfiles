@@ -1,16 +1,9 @@
 github.com/cweill/gotests/...
-github.com/gohugoio/hugo
-github.com/itchyny/gojq
 github.com/itchyny/gojq/cmd/gojq
-github.com/kazegusuri/grpcurl
 github.com/ktr0731/evans
-github.com/quasilyte/go-consistent
 github.com/yagi5/gotest
 github.com/yagi5/hist-datastore/cmd/cacheupdate
 github.com/yagi5/hist-datastore/cmd/histdatastore
-go.uber.org/zap
-golang.org/x/tools/cmd/goimports
 golang.org/x/tools/gopls
 mvdan.cc/gofumpt
 mvdan.cc/gofumpt/gofumports
-sigs.k8s.io/kustomize/kustomize/v3
