@@ -3,15 +3,16 @@
 set -e
 
 GO_VERSION="1.13.5"
-GCLOUD_VERSION="245.0.0"
+NEOVIM_VERSION="0.4.3"
+SCREEN_VERSION="4.7.0"
 
-export GOPATH="$HOME/ghq"
-export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
-export SECRETS=$DOT_FILES/secrets
-export GIT_SSH_COMMAND='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
-export XDG_CONFIG_HOME=$DOT_FILES/config
-export XDG_CACHE_HOME=$DOT_FILES/cache
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
+GOPATH="$HOME/ghq"
+DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
+SECRETS=$DOT_FILES/secrets
+GIT_SSH_COMMAND='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
+XDG_CONFIG_HOME=$DOT_FILES/config
+XDG_CACHE_HOME=$DOT_FILES/cache
+PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
 
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 
@@ -54,26 +55,26 @@ touch -f $XDG_CACHE_HOME/hist-datastore
 
 # Install Go
 # TODO: check the version is the same as $GO_VERSION
-if ! [ -x "$(command -v go)" ]; then
-  curl -L -o go${GO_VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.darwin-amd64.tar.gz"
-  sudo tar -C /usr/local -xzf "go${GO_VERSION}.darwin-amd64.tar.gz"
-  rm -f "go${GO_VERSION}.darwin-amd64.tar.gz"
-fi
+curl -L -o go${GO_VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.darwin-amd64.tar.gz"
+sudo tar -C /usr/local -xzf "go${GO_VERSION}.darwin-amd64.tar.gz"
 
 # Install ghq
-if ! [ -x "$(command -v ghq)" ]; then
-  go get github.com/motemen/ghq
-fi
+go get -u github.com/motemen/ghq
 
 # Install neovim
-if ! [ -x "$(command -v nvim)" ]; then
-  curl -LO https://github.com/neovim/neovim/releases/download/v0.4.3/nvim-macos.tar.gz
-  tar xzf nvim-macos.tar.gz
-  mv ./nvim-osx64/ $GOPATH/bin/nvim
-  rm nvim-macos.tar.gz
-  rm -rf nvim-osx64
-fi
+curl -LO https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz
+tar xzf nvim-macos.tar.gz
+mv ./nvim-osx64/ $GOPATH/bin/nvim
 
+# Install screen
+curl -LO http://ftp.gnu.org/gnu/screen/screen-${SCREEN_VERSION}.tar.gz
+tar xzf screen-${SCREEN_VERSION}.tar.gz
+cd screen-${SCREEN_VERSION}/
+./configure --enable-colors256
+make
+mv ./screen ~/ghq/bin/
+
+# Install packages by go and ghq
 cat $DOT_FILES/config/packages/go | while read line
 do
   ghq list | grep $line || echo "installing ${line}..."; go get -u $line
