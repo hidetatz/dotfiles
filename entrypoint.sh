@@ -96,19 +96,19 @@ function install_go_darwin() {
 function install_neovim_darwin() {
   if ! [ -x "$(command -v nvim)" ]; then
     brew install neovim
-  }
+  fi
 }
 
 function install_tmux_darwin() {
   if ! [ -x "$(command -v tmux)" ]; then
     brew install tmux
-  }
+  fi
 }
 
 function install_clangd_darwin() {
   if ! [ -x "$(command -v clangd)" ]; then
     brew install llvm # clangd is contained by llvm
-  }
+  fi
 }
 
 function main() {
