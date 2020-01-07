@@ -12,7 +12,8 @@ SECRETS=$DOT_FILES/secrets
 XDG_CONFIG_HOME=$DOT_FILES/config
 XDG_CACHE_HOME=$DOT_FILES/cache
 PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
-CLOUDSDK_CONFIG=$DOT_FILES/gcloud
+
+export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 
 ########################################
 # Common functions
@@ -23,7 +24,7 @@ function platform() {
 }
 
 function gcloud_authenticated() {
-  if [ gcloud auth list | grep "ACTIVE" >/dev/null ]; then
+  if gcloud auth list | grep "ACTIVE" >/dev/null then
     return 0
   fi
   return 1
