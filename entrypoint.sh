@@ -2,84 +2,124 @@
 
 set -e
 
-GO_VERSION="1.13.5"
-NEOVIM_VERSION="0.4.3"
-SCREEN_VERSION="4.7.0"
+########################################
+# Variable declaration
+########################################
 
 GOPATH="$HOME/ghq"
 DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
 SECRETS=$DOT_FILES/secrets
-GIT_SSH_COMMAND='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
 XDG_CONFIG_HOME=$DOT_FILES/config
 XDG_CACHE_HOME=$DOT_FILES/cache
 PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
+CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 
-export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
+########################################
+# Common functions
+########################################
 
-mkdir -p $HOME/ghq/src/github.com/yagi5
+function gcloud_authenticated() {
+  if [ gcloud auth list | grep "ACTIVE" >/dev/null ]; then
+    return 0
+  fi
+  return 1
+}
 
-# Install gcloud
-if ! [ -x "$(command -v gcloud)" ]; then
-  curl https://sdk.cloud.google.com > install.sh
-  bash install.sh --disable-prompts --install-dir=$DOT_FILES
-  rm install.sh
-fi
-
-# Install some secrets from GCS
-if ! [ -e $XDG_CONFIG_HOME/bash/profile.pvt ]; then
-  gcloud auth login
-  gsutil cp gs://blackhole-yagi5/config              $SECRETS/ssh/config
-  gsutil cp gs://blackhole-yagi5/github_mac          $SECRETS/ssh/github_mac
-  gsutil cp gs://blackhole-yagi5/profile.pvt         $SECRETS/bash/profile.pvt
-  gsutil cp gs://blackhole-yagi5/ghq.private         $SECRETS/ghq.private
-  gsutil cp gs://blackhole-yagi5/hist-datastore.json $SECRETS/hist-datastore.json
-  chmod 600 $SECRETS/ssh/github_mac
-fi
-
-rm -rf /tmp/dotfiles
-mv $DOT_FILES /tmp/
-
-# Download dotfiles
-if ! [ -e $DOT_FILES ]; then
+function clone_dotfiles() {
+  install_gcloud_${platform}
+  if ! [ gcloud_authenticated ]; then
+    gcloud auth login
+  fi
+  mkdir -p /tmp/secrets
+  gsutil cp gs://blackhole-yagi5/github_mac /tmp/secrets/
+  gsutil cp gs://blackhole-yagi5/known_hosts /tmp/secrets/
+  chmod 600 /tmp/secrets/github_mac
+  GIT_SSH_COMMAND='ssh git@github.com -i /tmp/secrets/github_mac -o UserKnownHostsFile=/tmp/secrets/known_hosts'
   git clone https://github.com/yagi5/dotfiles.git $DOT_FILES
-  mv /tmp/dotfiles/secrets $DOT_FILES/
-  mv /tmp/dotfiles/gcloud $DOT_FILES/
-  mv /tmp/dotfiles/google-cloud-sdk $DOT_FILES/
-  rm -rf /tmp/dotfiles
-fi
+}
 
-mkdir -p $SECRETS/ssh
-mkdir -p $SECRETS/bash
-mkdir -p $XDG_CACHE_HOME
-touch -f $XDG_CACHE_HOME/hist-datastore
+function install_secrets() {
+  install_gcloud_${platform}
+  if ! [ gcloud_authenticated ]; then
+    gcloud auth login
+  fi
+  mkdir -p $SECRETS
+  gsutil cp gs://blackhole-yagi5/* $SECRETS
+}
 
-# Install Go
-# TODO: check the version is the same as $GO_VERSION
-curl -L -o go${GO_VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.darwin-amd64.tar.gz"
-sudo tar -C /usr/local -xzf "go${GO_VERSION}.darwin-amd64.tar.gz"
+function install_commands() {
+  platform=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
+  install_pkg_manager_${platform}
+  install_gcloud_${platform}
+  install_go_${platform}
+  install_neovim_${platform}
+  install_tmux_${platform}
+  install_clangd_${platform}
+  # Install commands by go get
+  cat $DOT_FILES/config/packages/go | while read line
+  do
+    go get -u $line
+  done
+}
 
-# Install ghq
-go get -u github.com/motemen/ghq
+function install_sources() {
+  go get -u github.com/motemen/ghq
+  ghq get -u --parallel < $DOT_FILES/config/packages/ghq
+  ghq get -u --parallel < $SECRETS/ghq.private
+}
 
-# Install neovim
-curl -LO https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz
-tar xzf nvim-macos.tar.gz
-mv ./nvim-osx64/ $GOPATH/bin/nvim
+########################################
+# package installation for darwin
+########################################
 
-# Install screen
-curl -LO http://ftp.gnu.org/gnu/screen/screen-${SCREEN_VERSION}.tar.gz
-tar xzf screen-${SCREEN_VERSION}.tar.gz
-cd screen-${SCREEN_VERSION}/
-./configure --enable-colors256
-make
-mv ./screen ~/ghq/bin/
+function install_pkg_manager_darwin() {
+  if ! [ -x "$(command -v brew)" ]; then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+}
 
-# Install packages by go and ghq
-cat $DOT_FILES/config/packages/go | while read line
-do
-  ghq list | grep $line || echo "installing ${line}..."; go get -u $line
-done
-ghq get -u --parallel < $DOT_FILES/config/packages/ghq
-ghq get -u --parallel < $SECRETS/ghq.private
+function install_gcloud_darwin() {
+  if ! [ -x "$(command -v gcloud)" ]; then
+    curl https://sdk.cloud.google.com > install.sh
+    bash install.sh --disable-prompts --install-dir=$DOT_FILES
+  fi
+}
 
-echo "source $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile" > $HOME/.bash_profile
+function install_go_darwin() {
+  if ! [ -x "$(command -v go)" ]; then
+    VERSION="1.13.5"
+    curl -L -o go${VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.darwin-amd64.tar.gz"
+    sudo tar -C /usr/local -xzf "go${VERSION}.darwin-amd64.tar.gz"
+  fi
+}
+
+function install_neovim_darwin() {
+  if ! [ -x "$(command -v nvim)" ]; then
+    brew install neovim
+  }
+}
+
+function install_tmux_darwin() {
+  if ! [ -x "$(command -v tmux)" ]; then
+    brew install tmux
+  }
+}
+
+function install_clangd_darwin() {
+  if ! [ -x "$(command -v clangd)" ]; then
+    brew install llvm # clangd is contained by llvm
+  }
+}
+
+function main() {
+  clone_dotfiles
+  install_secrets
+  install_commands
+  install_sources
+
+  mkdir -p $XDG_CACHE_HOME
+  touch -f $XDG_CACHE_HOME/hist-datastore
+  echo "source $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile" > $HOME/.bash_profile
+}
+
+main

@@ -22,7 +22,7 @@ export PATH=$PATH:$GOPATH/bin/nvim/bin
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
 [ -e $XDG_CONFIG_HOME/scripts ] && for f in $XDG_CONFIG_HOME/scripts/*; do source $f; done
-[ -e $SECRETS/bash/profile.pvt ] && . $SECRETS/bash/profile.pvt
+[ -e $SECRETS/profile.pvt ] && . $SECRETS/profile.pvt
 
 # source <(stern --completion=bash)
 source <(kubectl completion bash)
@@ -206,7 +206,7 @@ alias t='vifzf'
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias vi="nvim"
-# alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
 alias dr="docker"
 alias drc="docker-compose"
@@ -223,7 +223,7 @@ alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
 alias st='stern worker -o json -n $KUBE_NAMESPACE'
-alias ssh='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
+alias ssh='ssh -F $SECRETS/config -o UserKnownHostsFile=$SECRETS/known_hosts'
 alias go='_go'
 alias ghq='_ghq'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'

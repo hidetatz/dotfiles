@@ -33,7 +33,7 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'prabirshrestha/vim-lsp'
 
   " Language specific
-  Plug 'rhysd/vim-clang-format'
+  " Plug 'rhysd/vim-clang-format'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
   Plug 'buoto/gotests-vim'
 
@@ -148,6 +148,17 @@ command! -bang -nargs=* GGrep
 nmap m :GGrep
 
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+"----------------------------------------------------------------------------
+" c++
+"----------------------------------------------------------------------------
+
+if executable('clangd')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'clangd',
+    \ 'cmd': {server_info->['clangd']},
+    \ 'whitelist': ['cpp', 'cc'],
+    \ })
+endif
 
 "----------------------------------------------------------------------------
 " Go
