@@ -24,13 +24,13 @@ function platform() {
 }
 
 function gcloud_authenticated() {
-  if gcloud auth list | grep "ACTIVE"; then return 0; else return 1; fi
+  if gcloud auth list | grep "ACTIVE"; then echo 0; else echo 1; fi
 }
 
 function clone_dotfiles() {
   platform=$(platform)
   install_gcloud_${platform}
-  if [ ! gcloud_authenticated ]; then gcloud auth login; fi
+  if [ $(gcloud_authenticated) -ne 0 ]; then gcloud auth login; fi
   mkdir -p /tmp/secrets
   gsutil cp gs://blackhole-yagi5/github_mac /tmp/secrets/
   gsutil cp gs://blackhole-yagi5/known_hosts /tmp/secrets/
@@ -43,7 +43,7 @@ function clone_dotfiles() {
 function install_secrets() {
   platform=$(platform)
   install_gcloud_${platform}
-  if [ ! gcloud_authenticated ]; then gcloud auth login; fi
+  if [ $(gcloud_authenticated) -ne 0 ]; then gcloud auth login; fi
   mkdir -p $SECRETS
   gsutil cp gs://blackhole-yagi5/* $SECRETS
 }
