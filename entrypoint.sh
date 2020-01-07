@@ -6,14 +6,14 @@ set -e
 # Variable declaration
 ########################################
 
-GOPATH="$HOME/ghq"
-DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
-SECRETS=$DOT_FILES/secrets
-XDG_CONFIG_HOME=$DOT_FILES/config
-XDG_CACHE_HOME=$DOT_FILES/cache
-PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
-
+export GOPATH="$HOME/ghq"
+export DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+export SECRETS=$DOT_FILES/secrets
+export XDG_CONFIG_HOME=$DOT_FILES/config
+export XDG_CACHE_HOME=$DOT_FILES/cache
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
+export GIT_SSH_COMMAND="ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
 
 ########################################
 # Common functions
@@ -27,28 +27,44 @@ function gcloud_authenticated() {
   if gcloud auth list | grep "ACTIVE"; then echo 0; else echo 1; fi
 }
 
-function clone_dotfiles() {
+function install_secrets() {
+  echo "======================================"
+  echo "installing secrets..."
+  echo "======================================"
+  mkdir -p $CLOUDSDK_CONFIG
   platform=$(platform)
   install_gcloud_${platform}
-  if [ $(gcloud_authenticated) -ne 0 ]; then gcloud auth login; fi
-  mkdir -p /tmp/secrets
-  gsutil cp gs://blackhole-yagi5/github_mac /tmp/secrets/
-  gsutil cp gs://blackhole-yagi5/known_hosts /tmp/secrets/
-  chmod 600 /tmp/secrets/github_mac
-  GIT_SSH_COMMAND='ssh git@github.com -i /tmp/secrets/github_mac -o UserKnownHostsFile=/tmp/secrets/known_hosts'
-  git clone https://github.com/yagi5/dotfiles.git /tmp/dotfiles
-  cp -r /tmp/dotfiles/. $DOTFILES/
+  gcloud auth login
+  mkdir -p $SECRETS
+  mkdir -p $XDG_CONFIG_HOME/ssh
+  gsutil cp gs://blackhole-yagi5/github_mac          $XDG_CONFIG_HOME/ssh/
+  gsutil cp gs://blackhole-yagi5/config              $XDG_CONFIG_HOME/ssh/
+  gsutil cp gs://blackhole-yagi5/known_hosts         $XDG_CONFIG_HOME/ssh/
+  gsutil cp gs://blackhole-yagi5/ghq.private         $SECRETS/
+  gsutil cp gs://blackhole-yagi5/profile.pvt         $SECRETS/
+  gsutil cp gs://blackhole-yagi5/hist-datastore.json $SECRETS/
+  chmod 700 $XDG_CONFIG_HOME/ssh
+  chmod 600 $XDG_CONFIG_HOME/ssh/*
 }
 
-function install_secrets() {
+function clone_dotfiles() {
+  echo "======================================"
+  echo "cloning dotfiles..."
+  echo "======================================"
+  mkdir -p $CLOUDSDK_CONFIG
   platform=$(platform)
-  install_gcloud_${platform}
-  if [ $(gcloud_authenticated) -ne 0 ]; then gcloud auth login; fi
-  mkdir -p $SECRETS
-  gsutil cp gs://blackhole-yagi5/* $SECRETS
+  rm -rf /tmp/dotfiles
+  # Because secret is already located
+  git clone https://github.com/yagi5/dotfiles.git /tmp/dotfiles
+  mkdir -p $DOT_FILES
+  sudo cp -r /tmp/dotfiles/. $DOT_FILES
 }
 
 function install_commands() {
+  echo "======================================"
+  echo "installing commands..."
+  echo "======================================"
+  mkdir -p $CLOUDSDK_CONFIG
   platform=$(platform)
   install_pkg_manager_${platform}
   install_gcloud_${platform}
@@ -64,6 +80,9 @@ function install_commands() {
 }
 
 function install_sources() {
+  echo "======================================"
+  echo "installing source code..."
+  echo "======================================"
   go get -u github.com/motemen/ghq
   ghq get -u --parallel < $DOT_FILES/config/packages/ghq
   ghq get -u --parallel < $SECRETS/ghq.private
@@ -113,8 +132,8 @@ function install_clangd_darwin() {
 }
 
 function main() {
-  clone_dotfiles
   install_secrets
+  clone_dotfiles
   install_commands
   install_sources
 
