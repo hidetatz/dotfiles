@@ -18,6 +18,10 @@ CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 # Common functions
 ########################################
 
+function platform() {
+  echo $(echo $(uname) | tr '[:upper:]' '[:lower:]')
+}
+
 function gcloud_authenticated() {
   if [ gcloud auth list | grep "ACTIVE" >/dev/null ]; then
     return 0
@@ -26,6 +30,7 @@ function gcloud_authenticated() {
 }
 
 function clone_dotfiles() {
+  platform=$(platform)
   install_gcloud_${platform}
   if ! [ gcloud_authenticated ]; then
     gcloud auth login
@@ -35,10 +40,12 @@ function clone_dotfiles() {
   gsutil cp gs://blackhole-yagi5/known_hosts /tmp/secrets/
   chmod 600 /tmp/secrets/github_mac
   GIT_SSH_COMMAND='ssh git@github.com -i /tmp/secrets/github_mac -o UserKnownHostsFile=/tmp/secrets/known_hosts'
-  git clone https://github.com/yagi5/dotfiles.git $DOT_FILES
+  git clone https://github.com/yagi5/dotfiles.git /tmp/dotfiles
+  cp -r /tmp/dotfiles/. $DOTFILES/
 }
 
 function install_secrets() {
+  platform=$(platform)
   install_gcloud_${platform}
   if ! [ gcloud_authenticated ]; then
     gcloud auth login
@@ -48,7 +55,7 @@ function install_secrets() {
 }
 
 function install_commands() {
-  platform=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
+  platform=$(platform)
   install_pkg_manager_${platform}
   install_gcloud_${platform}
   install_go_${platform}
