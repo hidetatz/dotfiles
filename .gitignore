@@ -5,3 +5,4 @@ google-cloud-sdk
 config/nvim/autoload/
 config/nvim/plugged/
 fzf/
+config/ssh

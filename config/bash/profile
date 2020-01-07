@@ -7,7 +7,6 @@ export LESSHISTSIZE=0
 export EDITOR="nvim"
 shopt -s histappend
 
-# export GIT_SSH_COMMAND='ssh -F $SECRETS/ssh/config -o UserKnownHostsFile=$SECRETS/ssh/known_hosts'
 
 export GOPATH="$HOME/ghq"
 export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
@@ -16,6 +15,7 @@ export XDG_CONFIG_HOME=$DOT_FILES/config
 export XDG_CACHE_HOME=$DOT_FILES/cache
 export SECRETS=$DOT_FILES/secrets
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
+export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 
 export PATH=$PATH:$GOPATH/bin/nvim/bin
 
@@ -223,7 +223,7 @@ alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
 alias st='stern worker -o json -n $KUBE_NAMESPACE'
-alias ssh='ssh -F $SECRETS/config -o UserKnownHostsFile=$SECRETS/known_hosts'
+alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias go='_go'
 alias ghq='_ghq'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
