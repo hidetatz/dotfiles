@@ -24,10 +24,7 @@ function platform() {
 }
 
 function gcloud_authenticated() {
-  if gcloud auth list | grep "ACTIVE" >/dev/null then
-    return 0
-  fi
-  return 1
+  if gcloud auth list | grep "ACTIVE"; then return 0; else return 1; fi
 }
 
 function clone_dotfiles() {
