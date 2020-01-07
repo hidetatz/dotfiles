@@ -1,5 +1,4 @@
 github.com/cweill/gotests/...
-github.com/itchyny/gojq/cmd/gojq
 github.com/ktr0731/evans
 github.com/motemen/ghq
 github.com/yagi5/gotest
