@@ -58,6 +58,7 @@ function clone_dotfiles() {
   git clone https://github.com/yagi5/dotfiles.git /tmp/dotfiles
   mkdir -p $DOT_FILES
   sudo cp -r /tmp/dotfiles/. $DOT_FILES
+  sudo chown $(whoami):$(id -g -n) $DOT_FILES/
 }
 
 function install_commands() {
