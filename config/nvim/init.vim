@@ -240,16 +240,16 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 " UltiSnips
 "----------------------------------------------------------------------------
 
-let g:UltiSnipsSnippetDirectories = [$XDG_CONFIG_HOME . "/nvim/snippets"]
+" let g:UltiSnipsSnippetDirectories = [$XDG_CONFIG_HOME . "/nvim/snippets"]
 
-if has('python3')
-  let g:UltiSnipsExpandTrigger = "<c-e>"
-  call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-    \ 'name': 'ultisnips',
-    \ 'whitelist': ['*'],
-    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-    \ }))
-endif
+" if has('python3')
+"   let g:UltiSnipsExpandTrigger = "<c-e>"
+"   call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+"     \ 'name': 'ultisnips',
+"     \ 'whitelist': ['*'],
+"     \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+"     \ }))
+" endif
 
 "----------------------------------------------------------------------------
 " vim-lsp
