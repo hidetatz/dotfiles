@@ -42,8 +42,10 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'mh21/errormarker.vim'
 
   " Snippets
-  Plug 'SirVer/ultisnips'
-  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+  " Plug 'SirVer/ultisnips'
+  " Plug 'Shougo/neosnippet.vim'
+  " Plug 'honza/vim-snippets'
+  " Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 call plug#end()
 
 "----------------------------------------------------------------------------
@@ -156,8 +158,8 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim
 if executable('clangd')
   au User lsp_setup call lsp#register_server({
     \ 'name': 'clangd',
-    \ 'cmd': {server_info->['clangd']},
-    \ 'whitelist': ['cpp', 'cc'],
+    \ 'cmd': {server_info->['clangd', '-background-index']},
+    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
     \ })
 endif
 
