@@ -6,3 +6,6 @@ config/nvim/autoload/
 config/nvim/plugged/
 fzf/
 config/ssh
+local
+config/nvim/.netrwhist
+config/nvim/viminfo

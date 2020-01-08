@@ -92,6 +92,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)
+set viminfo+=n$XDG_CONFIG_HOME/nvim/viminfo
 
 " Open last edited line
 augroup vimrcEx

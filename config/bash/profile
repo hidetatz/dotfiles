@@ -7,15 +7,18 @@ export LESSHISTSIZE=0
 export EDITOR="nvim"
 shopt -s histappend
 
-
 export GOPATH="$HOME/ghq"
 export DOT_FILES="$HOME/ghq/src/github.com/yagi5/dotfiles"
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin:$DOT_FILES/fzf/bin
 export XDG_CONFIG_HOME=$DOT_FILES/config
 export XDG_CACHE_HOME=$DOT_FILES/cache
+export XDG_DATA_HOME=$DOT_FILES/local
 export SECRETS=$DOT_FILES/secrets
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
+
+export SHELL_SESSION_HISTORY=0 # Disable bash_sessions on OSX
+export HISTFILE=$XDG_CONFIG_HOME/bash/
 
 export PATH=$PATH:$GOPATH/bin/nvim/bin
 
