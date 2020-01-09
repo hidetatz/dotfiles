@@ -33,7 +33,7 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'prabirshrestha/vim-lsp'
 
   " Language specific
-  " Plug 'rhysd/vim-clang-format'
+  Plug 'rhysd/vim-clang-format'
   Plug 'cespare/vim-toml', {'for' : 'toml'}
   Plug 'buoto/gotests-vim'
 
