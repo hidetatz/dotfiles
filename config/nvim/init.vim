@@ -155,6 +155,10 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim
 " c++
 "----------------------------------------------------------------------------
 
+function! CPPRun()
+  :AsyncRun -strip g++ -std=c++17 -Wall --pedantic-errors -o main "%:p" && ./main
+endfunction
+
 if executable('clangd')
   au User lsp_setup call lsp#register_server({
     \ 'name': 'clangd',
@@ -162,6 +166,10 @@ if executable('clangd')
     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
     \ })
 endif
+
+autocmd BufWritePost *.cpp :LspDocumentFormat
+autocmd BufWritePost *.h :LspDocumentFormat
+autocmd FileType cpp nmap <leader>r :<C-u>call CPPRun()<CR>
 
 "----------------------------------------------------------------------------
 " Go
