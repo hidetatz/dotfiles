@@ -42,10 +42,10 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'mh21/errormarker.vim'
 
   " Snippets
-  " Plug 'SirVer/ultisnips'
-  " Plug 'Shougo/neosnippet.vim'
-  " Plug 'honza/vim-snippets'
-  " Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+  Plug 'Shougo/neosnippet.vim'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+
 call plug#end()
 
 "----------------------------------------------------------------------------
@@ -165,6 +165,7 @@ if executable('clangd')
     \ 'cmd': {server_info->['clangd', '-background-index']},
     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
     \ })
+  au FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
 endif
 
 autocmd BufWritePost *.cpp :LspDocumentFormat
@@ -245,19 +246,18 @@ augroup END
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
 "----------------------------------------------------------------------------
-" UltiSnips
+" Neosnippet
 "----------------------------------------------------------------------------
 
-" let g:UltiSnipsSnippetDirectories = [$XDG_CONFIG_HOME . "/nvim/snippets"]
+call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+    \ 'name': 'neosnippet',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+    \ }))
 
-" if has('python3')
-"   let g:UltiSnipsExpandTrigger = "<c-e>"
-"   call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-"     \ 'name': 'ultisnips',
-"     \ 'whitelist': ['*'],
-"     \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-"     \ }))
-" endif
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
 
 "----------------------------------------------------------------------------
 " vim-lsp
