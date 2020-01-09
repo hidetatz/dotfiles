@@ -248,6 +248,7 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 "----------------------------------------------------------------------------
 " Neosnippet
 "----------------------------------------------------------------------------
+let g:neosnippet#snippets_directory='$XDG_CONFIG_HOME/nvim/snippets/'
 
 call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
     \ 'name': 'neosnippet',
