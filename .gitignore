@@ -9,3 +9,4 @@ config/ssh
 local
 config/nvim/.netrwhist
 config/nvim/viminfo
+config/configstore

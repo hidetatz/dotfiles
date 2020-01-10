@@ -151,6 +151,22 @@ command! -bang -nargs=* GGrep
 nmap m :GGrep
 
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+"----------------------------------------------------------------------------
+" PHP
+"----------------------------------------------------------------------------
+
+" \ 'cmd': {server_info->['node', expand('PATH_TO_GLOBAL_NODE_MODULES/intelephense/lib/intelephense.js'), '--stdio']},
+au User lsp_setup call lsp#register_server({
+    \ 'name': 'intelephense',
+    \ 'cmd': {server_info->['intelephense', '--stdio']},
+    \ 'initialization_options': {"storagePath": "$XDG_DATA_HOME/intelephense"},
+    \ 'whitelist': ['php'],
+    \ 'workspace_config': { 'intelephense': {
+    \   'files.associations': ['*.php'],
+    \ }},
+    \ })
+
 "----------------------------------------------------------------------------
 " c++
 "----------------------------------------------------------------------------
