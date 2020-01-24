@@ -1,6 +1,8 @@
 github.com/cweill/gotests/...
+github.com/itchyny/gojq/cmd/gojq
 github.com/ktr0731/evans
 github.com/motemen/ghq
+github.com/quasilyte/go-consistent
 github.com/yagi5/gotest
 github.com/yagi5/hist-datastore/cmd/cacheupdate
 github.com/yagi5/hist-datastore/cmd/histdatastore

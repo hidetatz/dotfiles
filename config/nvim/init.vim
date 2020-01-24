@@ -65,7 +65,7 @@ colorscheme gruvbox
 " colorscheme jellybeans
 " set termguicolors
 set encoding=utf-8
-set ambiwidth=double
+" set ambiwidth=double
 set hidden
 set autoindent
 set clipboard+=unnamed
