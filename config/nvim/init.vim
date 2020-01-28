@@ -160,7 +160,7 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim
 au User lsp_setup call lsp#register_server({
     \ 'name': 'intelephense',
     \ 'cmd': {server_info->['intelephense', '--stdio']},
-    \ 'initialization_options': {"storagePath": "$XDG_DATA_HOME/intelephense"},
+    \ 'initialization_options': {'storagePath': '$XDG_DATA_HOME/intelephense'},
     \ 'whitelist': ['php'],
     \ 'workspace_config': { 'intelephense': {
     \   'files.associations': ['*.php'],
