@@ -15,6 +15,9 @@ export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
 export GIT_SSH_COMMAND="ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
 
+export GO_VERSION="1.13.5"
+
+
 ########################################
 # Common functions
 ########################################
@@ -23,64 +26,38 @@ function platform() {
   echo $(echo $(uname) | tr '[:upper:]' '[:lower:]')
 }
 
-function gcloud_authenticated() {
-  if gcloud auth list | grep "ACTIVE"; then echo 0; else echo 1; fi
-}
-
 function install_secrets() {
   echo "======================================"
   echo "installing secrets..."
   echo "======================================"
-  mkdir -p $CLOUDSDK_CONFIG
-  platform=$(platform)
-  install_gcloud_${platform}
-  gcloud auth login
+  if ! [ -x "$(command -v op)" ]; then echo 0;
+    platform=$(platform)
+    if [ $platform = "darwin" ]; then
+      echo "please install one password first -> https://support.1password.com/command-line-getting-started/"
+      exit 1
+    fi
+
+    if [ $platform = "linux" ]; then
+      curl -o op.zip https://cache.agilebits.com/dist/1P/op/pkg/v0.9.2/op_linux_amd64_v0.9.2.zip
+      unzip op.zip
+      mv ./op $GOPATH/bin/
+    fi
+  fi
+
   mkdir -p $SECRETS
   mkdir -p $XDG_CONFIG_HOME/ssh
-  gsutil cp gs://blackhole-yagi5/github_mac          $XDG_CONFIG_HOME/ssh/
-  gsutil cp gs://blackhole-yagi5/config              $XDG_CONFIG_HOME/ssh/
-  gsutil cp gs://blackhole-yagi5/known_hosts         $XDG_CONFIG_HOME/ssh/
-  gsutil cp gs://blackhole-yagi5/ghq.private         $SECRETS/
-  gsutil cp gs://blackhole-yagi5/profile.pvt         $SECRETS/
-  gsutil cp gs://blackhole-yagi5/hist-datastore.json $SECRETS/
+  echo "Authenticating with 1 password"
+  export OP_SESSION_my=$(op signin https://my.1password.com deetyler@protonmail.com --output=raw)
+  echo "Pulling secrets"
+  op get document "hist_datastore.json" > $SECRETS/hist-datastore.json
+  op get document "ghq.private"         > $SECRETS/ghq.private
+  op get document "profile.pvt"         > $SECRETS/profile.pvt
+  op get document "id_github"           > $XDG_CONFIG_HOME/ssh/id_github
   chmod 700 $XDG_CONFIG_HOME/ssh
   chmod 600 $XDG_CONFIG_HOME/ssh/*
 }
 
-function clone_dotfiles() {
-  echo "======================================"
-  echo "cloning dotfiles..."
-  echo "======================================"
-  mkdir -p $CLOUDSDK_CONFIG
-  platform=$(platform)
-  rm -rf /tmp/dotfiles
-  # Because secret is already located
-  git clone https://github.com/yagi5/dotfiles.git /tmp/dotfiles
-  mkdir -p $DOT_FILES
-  sudo cp -r /tmp/dotfiles/. $DOT_FILES
-  sudo chown -R $(whoami):$(id -g -n) $DOT_FILES/
-}
-
-function install_commands() {
-  echo "======================================"
-  echo "installing commands..."
-  echo "======================================"
-  mkdir -p $CLOUDSDK_CONFIG
-  platform=$(platform)
-  install_pkg_manager_${platform}
-  install_gcloud_${platform}
-  install_go_${platform}
-  install_neovim_${platform}
-  install_tmux_${platform}
-  install_clangd_${platform}
-  # Install commands by go get
-  cat $DOT_FILES/config/packages/go | while read line
-  do
-    go get -u $line
-  done
-}
-
-function install_sources() {
+function install_repositories() {
   echo "======================================"
   echo "installing source code..."
   echo "======================================"
@@ -89,54 +66,88 @@ function install_sources() {
   ghq get -u --parallel < $SECRETS/ghq.private
 }
 
-########################################
-# package installation for darwin
-########################################
+function install_commands() {
+  echo "======================================"
+  echo "installing commands..."
+  echo "======================================"
+  platform=$(platform)
+  install_commands_${platform}
+  # Install commands by go get
+  cat $DOT_FILES/config/packages/go | while read line
+  do
+    echo "installing $line"
+    go get -u $line
+  done
+}
 
-function install_pkg_manager_darwin() {
+function install_commands_darwin() {
   if ! [ -x "$(command -v brew)" ]; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
-}
 
-function install_gcloud_darwin() {
+  # gcloud
   if ! [ -x "$(command -v gcloud)" ]; then
     curl https://sdk.cloud.google.com > install.sh
     bash install.sh --disable-prompts --install-dir=$DOT_FILES
   fi
-}
 
-function install_go_darwin() {
+  # go
   if ! [ -x "$(command -v go)" ]; then
-    VERSION="1.13.5"
     curl -L -o go${VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.darwin-amd64.tar.gz"
     sudo tar -C /usr/local -xzf "go${VERSION}.darwin-amd64.tar.gz"
   fi
-}
 
-function install_neovim_darwin() {
+  # neovim
   if ! [ -x "$(command -v nvim)" ]; then
     brew install neovim
   fi
-}
 
-function install_tmux_darwin() {
+  # tmux
   if ! [ -x "$(command -v tmux)" ]; then
     brew install tmux
   fi
+
+  # clangd
+  if ! [ -x "$(command -v clangd)" ]; then
+    brew install llvm
+  fi
 }
 
-function install_clangd_darwin() {
+function install_commands_linux() {
+  sudo apt update
+  sudo apt upgrade
+  # gcloud
+  if ! [ -x "$(command -v gcloud)" ]; then
+    curl https://sdk.cloud.google.com > install.sh
+    bash install.sh --disable-prompts --install-dir=$DOT_FILES
+  fi
+
+  # go
+  if ! [ -x "$(command -v go)" ]; then
+    curl -L -o go${GO_VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz"
+    sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
+  fi
+
+  # neovim
+  if ! [ -x "$(command -v nvim)" ]; then
+    sudo apt install neovim
+  fi
+
+  # tmux
+  if ! [ -x "$(command -v tmux)" ]; then
+    sudo apt install tmux
+  fi
+
+  # clangd
   if ! [ -x "$(command -v clangd)" ]; then
-    brew install llvm # clangd is contained by llvm
+    sudo apt install clang-tools-8
   fi
 }
 
 function main() {
   install_secrets
-  clone_dotfiles
+  install_repositories
   install_commands
-  install_sources
 
   mkdir -p $XDG_CACHE_HOME
   touch -f $XDG_CACHE_HOME/hist-datastore
