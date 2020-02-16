@@ -52,9 +52,6 @@ call plug#end()
 " Settings
 "----------------------------------------------------------------------------
 
-" autocmd ColorScheme * highlight LineNr ctermfg=24 guifg=#008800
-" autocmd ColorScheme * highlight Cursor guifg=green guibg=green
-
 filetype off
 filetype plugin indent on
 " colorscheme deep-space
@@ -120,8 +117,8 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap gh :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
-nnoremap <C-j> :cnext<CR>
-nnoremap <C-k> :cprevious<CR>
+nnoremap <C-n> :cnext<CR>
+nnoremap <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
 inoremap <C-a> <Home>
@@ -203,7 +200,7 @@ function! GoRun()
 endfunction
 
 function! GoBuildAndLint()
-  :AsyncRun -strip go build <root>/... && golangci-lint run "%:p:h" 
+  :AsyncRun! -strip go build <root>/... && go test -c <cwd>/ && golangci-lint run "%:p:h"
     \ --disable-all 
     \ --no-config
     \ --enable=vet
@@ -232,7 +229,6 @@ autocmd BufWritePost *.go :call GoFmt()
 autocmd BufWritePost *.go :call GoBuildAndLint()
 autocmd FileType go nmap <leader>t :<C-u>call GoTest()<CR>
 autocmd FileType go nmap <leader>r :<C-u>call GoRun()<CR>
-autocmd FileType go nmap <leader>b :<C-u>call GoBuildAndLint()<CR>
 :highlight goErr cterm=bold ctermfg=lightblue
 :match goErr /\<err\>/
 
@@ -249,11 +245,8 @@ endif
 "----------------------------------------------------------------------------
 
 let g:asyncrun_auto = "make"
-
-augroup vimrc
-  " Show quickfix only it's not empty
-  autocmd QuickfixCmdPost * if len(getqflist()) != 0 | copen 8 | else | cclose | endif
-augroup END
+let g:asyncrun_open = 1
+let g:asyncrun_open = 10
 
 "----------------------------------------------------------------------------
 " supertab
