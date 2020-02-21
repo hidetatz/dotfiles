@@ -116,6 +116,13 @@ function install_commands_darwin() {
   if ! [ -x "$(command -v clangd)" ]; then
     brew install llvm
   fi
+
+  # aws
+  if ! [ -x "$(command -v aws2)" ]; then
+    curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-macos.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+  fi
 }
 
 function install_commands_linux() {
@@ -146,6 +153,13 @@ function install_commands_linux() {
   # clangd
   if ! [ -x "$(command -v clangd)" ]; then
     sudo apt install clang-tools-8
+  fi
+
+  # aws
+  if ! [ -x "$(command -v aws2)" ]; then
+    curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
   fi
 }
 
