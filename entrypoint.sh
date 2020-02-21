@@ -30,7 +30,6 @@ function install_secrets() {
   echo "installing secrets..."
   echo "======================================"
   if ! [ -x "$(command -v op)" ]; then echo 0;
-    platform=$(platform)
     if [ $platform = "darwin" ]; then
       echo "please install one password first -> https://support.1password.com/command-line-getting-started/"
       exit 1
@@ -39,6 +38,7 @@ function install_secrets() {
     if [ $platform = "linux" ]; then
       curl -o op.zip https://cache.agilebits.com/dist/1P/op/pkg/v0.9.2/op_linux_amd64_v0.9.2.zip
       unzip op.zip
+      mkdir -p $GOPATH/bin
       mv ./op $GOPATH/bin/
     fi
   fi
@@ -53,9 +53,9 @@ function install_secrets() {
   op get document "profile.pvt"         > $SECRETS/profile.pvt
 
   if [ $platform = "darwin" ]; then
-    op get document "id_github"           > $XDG_CONFIG_HOME/ssh/id_github
+    op get document "id_github"     > $XDG_CONFIG_HOME/ssh/id_github
   else
-    op get document "github_dty1er"       > $XDG_CONFIG_HOME/ssh/id_github
+    op get document "github_dty1er" > $XDG_CONFIG_HOME/ssh/id_github
   fi
 
   chmod 700 $XDG_CONFIG_HOME/ssh
@@ -75,7 +75,6 @@ function install_commands() {
   echo "======================================"
   echo "installing commands..."
   echo "======================================"
-  platform=$(platform)
   install_commands_${platform}
   # Install commands by go get
   cat $DOT_FILES/config/packages/go | while read line
@@ -122,6 +121,7 @@ function install_commands_darwin() {
     curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-macos.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
+    rm awscliv2.zip
   fi
 }
 
@@ -160,10 +160,13 @@ function install_commands_linux() {
     curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
+    rm awscliv2.zip
   fi
 }
 
 function main() {
+  export platform=$(platform)
+  echo "platform: $platform"
   install_secrets
   install_repositories
   install_commands
