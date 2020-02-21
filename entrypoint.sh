@@ -13,7 +13,6 @@ export XDG_CONFIG_HOME=$DOT_FILES/config
 export XDG_CACHE_HOME=$DOT_FILES/cache
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
-export GIT_SSH_COMMAND="ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
 
 export GO_VERSION="1.13.5"
 
@@ -52,7 +51,8 @@ function install_secrets() {
   op get document "hist_datastore.json" > $SECRETS/hist-datastore.json
   op get document "ghq.private"         > $SECRETS/ghq.private
   op get document "profile.pvt"         > $SECRETS/profile.pvt
-  op get document "id_github"           > $XDG_CONFIG_HOME/ssh/id_github
+  op get document "id_github"           > $XDG_CONFIG_HOME/ssh/id_github_yagi5
+  op get document "github_dty1er"       > $XDG_CONFIG_HOME/ssh/id_github_dty1er
   chmod 700 $XDG_CONFIG_HOME/ssh
   chmod 600 $XDG_CONFIG_HOME/ssh/*
 }
@@ -153,5 +153,12 @@ function main() {
   touch -f $XDG_CACHE_HOME/hist-datastore
   echo "source $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile" > $HOME/.bash_profile
 }
+
+platform=$(platform)
+if [ $platform = "darwin" ]; then
+  export GIT_SSH_COMMAND="ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
+else
+  export GIT_SSH_COMMAND="ssh -F $XDG_CONFIG_HOME/ssh/config_dty1er -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts"
+fi
 
 main
