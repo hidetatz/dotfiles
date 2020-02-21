@@ -248,6 +248,11 @@ let g:asyncrun_auto = "make"
 let g:asyncrun_open = 1
 let g:asyncrun_open = 10
 
+augroup vimrc
+  " Show quickfix only it's not empty
+  autocmd QuickfixCmdPost * if len(getqflist()) != 0 | copen 8 | else | cclose | endif
+augroup END
+
 "----------------------------------------------------------------------------
 " supertab
 "----------------------------------------------------------------------------

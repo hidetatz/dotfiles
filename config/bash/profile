@@ -15,13 +15,14 @@ export XDG_CACHE_HOME=$DOT_FILES/cache
 export XDG_DATA_HOME=$DOT_FILES/local
 export SECRETS=$DOT_FILES/secrets
 export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
-export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
+# export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 
 export SHELL_SESSION_HISTORY=0 # Disable bash_sessions on OSX
 export HISTFILE=$XDG_CONFIG_HOME/bash/
 
 export PATH=$PATH:$GOPATH/bin/nvim/bin
 export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd
+export PATH="/usr/local/opt/mysql-client/bin:$PATH" # for MySQL client installed by brew
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
@@ -239,6 +240,7 @@ alias kdp='kube_describe_pod'
 alias klp='kube_logs_pod'
 alias kfp='kube_port_forward'
 alias screen='$GOPATH/bin/screen -c $XDG_CONFIG_HOME/screen/screenrc'
+alias tp='telepresence --namespace="$KUBE_NAMESPACE" --context="$KUBE_CONTEXT"'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)
