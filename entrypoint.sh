@@ -7,7 +7,7 @@ set -e
 ########################################
 
 export GOPATH="$HOME/ghq"
-export DOT_FILES=$HOME/ghq/src/github.com/yagi5/dotfiles
+export DOT_FILES=$HOME/ghq/src/github.com/dty1er/dotfiles
 export SECRETS=$DOT_FILES/secrets
 export XDG_CONFIG_HOME=$DOT_FILES/config
 export XDG_CACHE_HOME=$DOT_FILES/cache
@@ -168,12 +168,12 @@ function main() {
   export platform=$(platform)
   echo "platform: $platform"
   install_secrets
-  install_repositories
   install_commands
+  install_repositories
 
   mkdir -p $XDG_CACHE_HOME
   touch -f $XDG_CACHE_HOME/hist-datastore
-  echo "source $HOME/ghq/src/github.com/yagi5/dotfiles/config/bash/profile" > $HOME/.bash_profile
+  echo "source $HOME/ghq/src/github.com/dty1er/dotfiles/config/bash/profile" > $HOME/.bash_profile
 }
 
 main
