@@ -68,7 +68,7 @@ function install_repositories() {
   echo "======================================"
   go get -u github.com/motemen/ghq
   ghq get -u --parallel < $DOT_FILES/config/packages/ghq
-  ghq get -u --parallel < $SECRETS/ghq.private
+  # ghq get -u --parallel < $SECRETS/ghq.private
 }
 
 function install_commands() {
