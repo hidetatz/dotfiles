@@ -110,11 +110,11 @@ function goget() {
 }
 
 function ghqget() {
-  ghq import -u --parallel < $XDG_CONFIG_HOME/packages/ghq
+  ghq get -u --parallel < $XDG_CONFIG_HOME/packages/ghq
 }
 
 function ghqprivget() {
-  ghq import -u --parallel < $SECRETS/ghq.private
+  ghq get -u --parallel < $SECRETS/ghq.private
 }
 
 function _go() {
