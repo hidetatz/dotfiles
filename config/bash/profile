@@ -2,27 +2,29 @@
 # common bash config
 # -------------------------------------
 export LC_ALL=en_US.UTF-8
+
 export LESS='-i -M -R -W -q -S'
 export LESSHISTSIZE=0
-export EDITOR="nvim"
-shopt -s histappend
 
-export GOPATH="$HOME/ghq"
+export EDITOR="nvim"
+
 export DOT_FILES="$HOME/ghq/src/github.com/dty1er/dotfiles"
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin:$DOT_FILES/fzf/bin
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local
 export SECRETS=$HOME/.secrets
-export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
-# export GIT_SSH_COMMAND='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 
+export CLOUDSDK_CONFIG=$XDG_CONFIG_HOME
+
+shopt -s histappend
 export SHELL_SESSION_HISTORY=0 # Disable bash_sessions on OSX
 export HISTFILE=$XDG_CONFIG_HOME/bash/
 
-export PATH=$PATH:$GOPATH/bin/nvim/bin
-export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd
-export PATH="/usr/local/opt/mysql-client/bin:$PATH" # for MySQL client installed by brew
+export GOPATH="$HOME/ghq"
+export PATH=$PATH:/usr/local/go/bin # for go
+export PATH=$PATH:$GOPATH/bin # for go built binary
+export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd installed by brew
+export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL client installed by brew
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
@@ -44,14 +46,6 @@ bind '"\C-r": " \C-e\C-u\C-y\ey\C-u`history_get_from_datastore`\e\C-e\er\e^"'
 # -------------------------------------
 # functions
 # -------------------------------------
-
-function gcloud_account() {
-  echo $(gcloud config configurations list | grep True | awk '{print $3}')
-}
-
-function gcloud_pj() {
-  echo $(gcloud config configurations list | grep True | awk '{print $4}')
-}
 
 function git_show_fzf() {
   while true
@@ -126,21 +120,21 @@ function _go() {
 
   # go get *
   if [ "$2" = "-u" ]; then
-    echo $3 >> $XDG_CONFIG_HOME/packages/go
+    echo $3 >> $DOT_FILES/config/packages/go
   else
-    echo $2 >> $XDG_CONFIG_HOME/packages/go
+    echo $2 >> $DOT_FILES/config/packages/go
   fi
-  f=`cat $XDG_CONFIG_HOME/packages/go | sort | uniq`
-  echo "$f" > $XDG_CONFIG_HOME/packages/go
+  f=`cat $DOT_FILES/config/packages/go | sort | uniq`
+  echo "$f" > $DOT_FILES/config/packages/go
   `which go` $@
 }
 
 function _ghq() {
   [ "$1" = "" ] && `which ghq` && return
   [ "$1" != "get" ] && `which ghq` $@ && return
-  echo $2 >> $XDG_CONFIG_HOME/packages/ghq
-  f=`cat $XDG_CONFIG_HOME/packages/ghq | sort | uniq`
-  echo "$f" > $XDG_CONFIG_HOME/packages/ghq
+  echo $2 >> $DOT_FILES/config/packages/ghq
+  f=`cat $DOT_FILES/config/packages/ghq | sort | uniq`
+  echo "$f" > $DOT_FILES/config/packages/ghq
   `which ghq` $@
 }
 
@@ -172,11 +166,6 @@ function vifzf() {
 # MAGENTA="\[\e[35m\]"
 # CYAN="\[\e[36m\]"
 # RESET="\[\e[0m\]"
-
-# PS1='
-# (\[\e[32m\e[40m\]$KUBE_CONTEXT\[\e[0m\]:\[\e[32m\e[40m\]$KUBE_NAMESPACE\[\e[0m\])
-# (\[\e[33m\e[40m\]g\[\e[0m\] |\[\e[33m\e[40m\]$(gcloud_account)\[\e[0m\]:\[\e[33m\e[40m\]$(gcloud_pj)\[\e[0m\])
-# '
 PS1='
 (\[\e[32m\e[40m\]$KUBE_CONTEXT\[\e[0m\]:\[\e[32m\e[40m\]$KUBE_NAMESPACE\[\e[0m\])
 '
@@ -215,7 +204,6 @@ alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
 alias st='stern worker -o json -n $KUBE_NAMESPACE'
-# alias ssh='ssh -F $XDG_CONFIG_HOME/ssh/config -o UserKnownHostsFile=$XDG_CONFIG_HOME/ssh/known_hosts'
 alias go='_go'
 alias ghq='_ghq'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
