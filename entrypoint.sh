@@ -52,7 +52,7 @@ function install_secrets() {
   echo "Authenticating with 1 password"
   export OP_SESSION_my=$(op signin https://my.1password.com deetyler@protonmail.com --output=raw)
   echo "Pulling secrets"
-  op get document "hist_datastore.json" > $SECRETS/hist-datastore.json
+  op get document "hist-datastore.json" > $SECRETS/hist-datastore.json
   op get document "ghq.private"         > $SECRETS/ghq.private
   op get document "profile.pvt"         > $SECRETS/profile.pvt
 
