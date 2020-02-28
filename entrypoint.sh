@@ -23,6 +23,12 @@ function platform() {
   echo $(echo $(uname) | tr '[:upper:]' '[:lower:]')
 }
 
+########################################
+# Install secret files
+#   - install 1password cli
+#   - pull secret files from 1password
+#   - setup ssh private key
+########################################
 function install_secrets() {
   echo "======================================"
   echo "installing secrets..."
@@ -60,15 +66,10 @@ function install_secrets() {
   chmod 600 $HOME/.ssh/*
 }
 
-function install_repositories() {
-  echo "======================================"
-  echo "installing source code..."
-  echo "======================================"
-  go get -u github.com/motemen/ghq
-  ghq get -u --parallel < $DOT_FILES/config/packages/ghq
-  # ghq get -u --parallel < $SECRETS/ghq.private
-}
-
+########################################
+# Install go binary
+#   - this is needed to get ghq
+########################################
 function install_go() {
   echo "======================================"
   echo "installing go..."
@@ -91,6 +92,27 @@ function install_go_linux() {
   fi
 }
 
+########################################
+# Install some repositories
+#   - clone dotfiles
+#   - install ghq
+#   - fetch repos by ghq
+########################################
+function install_repositories() {
+  echo "======================================"
+  echo "installing source code..."
+  echo "======================================"
+  git clone https://github.com/dty1er/dotfiles.git $HOME/ghq/src/github.com/dty1er/dotfiles
+  go get -u github.com/motemen/ghq
+  ghq get -u --parallel < $DOT_FILES/config/packages/ghq
+  # ghq get -u --parallel < $SECRETS/ghq.private
+}
+
+########################################
+# Install necessary commands
+#   - install some commands by package manager
+#   - execute go get
+########################################
 function install_commands() {
   echo "======================================"
   echo "installing commands..."
@@ -172,6 +194,9 @@ function install_commands_linux() {
   fi
 }
 
+########################################
+# Create dotfiles symlinks
+########################################
 function ln_dotfiles() {
   mkdir -p $XDG_CONFIG_HOME/bash/
   mkdir -p $XDG_CONFIG_HOME/git/
