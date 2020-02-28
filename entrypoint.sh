@@ -211,6 +211,7 @@ function ln_dotfiles() {
   fi
   ln -s $DOT_FILES/config/nvim/init.vim $XDG_CONFIG_HOME/nvim/init.vim
   ln -s $DOT_FILES/config/tmux/tmux.conf $XDG_CONFIG_HOME/tmux/tmux.conf
+  ln -s $DOT_FILES/config/ssh/config $HOME/.ssh/config
 }
 
 function main() {
