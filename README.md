@@ -1,3 +1,5 @@
 ```sh
-cd $(mktemp -d); curl https://raw.githubusercontent.com/yagi5/dotfiles/master/entrypoint.sh | bash
+curl https://raw.githubusercontent.com/dty1er/dotfiles/master/entrypoint.sh > entrypoint.sh
+chmod +x entrypoint.sh
+./entrypoint.sh
 ```
