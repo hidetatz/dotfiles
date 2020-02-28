@@ -8,7 +8,6 @@ endif
 
 call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   " general
-  Plug 'junegunn/fzf', { 'dir': '$DOT_FILES/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
@@ -134,7 +133,7 @@ inoremap <C-l> <Right>
 " fzf.vim
 "----------------------------------------------------------------------------
 
-set rtp+=$DOT_FILES/fzf/bin
+set rtp+=$XDG_CONFIG_HOME/fzf/bin
 
 nnoremap ; :Buffers
 nnoremap t :Files

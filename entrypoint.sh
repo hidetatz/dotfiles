@@ -8,14 +8,12 @@ set -e
 
 export GOPATH="$HOME/ghq"
 export DOT_FILES=$HOME/ghq/src/github.com/dty1er/dotfiles
-export SECRETS=$DOT_FILES/secrets
-export XDG_CONFIG_HOME=$DOT_FILES/config
-export XDG_CACHE_HOME=$DOT_FILES/cache
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$DOT_FILES/google-cloud-sdk/bin
-export CLOUDSDK_CONFIG=$DOT_FILES/gcloud
+export SECRETS=$HOME/.secrets
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
 export GO_VERSION="1.13.5"
-
 
 ########################################
 # Common functions
@@ -44,7 +42,7 @@ function install_secrets() {
   fi
 
   mkdir -p $SECRETS
-  mkdir -p $XDG_CONFIG_HOME/ssh
+  mkdir -p $HOME/.ssh
   echo "Authenticating with 1 password"
   export OP_SESSION_my=$(op signin https://my.1password.com deetyler@protonmail.com --output=raw)
   echo "Pulling secrets"
@@ -53,13 +51,13 @@ function install_secrets() {
   op get document "profile.pvt"         > $SECRETS/profile.pvt
 
   if [ $platform = "darwin" ]; then
-    op get document "id_github"     > $XDG_CONFIG_HOME/ssh/id_github
+    op get document "id_github"     > $HOME/.ssh/id_github
   else
-    op get document "github_dty1er" > $XDG_CONFIG_HOME/ssh/id_github
+    op get document "github_dty1er" > $HOME/.ssh/id_github
   fi
 
-  chmod 700 $XDG_CONFIG_HOME/ssh
-  chmod 600 $XDG_CONFIG_HOME/ssh/*
+  chmod 700 $HOME/.ssh
+  chmod 600 $HOME/.ssh/*
 }
 
 function install_repositories() {
@@ -69,6 +67,28 @@ function install_repositories() {
   go get -u github.com/motemen/ghq
   ghq get -u --parallel < $DOT_FILES/config/packages/ghq
   # ghq get -u --parallel < $SECRETS/ghq.private
+}
+
+function install_go() {
+  echo "======================================"
+  echo "installing go..."
+  echo "======================================"
+
+  install_go_${platform}
+}
+
+function install_go_darwin() {
+  if ! [ -x "$(command -v go)" ]; then
+    curl -L -o go${VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.darwin-amd64.tar.gz"
+    sudo tar -C /usr/local -xzf "go${VERSION}.darwin-amd64.tar.gz"
+  fi
+}
+
+function install_go_linux() {
+  if ! [ -x "$(command -v go)" ]; then
+    curl -L -o go${GO_VERSION}.linux-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz"
+    sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
+  fi
 }
 
 function install_commands() {
@@ -89,91 +109,97 @@ function install_commands_darwin() {
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 
-  # gcloud
   if ! [ -x "$(command -v gcloud)" ]; then
-    curl https://sdk.cloud.google.com > install.sh
-    bash install.sh --disable-prompts --install-dir=$DOT_FILES
+    brew cask install google-cloud-sdk
   fi
 
-  # go
-  if ! [ -x "$(command -v go)" ]; then
-    curl -L -o go${VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.darwin-amd64.tar.gz"
-    sudo tar -C /usr/local -xzf "go${VERSION}.darwin-amd64.tar.gz"
-  fi
-
-  # neovim
   if ! [ -x "$(command -v nvim)" ]; then
     brew install neovim
   fi
 
-  # tmux
   if ! [ -x "$(command -v tmux)" ]; then
     brew install tmux
   fi
 
-  # clangd
   if ! [ -x "$(command -v clangd)" ]; then
     brew install llvm
   fi
 
-  # aws
   if ! [ -x "$(command -v aws2)" ]; then
     curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-macos.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
     rm awscliv2.zip
   fi
+
+  if ! [ -x "$(command -v fzf)" ]; then
+    brew install fzf
+  fi
 }
 
 function install_commands_linux() {
   sudo apt update
   sudo apt upgrade
-  # gcloud
+
   if ! [ -x "$(command -v gcloud)" ]; then
-    curl https://sdk.cloud.google.com > install.sh
-    bash install.sh --disable-prompts --install-dir=$DOT_FILES
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    sudo apt-get install apt-transport-https ca-certificates gnupg
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+    sudo apt-get update && sudo apt-get install google-cloud-sdk
   fi
 
-  # go
-  if ! [ -x "$(command -v go)" ]; then
-    curl -L -o go${GO_VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz"
-    sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
-  fi
-
-  # neovim
   if ! [ -x "$(command -v nvim)" ]; then
     sudo apt install neovim
   fi
 
-  # tmux
   if ! [ -x "$(command -v tmux)" ]; then
     sudo apt install tmux
   fi
 
-  # clangd
   if ! [ -x "$(command -v clangd)" ]; then
     sudo apt install clang-tools-8
   fi
 
-  # aws
   if ! [ -x "$(command -v aws2)" ]; then
     curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
     rm awscliv2.zip
   fi
+
+  if ! [ -x "$(command -v fzf)" ]; then
+    sudo apt install fzf
+  fi
+}
+
+function ln_dotfiles() {
+  mkdir -p $XDG_CONFIG_HOME/bash/
+  mkdir -p $XDG_CONFIG_HOME/git/
+  mkdir -p $XDG_CONFIG_HOME/nvim/
+  mkdir -p $XDG_CONFIG_HOME/tmux/
+
+  ln -s $DOT_FILES/config/bash/profile $XDG_CONFIG_HOME/bash/profile
+  if [ "$platform" = "darwin" ]; then
+    ln -s $DOT_FILES/config/git/config_yagi5 $XDG_CONFIG_HOME/git/config
+  else
+    ln -s $DOT_FILES/config/git/config_dty1er $XDG_CONFIG_HOME/git/config
+  fi
+  ln -s $DOT_FILES/config/nvim/init.vim $XDG_CONFIG_HOME/nvim/init.vim
+  ln -s $DOT_FILES/config/tmux/tmux.conf $XDG_CONFIG_HOME/tmux/tmux.conf
 }
 
 function main() {
   export platform=$(platform)
   echo "platform: $platform"
   install_secrets
-  install_commands
+  install_go
   install_repositories
+  install_commands
+  ln_dotfiles
 
   mkdir -p $XDG_CACHE_HOME
   touch -f $XDG_CACHE_HOME/hist-datastore
-  echo "source $HOME/ghq/src/github.com/dty1er/dotfiles/config/bash/profile" > $HOME/.bash_profile
+  echo "source $HOME/.config/bash/profile" > $HOME/.bash_profile
 }
 
 main

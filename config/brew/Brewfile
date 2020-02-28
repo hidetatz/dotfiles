@@ -1,8 +1,0 @@
-cask "osxfuse"
-brew "mysql"
-brew "neovim"
-brew "protobuf"
-brew "stern"
-brew "terraform"
-brew "tmux"
-brew "datawire/blackbird/telepresence"
