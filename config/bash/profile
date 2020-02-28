@@ -170,6 +170,9 @@ function add_hist() {
 function vifzf() {
   file=$(fzf)
   add_hist "vi $file"
+  if [ -z $file ]; then
+    return 0
+  fi
   nvim $file
 }
 
