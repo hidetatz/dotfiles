@@ -223,6 +223,8 @@ function main() {
   install_commands
   ln_dotfiles
 
+  git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
+
   mkdir -p $XDG_CACHE_HOME
   touch -f $XDG_CACHE_HOME/hist-datastore
   echo "source $HOME/.config/bash/profile" > $HOME/.bash_profile
