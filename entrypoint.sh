@@ -104,7 +104,7 @@ function install_repositories() {
   echo "======================================"
   git clone https://github.com/dty1er/dotfiles.git $HOME/ghq/src/github.com/dty1er/dotfiles
   go get -u github.com/motemen/ghq
-  ghq get -u --parallel < $DOT_FILES/config/packages/ghq
+  GHQ_ROOT="$HOME/ghq/src" ghq get -u --parallel < $DOT_FILES/config/packages/ghq
   # ghq get -u --parallel < $SECRETS/ghq.private
 }
 
