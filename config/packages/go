@@ -1,7 +1,6 @@
 github.com/cweill/gotests/...
 github.com/ktr0731/evans
-github.com/motemen/ghq
-github.com/quasilyte/go-consistentupdatee
+github.com/quasilyte/go-consistent
 github.com/dty1er/hist-datastore/cmd/cacheupdate
 github.com/dty1er/hist-datastore/cmd/histdatastore
 golang.org/x/tools/gopls
