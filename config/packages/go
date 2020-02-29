@@ -3,6 +3,8 @@ github.com/ktr0731/evans
 github.com/quasilyte/go-consistent
 github.com/dty1er/hist-datastore/cmd/cacheupdate
 github.com/dty1er/hist-datastore/cmd/histdatastore
+github.com/ktr0731/evans
+github.com/quasilyte/go-consistent
 golang.org/x/tools/gopls
 mvdan.cc/gofumpt
 mvdan.cc/gofumpt/gofumports

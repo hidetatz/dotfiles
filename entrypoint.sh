@@ -30,6 +30,9 @@ function platform() {
 #   - setup ssh private key
 ########################################
 function install_secrets() {
+  if [ "$SKIP_SECRETS" = 1 ]; then
+    return
+  fi
   echo "======================================"
   echo "installing secrets..."
   echo "======================================"
@@ -147,7 +150,7 @@ function install_commands_darwin() {
     brew install llvm
   fi
 
-  if ! [ -x "$(command -v aws2)" ]; then
+  if ! [ -x "$(command -v aws)" ]; then
     curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-macos.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
@@ -182,7 +185,7 @@ function install_commands_linux() {
     sudo apt install clang-tools-8
   fi
 
-  if ! [ -x "$(command -v aws2)" ]; then
+  if ! [ -x "$(command -v aws)" ]; then
     curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
