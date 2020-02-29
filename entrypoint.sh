@@ -105,7 +105,9 @@ function install_repositories() {
   echo "======================================"
   echo "installing source code..."
   echo "======================================"
-  git clone https://github.com/dty1er/dotfiles.git $HOME/ghq/src/github.com/dty1er/dotfiles
+  if [ ! -e $DOT_FILES ]; then
+    git clone https://github.com/dty1er/dotfiles.git $HOME/ghq/src/github.com/dty1er/dotfiles
+  fi
   go get -u github.com/motemen/ghq
   GHQ_ROOT="$HOME/ghq/src" ghq get -u --parallel < $DOT_FILES/config/packages/ghq
   # ghq get -u --parallel < $SECRETS/ghq.private
@@ -174,7 +176,10 @@ function install_commands_linux() {
   fi
 
   if ! [ -x "$(command -v nvim)" ]; then
-    sudo apt install neovim
+    # nvim installed by apt is too old
+    wget https://github.com/neovim/neovim/releases/download/v0.4.3/nvim.appimage
+    chmod +x nvim.appimage
+    sudo mv nvim.appimage /usr/bin/nvim
   fi
 
   if ! [ -x "$(command -v tmux)" ]; then
@@ -194,6 +199,10 @@ function install_commands_linux() {
 
   if ! [ -x "$(command -v fzf)" ]; then
     sudo apt install fzf
+  fi
+
+  if ! [ -x "$(command -v g++)" ]; then
+    sudo apt install g++
   fi
 }
 
