@@ -168,7 +168,7 @@ au User lsp_setup call lsp#register_server({
 "----------------------------------------------------------------------------
 
 function! CPPRun()
-  :AsyncRun -strip g++ -std=c++17 -Wall --pedantic-errors -o main "%:p" && ./main
+  :AsyncRun -strip g++ -O2 -std=c++17 -Wall --pedantic-errors -o main "%:p" && ./main
 endfunction
 
 if executable('clangd')
@@ -180,9 +180,10 @@ if executable('clangd')
   au FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
 endif
 
-autocmd BufWritePost *.cpp :LspDocumentFormat
-autocmd BufWritePost *.h :LspDocumentFormat
+autocmd BufWritePost *.cpp :ClangFormat
+autocmd BufWritePost *.h :ClangFormat
 autocmd FileType cpp nmap <leader>r :<C-u>call CPPRun()<CR>
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=2 shiftwidth=2
 
 "----------------------------------------------------------------------------
 " Go
