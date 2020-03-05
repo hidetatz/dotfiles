@@ -8,6 +8,7 @@ endif
 
 call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   " general
+  Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
