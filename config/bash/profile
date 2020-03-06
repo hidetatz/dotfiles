@@ -92,6 +92,10 @@ function kube_port_forward() {
   kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" port-forward {} $1
 }
 
+function kube_exec_sh() {
+  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" exec -it {} sh
+}
+
 function history_get_from_datastore() {
   histdatastore get $(dirs +0) | fzf --no-sort --tac
 }
@@ -213,6 +217,7 @@ alias jq='gojq'
 alias kdp='kube_describe_pod'
 alias klp='kube_logs_pod'
 alias kfp='kube_port_forward'
+alias kep='kube_exec_sh'
 alias tp='telepresence --namespace="$KUBE_NAMESPACE" --context="$KUBE_CONTEXT"'
 
 # -------------------------------------
