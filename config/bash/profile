@@ -207,7 +207,7 @@ alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/ya
 alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
-alias st='stern worker -o json -n $KUBE_NAMESPACE'
+alias st='stern -o json --namespace $KUBE_NAMESPACE --context $KUBE_CONTEXT'
 alias go='_go'
 alias ghq='_ghq'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
