@@ -131,6 +131,16 @@ inoremap <C-f> <Right>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
+function! Yank(text) abort
+  let escape = system('yank', a:text)
+  if v:shell_error
+    echoerr escape
+  else
+    call writefile([escape], '/dev/tty', 'b')
+  endif
+endfunction
+noremap <silent> <Leader>y y:<C-U>call Yank(@0)<CR>
+
 "----------------------------------------------------------------------------
 " fzf.vim
 "----------------------------------------------------------------------------
