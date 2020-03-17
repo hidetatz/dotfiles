@@ -204,6 +204,10 @@ function install_commands_linux() {
   if ! [ -x "$(command -v g++)" ]; then
     sudo apt install g++
   fi
+
+  if ! [ -x "$(command -v golangci-lint)" ]; then
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
+  fi
 }
 
 ########################################

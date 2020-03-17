@@ -213,7 +213,7 @@ function! GoRun()
 endfunction
 
 function! GoBuildAndLint()
-  :AsyncRun! -strip go build <root>/... && find <cwd> -name '*_test.go' | xargs gofmt -e > /dev/null && golangci-lint run "%:p:h"
+  :AsyncRun! -strip go build <root>/... && find <cwd> -name '*_test.go' | xargs -IXXX gofmt -e XXX > /dev/null && golangci-lint run "%:p:h"
     \ --disable-all 
     \ --no-config
     \ --enable=vet
