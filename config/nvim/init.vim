@@ -164,8 +164,8 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim
 " PHP
 "----------------------------------------------------------------------------
 
-" \ 'cmd': {server_info->['node', expand('PATH_TO_GLOBAL_NODE_MODULES/intelephense/lib/intelephense.js'), '--stdio']},
-au User lsp_setup call lsp#register_server({
+if executable('intelephense')
+  au User lsp_setup call lsp#register_server({
     \ 'name': 'intelephense',
     \ 'cmd': {server_info->['intelephense', '--stdio']},
     \ 'initialization_options': {'storagePath': $XDG_DATA_HOME . '/intelephense'},
@@ -174,6 +174,7 @@ au User lsp_setup call lsp#register_server({
     \   'files.associations': ['*.php'],
     \ }},
     \ })
+fi
 
 "----------------------------------------------------------------------------
 " c++
@@ -187,15 +188,15 @@ if executable('clangd')
   au User lsp_setup call lsp#register_server({
     \ 'name': 'clangd',
     \ 'cmd': {server_info->['clangd', '-background-index']},
-    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+    \ 'whitelist': ['c', 'cpp'],
     \ })
-  au FileType c,cpp,objc,objcpp,cc setlocal omnifunc=lsp#complete
+  au FileType c,cpp,cc setlocal omnifunc=lsp#complete
 endif
 
 autocmd BufWritePost *.cpp :ClangFormat
 autocmd BufWritePost *.h :ClangFormat
 autocmd FileType cpp nmap <leader>r :<C-u>call CPPRun()<CR>
-autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.cpp setlocal noexpandtab tabstop=2 shiftwidth=2
 
 "----------------------------------------------------------------------------
 " Go
@@ -238,9 +239,9 @@ endfunction
 
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
 autocmd BufWritePost *.go :call GoFmt()
-autocmd BufWritePost *.go :call GoBuildAndLint()
 autocmd FileType go nmap <leader>t :<C-u>call GoTest()<CR>
 autocmd FileType go nmap <leader>r :<C-u>call GoRun()<CR>
+autocmd FileType go nmap <leader>b :<C-u>call GoBuildAndLint()<CR>
 :highlight goErr cterm=bold ctermfg=lightblue
 :match goErr /\<err\>/
 
