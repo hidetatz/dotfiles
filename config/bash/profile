@@ -15,6 +15,7 @@ export XDG_DATA_HOME=$HOME/.local
 export SECRETS=$HOME/.secrets
 
 export CLOUDSDK_CONFIG=$XDG_CONFIG_HOME
+export KUBECONFIG=$XDG_CONFIG_HOME/kube
 
 shopt -s histappend
 export SHELL_SESSION_HISTORY=0 # Disable bash_sessions on OSX
@@ -25,6 +26,7 @@ export PATH=$PATH:/usr/local/go/bin # for go
 export PATH=$PATH:$GOPATH/bin # for go built binary
 export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd installed by brew
 export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL client installed by brew
+export PATH=$PATH:$XDG_CONFIG_HOME/fzf/bin # for fzf installed as vim plugin
 
 export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 
