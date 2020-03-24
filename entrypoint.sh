@@ -47,6 +47,7 @@ function install_secrets() {
       unzip op.zip
       mkdir -p $GOPATH/bin
       mv ./op $GOPATH/bin/
+      rm op.zip
     fi
   fi
 
