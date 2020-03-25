@@ -159,10 +159,6 @@ function install_commands_darwin() {
     sudo ./aws/install
     rm awscliv2.zip
   fi
-
-  if ! [ -x "$(command -v fzf)" ]; then
-    brew install fzf
-  fi
 }
 
 function install_commands_linux() {
@@ -196,10 +192,6 @@ function install_commands_linux() {
     unzip awscliv2.zip
     sudo ./aws/install
     rm awscliv2.zip
-  fi
-
-  if ! [ -x "$(command -v fzf)" ]; then
-    sudo apt install fzf
   fi
 
   if ! [ -x "$(command -v g++)" ]; then
