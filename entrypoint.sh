@@ -13,7 +13,7 @@ export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
-export GO_VERSION="1.13.5"
+export GO_VERSION="1.14.2"
 
 ########################################
 # Common functions
