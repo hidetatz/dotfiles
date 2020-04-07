@@ -15,13 +15,7 @@ export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
 export GO_VERSION="1.14.2"
 
-########################################
-# Common functions
-########################################
-
-function platform() {
-  echo $(echo $(uname) | tr '[:upper:]' '[:lower:]')
-}
+export PLATFORM=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
 
 ########################################
 # Install secret files
@@ -42,7 +36,7 @@ function install_secrets() {
       exit 1
     fi
 
-    if [ $platform = "linux" ]; then
+    if [ $PLATFORM = "linux" ]; then
       curl -o op.zip https://cache.agilebits.com/dist/1P/op/pkg/v0.9.2/op_linux_amd64_v0.9.2.zip
       unzip op.zip
       mkdir -p $GOPATH/bin
@@ -60,7 +54,7 @@ function install_secrets() {
   op get document "ghq.private"         > $SECRETS/ghq.private
   op get document "profile.pvt"         > $SECRETS/profile.pvt
 
-  if [ $platform = "darwin" ]; then
+  if [ $PLATFORM = "darwin" ]; then
     op get document "id_github"     > $HOME/.ssh/id_github
   else
     op get document "github_dty1er" > $HOME/.ssh/id_github
@@ -79,7 +73,7 @@ function install_go() {
   echo "installing go..."
   echo "======================================"
 
-  install_go_${platform}
+  install_go_${PLATFORM}
 }
 
 function install_go_darwin() {
@@ -123,7 +117,7 @@ function install_commands() {
   echo "======================================"
   echo "installing commands..."
   echo "======================================"
-  install_commands_${platform}
+  install_commands_${PLATFORM}
   # Install commands by go get
   cat $DOT_FILES/config/packages/go | while read line
   do
@@ -213,7 +207,7 @@ function ln_dotfiles() {
   mkdir -p $XDG_CONFIG_HOME/tmux/
 
   ln -s $DOT_FILES/config/bash/profile $XDG_CONFIG_HOME/bash/profile
-  if [ "$platform" = "darwin" ]; then
+  if [ "$PLATFORM" = "darwin" ]; then
     ln -s $DOT_FILES/config/git/config_yagi5 $XDG_CONFIG_HOME/git/config
   else
     ln -s $DOT_FILES/config/git/config_dty1er $XDG_CONFIG_HOME/git/config
@@ -224,8 +218,7 @@ function ln_dotfiles() {
 }
 
 function main() {
-  export platform=$(platform)
-  echo "platform: $platform"
+  echo "platform: $PLATFORM"
   install_secrets
   install_go
   install_repositories
