@@ -27,12 +27,13 @@ function install_secrets() {
   if [ "$SKIP_SECRETS" = 1 ]; then
     return
   fi
+
   echo "======================================"
   echo "installing secrets..."
   echo "======================================"
   if ! [ -x "$(command -v op)" ]; then echo 0;
     if [ $platform = "darwin" ]; then
-      echo "please install one password first -> https://support.1password.com/command-line-getting-started/"
+      echo "please install one password cli first"
       exit 1
     fi
 
