@@ -13,8 +13,6 @@ export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
-export GO_VERSION="1.14.2"
-
 export PLATFORM=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
 
 ########################################
@@ -74,20 +72,12 @@ function install_go() {
   echo "installing go..."
   echo "======================================"
 
+  VERSION="1.14.2"
+
   install_go_${PLATFORM}
-}
-
-function install_go_darwin() {
   if ! [ -x "$(command -v go)" ]; then
-    curl -L -o go${VERSION}.darwin-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.darwin-amd64.tar.gz"
-    sudo tar -C /usr/local -xzf "go${VERSION}.darwin-amd64.tar.gz"
-  fi
-}
-
-function install_go_linux() {
-  if ! [ -x "$(command -v go)" ]; then
-    curl -L -o go${GO_VERSION}.linux-amd64.tar.gz "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz"
-    sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
+    curl -L -o go${VERSION}.${PLATFORM}-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.${PLATFORM}-amd64.tar.gz"
+    sudo tar -C /usr/local -xzf "go${VERSION}.${PLATFORM}-amd64.tar.gz"
   fi
 }
 
