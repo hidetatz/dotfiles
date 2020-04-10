@@ -92,7 +92,7 @@ function install_repositories() {
   echo "installing source code..."
   echo "======================================"
   if [ ! -e $DOT_FILES ]; then
-    git clone https://github.com/dty1er/dotfiles.git $HOME/ghq/src/github.com/dty1er/dotfiles
+    git clone https://github.com/dty1er/dotfiles.git $DOT_FILES
   fi
   go get -u github.com/motemen/ghq
   GHQ_ROOT="$HOME/ghq/src" ghq get -u --parallel < $DOT_FILES/config/packages/ghq
