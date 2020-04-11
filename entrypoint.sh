@@ -100,15 +100,15 @@ function install_repositories() {
 }
 
 ########################################
-# Install necessary commands
-#   - install some commands by package manager
+# Install tools
+#   - install some tools by package manager
 #   - execute go get
 ########################################
-function install_commands() {
+function install_tools() {
   echo "======================================"
-  echo "installing commands..."
+  echo "installing tools..."
   echo "======================================"
-  install_commands_${PLATFORM}
+  install_tools_${PLATFORM}
   # Install commands by go get
   cat $DOT_FILES/config/packages/go | while read line
   do
@@ -117,7 +117,7 @@ function install_commands() {
   done
 }
 
-function install_commands_darwin() {
+function install_tools_darwin() {
   if ! [ -x "$(command -v brew)" ]; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
@@ -146,7 +146,7 @@ function install_commands_darwin() {
   fi
 }
 
-function install_commands_linux() {
+function install_tools_linux() {
   sudo apt update
   sudo apt upgrade
 
@@ -213,7 +213,7 @@ function main() {
   install_secrets
   install_go
   install_repositories
-  install_commands
+  install_tools
   ln_dotfiles
 
   git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
