@@ -6,6 +6,9 @@
     InsteadOf = https://github.com/
     InsteadOf = git@github.com:
 
+[url "git@github.com:"]
+    InsteadOf = https://github.com/
+
 [pager]
     branch = false
 
@@ -54,6 +57,3 @@
 
 [http]
     cookiefile = $HOME/.config/git/cookies
-
-[url "git@github.com:"]
-    insteadOf = https://github.com/
