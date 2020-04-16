@@ -33,13 +33,8 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 [ -e $DOT_FILES/config/scripts ] && for f in $DOT_FILES/config/scripts/*; do source $f; done
 [ -e $SECRETS/profile.pvt ] && . $SECRETS/profile.pvt
 
-if [ -x "$(command -v stern)" ]; then
-  source <(stern --completion=bash)
-fi
-
-if [ -x "$(command -v kubectl)" ]; then
-  source <(kubectl completion bash)
-fi
+[ -x "$(command -v stern)" ] && source <(stern --completion=bash)
+[ -x "$(command -v kubectl)" ] && source <(kubectl completion bash)
 
 # -------------------------------------
 # bind
