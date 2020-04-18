@@ -36,10 +36,6 @@ export FZF_DEFAULT_OPTS='--height 40% --border --bind ctrl-n:down,ctrl-p:up'
 [ -x "$(command -v stern)" ] && source <(stern --completion=bash)
 [ -x "$(command -v kubectl)" ] && source <(kubectl completion bash)
 
-# -------------------------------------
-# bind
-# -------------------------------------
-
 # necessary for history_get_from_datastore
 bind '"\er": redraw-current-line'
 bind '"\e^": history-expand-line'
