@@ -15,7 +15,7 @@ export XDG_DATA_HOME=$HOME/.local
 export SECRETS=$HOME/.secrets
 
 export CLOUDSDK_CONFIG=$XDG_CONFIG_HOME
-export KUBECONFIG=$XDG_CONFIG_HOME/kube
+export KUBECONFIG=$XDG_CONFIG_HOME/kube/config
 
 shopt -s histappend
 export SHELL_SESSION_HISTORY=0 # Disable bash_sessions on OSX
