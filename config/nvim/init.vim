@@ -134,9 +134,10 @@ au BufNewFile,BufRead *.cpp setlocal noexpandtab tabstop=2 shiftwidth=2
 "----------------------------------------------------------------------------
 
 function! GoBuildAndLint()
+  " run go build, go test -c, golangci-lint
   :AsyncRun! -strip go build <root>/... &&
-    \ go list <root>/... | xargs -I xxx -L 1 find $GOPATH/src/xxx -name *_test.go | xargs -L 1 dirname | sed "s@$GOPATH/src/@@g" | sort | uniq | xargs -L 1 go test -c &&
-    \ rm <root>/*.test &&
+    \ go list <root>/... | xargs -r -L 1 -I xxx find $GOPATH/src/xxx -name *_test.go | xargs -r -L 1 dirname | sed "s@$GOPATH/src/@@g" | sort | uniq | xargs -r -L 1 go test -c &&
+    \ rm -f <root>/*.test &&
     \ golangci-lint run "%:p:h" --disable-all --no-config --enable=vet --enable=errcheck --enable=golint --enable=unused --enable=structcheck --enable=gosimple
       \ --enable=varcheck --enable=ineffassign --enable=deadcode --enable=typecheck --enable=bodyclose --enable=gocyclo --enable=misspell --enable=unparam --enable=staticcheck
 endfunction
