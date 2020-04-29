@@ -24,6 +24,8 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/vim-lsp'
+
+  Plug 'mattn/vim-goimports'
 call plug#end()
 
 "----------------------------------------------------------------------------
@@ -148,6 +150,7 @@ au FileType go nmap <leader>t :<C-u>call GoTest()<CR>
 au FileType go nmap <leader>b :<C-u>call GoBuildAndLint()<CR>
 :highlight goErr cterm=bold ctermfg=lightblue
 :match goErr /\<err\>/
+let g:goimports = 1
 
 if executable('gopls')
   au User lsp_setup call lsp#register_server({
