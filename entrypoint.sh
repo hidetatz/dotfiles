@@ -6,109 +6,62 @@ set -e
 # Variable declaration
 ########################################
 
-export GOPATH="$HOME/ghq"
-export DOT_FILES=$HOME/ghq/src/github.com/dty1er/dotfiles
-export SECRETS=$HOME/.secrets
-export XDG_CONFIG_HOME=$HOME/.config
-export XDG_CACHE_HOME=$HOME/.cache
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+GOPATH="$HOME/ghq"
+DOT_FILES=$HOME/ghq/src/github.com/dty1er/dotfiles
+XDG_CONFIG_HOME=$HOME/.config
+PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+PLATFORM=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
 
-export PLATFORM=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
+VERSION_GO="1.14.4"
 
-########################################
-# Install secret files
-#   - install 1password cli
-#   - pull secret files from 1password
-#   - setup ssh private key
-########################################
+# Pull secrets from AWS S3
+# Before running this function, make sure that
+# the instance has a permission as a S3 reader
 function install_secrets() {
-  if [ "$SKIP_SECRETS" = 1 ]; then
-    return
-  fi
-
-  echo "======================================"
-  echo "installing secrets..."
-  echo "======================================"
-  if ! [ -x "$(command -v op)" ]; then echo 0;
-    if [ $platform = "darwin" ]; then
-      echo "please install one password cli first"
-      exit 1
-    fi
-
-    if [ $PLATFORM = "linux" ]; then
-      curl -o op.zip https://cache.agilebits.com/dist/1P/op/pkg/v0.9.2/op_linux_amd64_v0.9.2.zip
-      unzip op.zip
-      mkdir -p $GOPATH/bin
-      mv ./op $GOPATH/bin/
-      rm op.zip
-    fi
-  fi
-
-  mkdir -p $SECRETS
+  mkdir -p $HOME/.secrets
   mkdir -p $HOME/.ssh
-  echo "Authenticating with 1 password"
-  export OP_SESSION_my=$(op signin https://my.1password.com deetyler@protonmail.com --output=raw)
-  echo "Pulling secrets"
-  op get document "hist-datastore.json" > $SECRETS/hist-datastore.json
-  op get document "ghq.private"         > $SECRETS/ghq.private
-  op get document "profile.pvt"         > $SECRETS/profile.pvt
+  mkdir -p $HOME/.cache
 
+  echo "======================================"
+  echo "Pulling secrets..."
+  echo "======================================"
   if [ $PLATFORM = "darwin" ]; then
-    op get document "id_github"     > $HOME/.ssh/id_github
-  else
-    op get document "github_dty1er" > $HOME/.ssh/id_github
+    aws s3 cp s3://dtyler.secrets/ghq.private     $HOME/.secrets/ghq.private
+    aws s3 cp s3://dtyler.secrets/profile.pvt     $HOME/.secrets/profile.pvt
+    aws s3 cp s3://dtyler.secrets/id_github_yagi5 $HOME/.ssh/id_github
+  elif [ $PLATFORM = "linux" ]; then
+    aws s3 cp s3://dtyler.secrets/id_github_dty1er $HOME/.ssh/id_github
   fi
+
+  # TODO: concat remote and local files
+  aws s3 cp s3://dtyler.secrets/histcache $HOME/.cache/hist
 
   chmod 700 $HOME/.ssh
   chmod 600 $HOME/.ssh/*
 }
 
-########################################
-# Install go binary
-#   - this is needed to get ghq
-########################################
-function install_go() {
-  echo "======================================"
-  echo "installing go..."
-  echo "======================================"
-
-  VERSION="1.14.2"
-
-  install_go_${PLATFORM}
-  if ! [ -x "$(command -v go)" ]; then
-    curl -L -o go${VERSION}.${PLATFORM}-amd64.tar.gz "https://dl.google.com/go/go${VERSION}.${PLATFORM}-amd64.tar.gz"
-    sudo tar -C /usr/local -xzf "go${VERSION}.${PLATFORM}-amd64.tar.gz"
-  fi
-}
-
-########################################
-# Install some repositories
-#   - clone dotfiles
-#   - install ghq
-#   - fetch repos by ghq
-########################################
 function install_repositories() {
   echo "======================================"
-  echo "installing source code..."
+  echo "Installing repositories..."
   echo "======================================"
   if [ ! -e $DOT_FILES ]; then
     git clone https://github.com/dty1er/dotfiles.git $DOT_FILES
   fi
   go get -u github.com/motemen/ghq
   GHQ_ROOT="$HOME/ghq/src" ghq get -u --parallel < $DOT_FILES/config/packages/ghq
-  # ghq get -u --parallel < $SECRETS/ghq.private
+
+  # Install tmux plugin manager
+  mkdir -p $XDG_CONFIG_HOME
+  git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
 }
 
-########################################
-# Install tools
-#   - install some tools by package manager
-#   - execute go get
-########################################
 function install_tools() {
   echo "======================================"
-  echo "installing tools..."
+  echo "Installing tools..."
   echo "======================================"
+
   install_tools_${PLATFORM}
+
   # Install commands by go get
   cat $DOT_FILES/config/packages/go | while read line
   do
@@ -118,6 +71,13 @@ function install_tools() {
 }
 
 function install_tools_darwin() {
+  if ! [ -x "$(command -v go)" ]; then
+    url="https://dl.google.com/go/go${VERSION_GO}.darwin-amd64.tar.gz"
+    file="go${VERSION_GO}.darwin-amd64.tar.gz"
+    curl -L -o $file $url
+    sudo tar -C /usr/local -xzf $file
+  fi
+
   if ! [ -x "$(command -v brew)" ]; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
@@ -144,17 +104,21 @@ function install_tools_darwin() {
     sudo ./aws/install
     rm awscliv2.zip
   fi
+
+  if ! [ -x "$(command -v golangci-lint)" ]; then
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
+  fi
 }
 
 function install_tools_linux() {
   sudo apt update
   sudo apt upgrade
 
-  if ! [ -x "$(command -v gcloud)" ]; then
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-    sudo apt-get install apt-transport-https ca-certificates gnupg
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-    sudo apt-get update && sudo apt-get install google-cloud-sdk
+  if ! [ -x "$(command -v go)" ]; then
+    url="https://dl.google.com/go/go${VERSION_GO}.linux-amd64.tar.gz"
+    file="go${VERSION_GO}.-amd64.tar.gz"
+    curl -L -o $file $url
+    sudo tar -C /usr/local -xzf $file
   fi
 
   if ! [ -x "$(command -v nvim)" ]; then
@@ -192,35 +156,20 @@ function install_tools_linux() {
 # Create dotfiles symlinks
 ########################################
 function ln_dotfiles() {
-  mkdir -p $XDG_CONFIG_HOME/bash/
-  mkdir -p $XDG_CONFIG_HOME/git/
-  mkdir -p $XDG_CONFIG_HOME/nvim/
-  mkdir -p $XDG_CONFIG_HOME/tmux/
-
-  ln -s $DOT_FILES/config/bash/profile $XDG_CONFIG_HOME/bash/profile
-  if [ "$PLATFORM" = "darwin" ]; then
-    ln -s $DOT_FILES/config/git/config_yagi5 $XDG_CONFIG_HOME/git/config
-  else
-    ln -s $DOT_FILES/config/git/config_dty1er $XDG_CONFIG_HOME/git/config
-  fi
-  ln -s $DOT_FILES/config/nvim/init.vim $XDG_CONFIG_HOME/nvim/init.vim
-  ln -s $DOT_FILES/config/tmux/tmux.conf $XDG_CONFIG_HOME/tmux/tmux.conf
+  mkdir -p $XDG_CONFIG_HOME/git
+  mkdir -p $XDG_CONFIG_HOME/ssh
+  ln -s $DOT_FILES/config/git/config $XDG_CONFIG_HOME/git/config
   ln -s $DOT_FILES/config/ssh/config $HOME/.ssh/config
 }
 
 function main() {
   echo "platform: $PLATFORM"
-  install_secrets
-  install_go
-  install_repositories
   install_tools
+  install_secrets
+  install_repositories
   ln_dotfiles
 
-  git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
-
-  mkdir -p $XDG_CACHE_HOME
-  touch -f $XDG_CACHE_HOME/hist-datastore
-  echo "source $HOME/.config/bash/profile" > $HOME/.bash_profile
+  echo "source $DOT_FILES/config/bash/profile" > $HOME/.bash_profile
 }
 
 main

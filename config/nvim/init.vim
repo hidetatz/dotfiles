@@ -19,6 +19,8 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   " colorscheme
   Plug 'morhetz/gruvbox'
 
+  Plug 'vim-test/vim-test'
+
   " LSP
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/asyncomplete.vim'

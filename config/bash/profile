@@ -150,10 +150,10 @@ function add_hist() {
 
 function vifzf() {
   file=$(fzf)
-  add_hist "vi $file"
   if [ -z $file ]; then
     return 0
   fi
+  add_hist "vi $file"
   nvim $file
 }
 
@@ -188,8 +188,9 @@ GIT_PS1_SHOWUPSTREAM=
 alias t='vifzf'
 alias ls='ls -GF'
 alias ll='ls -alh'
+alias nvim="nvim -u $DOT_FILES/config/nvim/init.vim"
 alias vi="nvim"
-alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias tmux="tmux -f $DOT_FILES/config/tmux/tmux.conf"
 alias docker="docker --config $XDG_CONFIG_HOME/docker/"
 alias dr="docker"
 alias drc="docker-compose"
@@ -229,9 +230,3 @@ preexec() {
 precmd() { 
   : 
 }
-
-# -------------------------------------
-# hist-datastore
-# -------------------------------------
-
-(cacheupdate &)
