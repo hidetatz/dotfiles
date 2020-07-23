@@ -79,19 +79,19 @@ function export_kube_ctx() {
 }
 
 function kube_describe_pod() {
-  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" describe pod 
+  kubectl --context="$KUBE_CONTEXT" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs kubectl --context="$KUBE_CONTEXT" describe pod
 }
 
 function kube_logs_pod() {
-  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" logs
+  kubectl --context="$KUBE_CONTEXT" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs kubectl --context="$KUBE_CONTEXT" logs
 }
 
 function kube_port_forward() {
-  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" port-forward {} $1
+  kubectl --context="$KUBE_CONTEXT" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" port-forward {} $1
 }
 
 function kube_exec_sh() {
-  kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE" exec -it {} sh
+  kubectl --context="$KUBE_CONTEXT" get pods -o wide --no-headers | fzf | awk '{print $1}' | xargs -I "{}" kubectl --context="$KUBE_CONTEXT" exec -it {} sh
 }
 
 function history_get_from_datastore() {
@@ -169,7 +169,7 @@ function vifzf() {
 # CYAN="\[\e[36m\]"
 # RESET="\[\e[0m\]"
 PS1='
-(\[\e[32m\e[40m\]$KUBE_CONTEXT\[\e[0m\]:\[\e[32m\e[40m\]$KUBE_NAMESPACE\[\e[0m\])
+(\[\e[32m\e[40m\]$KUBE_CONTEXT\[\e[0m\])
 '
 PS1=$PS1'\[\e[36m\e[40m\]\w\[\e[0m\]'
 PS1=$PS1'\[\e[37m\e[40m\]$(__git_ps1 | sed -e "s/(//g" | sed -e "s/)//g")\[\e[0m\]'
@@ -202,10 +202,10 @@ alias de='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/bash'
 alias ds='docker exec -it $(docker ps | fzf | cut -d " " -f 1) /bin/sh'
 alias ap='export AWS_PROFILE=$(grep -iE "^[]+[^*]" ~/.aws/credentials | tr -d [| tr -d ] | fzf)'
 alias tcpdump='sudo tcpdump -A -p -tttt -l -n -s 0' # https://gist.github.com/yagi5/7e106bcb79d6e52953dedb48417874c5
-alias k='kubectl --context="$KUBE_CONTEXT" -n="$KUBE_NAMESPACE"'
+alias k='kubectl --context="$KUBE_CONTEXT"'
 alias gcf='gcloud_config_set_fzf'
 alias kc='export_kube_ctx'
-alias st='stern -o json --namespace $KUBE_NAMESPACE --context $KUBE_CONTEXT'
+alias st='stern -o json --context $KUBE_CONTEXT'
 alias go='_go'
 alias ghq='_ghq'
 alias docker_rmi_all='docker rmi --force $(docker images -qa)'
@@ -216,7 +216,7 @@ alias kdp='kube_describe_pod'
 alias klp='kube_logs_pod'
 alias kfp='kube_port_forward'
 alias kep='kube_exec_sh'
-alias tp='telepresence --namespace="$KUBE_NAMESPACE" --context="$KUBE_CONTEXT"'
+alias tp='telepresence --context="$KUBE_CONTEXT"'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)
