@@ -95,7 +95,7 @@ function kube_exec_sh() {
 }
 
 function history_get_from_datastore() {
-  histdatastore get $(dirs +0) | fzf --no-sort --tac
+  histdatastore get $(dirs +0) | fzf --no-sort
 }
 
 function goget() {

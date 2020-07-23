@@ -34,7 +34,7 @@ function install_secrets() {
   fi
 
   # TODO: concat remote and local files
-  aws s3 cp s3://dtyler.secrets/histcache $HOME/.cache/hist
+  aws s3 cp s3://dtyler.secrets/histcache $HOME/.cache/hist.tsv
 
   chmod 700 $HOME/.ssh
   chmod 600 $HOME/.ssh/*
@@ -129,11 +129,11 @@ function install_tools_linux() {
   fi
 
   if ! [ -x "$(command -v tmux)" ]; then
-    sudo apt install tmux
+    sudo apt install -y tmux
   fi
 
   if ! [ -x "$(command -v clangd)" ]; then
-    sudo apt install clang-tools-8
+    sudo apt install -y clang-tools-8
   fi
 
   if ! [ -x "$(command -v aws)" ]; then
@@ -144,7 +144,7 @@ function install_tools_linux() {
   fi
 
   if ! [ -x "$(command -v g++)" ]; then
-    sudo apt install g++
+    sudo apt install -y g++
   fi
 
   if ! [ -x "$(command -v golangci-lint)" ]; then
