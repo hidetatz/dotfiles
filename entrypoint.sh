@@ -40,21 +40,6 @@ function install_secrets() {
   chmod 600 $HOME/.ssh/*
 }
 
-function install_repositories() {
-  echo "======================================"
-  echo "Installing repositories..."
-  echo "======================================"
-  if [ ! -e $DOT_FILES ]; then
-    git clone https://github.com/dty1er/dotfiles.git $DOT_FILES
-  fi
-  go get -u github.com/motemen/ghq
-  GHQ_ROOT="$HOME/ghq/src" ghq get -u --parallel < $DOT_FILES/config/packages/ghq
-
-  # Install tmux plugin manager
-  mkdir -p $XDG_CONFIG_HOME
-  git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
-}
-
 function install_tools() {
   echo "======================================"
   echo "Installing tools..."
@@ -70,6 +55,17 @@ function install_tools() {
     echo "installing $line"
     go get -u $line
   done
+  
+  if [ ! -e $DOT_FILES ]; then
+    git clone https://github.com/dty1er/dotfiles.git $DOT_FILES
+  fi
+
+  go get -u github.com/motemen/ghq
+  GHQ_ROOT="$HOME/ghq/src" ghq get -u --parallel < $DOT_FILES/config/packages/ghq
+
+  # Install tmux plugin manager
+  mkdir -p $XDG_CONFIG_HOME
+  git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
 }
 
 function install_tools_darwin() {
@@ -167,7 +163,6 @@ function main() {
   echo "platform: $PLATFORM"
   install_tools
   install_secrets
-  install_repositories
   ln_dotfiles
 
   echo "source $DOT_FILES/config/bash/profile" > $HOME/.bash_profile
