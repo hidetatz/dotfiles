@@ -12,7 +12,7 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
   Plug 'airblade/vim-gitgutter'
 
   Plug '/usr/local/opt/fzf'
-  Plug 'junegunn/fzf', { 'dir': '~/.config/fzf' }
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   Plug 'skywind3000/asyncrun.vim'
 
