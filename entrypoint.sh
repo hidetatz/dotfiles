@@ -34,7 +34,7 @@ function install_secrets() {
   fi
 
   # TODO: concat remote and local files
-  aws s3 cp s3://dtyler.secrets/histcache $HOME/.cache/hist.tsv
+  aws s3 cp s3://dtyler.secrets/histcache.tsv $HOME/.cache/hist.tsv
 
   chmod 700 $HOME/.ssh
   chmod 600 $HOME/.ssh/*
@@ -157,7 +157,7 @@ function install_tools_linux() {
 ########################################
 function ln_dotfiles() {
   mkdir -p $XDG_CONFIG_HOME/git
-  mkdir -p $XDG_CONFIG_HOME/ssh
+  mkdir -p $HOME/.ssh
   ln -s $DOT_FILES/config/git/config $XDG_CONFIG_HOME/git/config
   ln -s $DOT_FILES/config/ssh/config $HOME/.ssh/config
 }
