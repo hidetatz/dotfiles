@@ -148,6 +148,12 @@ function add_hist() {
   (histdatastore put $(dirs +0) "$1" &)
 }
 
+function remove_hist_if_command_not_found() {
+  if [ $? -eq 127 ]; then
+    sed -i -e '$d' $HOME/.cache/hist.tsv
+  fi
+}
+
 function vifzf() {
   file=$(fzf)
   if [ -z $file ]; then
@@ -226,10 +232,8 @@ alias prime_division='ruby -rprime -e "puts %Q[#{ARGV[0]} = #{ARGV[0].to_i.prime
 # preexec(https://github.com/rcaloras/bash-preexec)
 # -------------------------------------
 
-preexec() {
-  (histdatastore put $(dirs +0) "$1" &)
-}
+preexec_functions+=(add_hist)
+precmd_functions+=(remove_hist_if_command_not_found)
 
-precmd() { 
-  : 
-}
+# preexec() { echo "just typed $1"; }
+# precmd() { echo "printing the prompt"; }
