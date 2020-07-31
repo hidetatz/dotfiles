@@ -141,7 +141,7 @@ function _ghq() {
 }
 
 function go_test_fzf() {
-  go test -timeout 30s -count=1 `go list ./... | fzf` -run "^(Test.*)$" -v | gotest
+  go test -timeout 30s -count=1 `go list ./... | fzf` -run "^(Test.*)$" -v | gotests
 }
 
 function add_hist() {
@@ -217,7 +217,10 @@ alias kdp='kube_describe_pod'
 alias klp='kube_logs_pod'
 alias kfp='kube_port_forward'
 alias kep='kube_exec_sh'
-alias tp='telepresence --context="$KUBE_CONTEXT"'
+alias tpnew='telepresence --context="$KUBE_CONTEXT" --new-deployment yagi5-local "$@"'
+alias tpswap='telepresence --context="$KUBE_CONTEXT" --swap-deployment "$@"'
+alias prime?='ruby -rprime -e "p ARGV[0].to_i.prime?"'
+alias prime_division='ruby -rprime -e "puts %Q[#{ARGV[0]} = #{ARGV[0].to_i.prime_division.map {|p, e| %Q|#{p}#{e > 1 ? %Q!^#{e}! : %q!!}| }.join(%q! * !)}]"'
 
 # -------------------------------------
 # preexec(https://github.com/rcaloras/bash-preexec)
