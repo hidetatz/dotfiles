@@ -99,14 +99,14 @@ function history_get_from_datastore() {
 }
 
 function goget() {
-  cat $XDG_CONFIG_HOME/packages/go | while read line
+  cat $DOT_FILES/config/packages/go | while read line
   do
     ghq list | grep $line || echo "installing ${line}..."; go get -u $line
   done
 }
 
 function ghqget() {
-  ghq get -u --parallel < $XDG_CONFIG_HOME/packages/ghq
+  ghq get -u --parallel < $DOT_FILES/config/packages/ghq
 }
 
 function ghqprivget() {
