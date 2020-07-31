@@ -3,7 +3,7 @@ set rtp+=$XDG_CONFIG_HOME/config/nvim
 if empty(glob('$XDG_CONFIG_HOME/nvim/autoload/plug.vim'))
   silent !curl -fLo $XDG_CONFIG_HOME/nvim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  au VimEnter * PlugInstall --sync | source $XDG_CONFIG_HOME/nvim/init.vim
+  au VimEnter * PlugInstall --sync | source $HOME/ghq/src/github.com/dty1er/dotfiles/config/nvim/init.vim
 endif
 
 call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')

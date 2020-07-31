@@ -45,7 +45,7 @@ function install_tools() {
   echo "Installing tools..."
   echo "======================================"
 
-  mkdir -p $GOPATH
+  mkdir -p $GOPATH/bin
 
   install_tools_${PLATFORM}
 
@@ -102,6 +102,12 @@ function install_tools_darwin() {
     rm AWSCLIV2.pkg
   fi
 
+  if ! [ -x "$(command -v fzf)" ]; then
+    curl -LO https://github.com/junegunn/fzf-bin/releases/download/0.21.1/fzf-0.21.1-darwin_amd64.tgz
+    mv fzf $GOPATH/bin
+    rm fzf-0.21.1-darwin_amd64.tgz
+  fi
+
   if ! [ -x "$(command -v golangci-lint)" ]; then
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
   fi
@@ -138,6 +144,12 @@ function install_tools_linux() {
     unzip awscliv2.zip
     sudo ./aws/install
     rm awscliv2.zip
+  fi
+
+  if ! [ -x "$(command -v fzf)" ]; then
+    curl -LO https://github.com/junegunn/fzf-bin/releases/download/0.21.1/fzf-0.21.1-linux_amd64.tgz
+    mv fzf $GOPATH/bin
+    rm fzf-0.21.1-linux_amd64.tgz
   fi
 
   if ! [ -x "$(command -v g++)" ]; then
