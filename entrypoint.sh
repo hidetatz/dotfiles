@@ -6,13 +6,13 @@ set -e
 # Variable declaration
 ########################################
 
-GOPATH="$HOME/ghq"
-DOT_FILES=$HOME/ghq/src/github.com/dty1er/dotfiles
-XDG_CONFIG_HOME=$HOME/.config
-PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-PLATFORM=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
+export GOPATH="$HOME/ghq"
+export DOT_FILES=$HOME/ghq/src/github.com/dty1er/dotfiles
+export XDG_CONFIG_HOME=$HOME/.config
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+export PLATFORM=$(echo $(uname) | tr '[:upper:]' '[:lower:]')
 
-VERSION_GO="1.14.4"
+export VERSION_GO="1.14.4"
 
 # Pull secrets from AWS S3
 # Before running this function, make sure that
@@ -103,6 +103,7 @@ function install_tools_darwin() {
   if ! [ -x "$(command -v aws)" ]; then
     curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
     sudo installer -pkg AWSCLIV2.pkg -target /
+    rm AWSCLIV2.pkg
   fi
 
   if ! [ -x "$(command -v golangci-lint)" ]; then
