@@ -104,6 +104,7 @@ function install_tools_darwin() {
 
   if ! [ -x "$(command -v fzf)" ]; then
     curl -LO https://github.com/junegunn/fzf-bin/releases/download/0.21.1/fzf-0.21.1-darwin_amd64.tgz
+    tar xzf fzf-0.21.1-darwin_amd64.tgz
     mv fzf $GOPATH/bin
     rm fzf-0.21.1-darwin_amd64.tgz
   fi
@@ -148,6 +149,7 @@ function install_tools_linux() {
 
   if ! [ -x "$(command -v fzf)" ]; then
     curl -LO https://github.com/junegunn/fzf-bin/releases/download/0.21.1/fzf-0.21.1-linux_amd64.tgz
+    tar xzf fzf-0.21.1-linux_amd64.tgz
     mv fzf $GOPATH/bin
     rm fzf-0.21.1-linux_amd64.tgz
   fi
