@@ -60,6 +60,8 @@ function install_tools() {
   echo "Installing tools..."
   echo "======================================"
 
+  mkdir -p $GOPATH
+
   install_tools_${PLATFORM}
 
   # Install commands by go get
@@ -99,10 +101,8 @@ function install_tools_darwin() {
   fi
 
   if ! [ -x "$(command -v aws)" ]; then
-    curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-macos.zip" -o "awscliv2.zip"
-    unzip awscliv2.zip
-    sudo ./aws/install
-    rm awscliv2.zip
+    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+    sudo installer -pkg AWSCLIV2.pkg -target /
   fi
 
   if ! [ -x "$(command -v golangci-lint)" ]; then
