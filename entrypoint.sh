@@ -115,8 +115,8 @@ function install_tools_darwin() {
 }
 
 function install_tools_linux() {
-  sudo apt update
-  sudo apt upgrade
+  sudo apt update -y
+  sudo apt upgrade -y
 
   if ! [ -x "$(command -v go)" ]; then
     url="https://dl.google.com/go/go${VERSION_GO}.linux-amd64.tar.gz"
