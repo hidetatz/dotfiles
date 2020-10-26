@@ -1,5 +1,0 @@
-github.com/dty1er/hist-datastore/cmd/histdatastore
-golang.org/x/tools/cmd/goimports
-golang.org/x/tools/gopls
-mvdan.cc/gofumpt
-mvdan.cc/gofumpt/gofumports

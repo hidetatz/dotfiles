@@ -1,3 +1,8 @@
-```sh
-curl https://raw.githubusercontent.com/dty1er/dotfiles/master/entrypoint.sh | bash
-```
+### Dependencies
+
+bash
+vim
+tmux
+git
+gcloud
+kubectl

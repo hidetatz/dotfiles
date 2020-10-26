@@ -1,6 +1,6 @@
 [user]
     name = Hidetatsu Yaginuma
-    email = deetyler@protonmail.com
+    email = ygnmhdtt@gmail.com
 
 [url "github.com:"]
     InsteadOf = https://github.com/
@@ -9,12 +9,9 @@
 [pager]
     branch = false
 
-[ghq]
-    root = ~/ghq/src
-
 [core]
     pager = LESSCHARSET=utf-8 less
-    editor = "nvim"
+    editor = "vim"
 
 [color]
     ui = true
