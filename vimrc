@@ -112,8 +112,22 @@ augroup lsp_install
     au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+let g:lsp_highlights_enabled = 0
+let g:lsp_textprop_enabled = 0
+let g:lsp_highlight_references_enabled = 0
+
 cnoreabbrev Ack Ack!
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
+endif
+
+
+" WSL yank support
+let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
+if executable(s:clip)
+    augroup WSLYank
+        autocmd!
+        autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+    augroup END
 endif
