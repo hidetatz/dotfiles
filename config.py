@@ -17,8 +17,8 @@ def configure(keymap):
     keymap_global["O-RShift"] = "Space"
 
     # IME
-    keymap_global["O-RCtrl"] = turn_on_ime
-    keymap_global["O-LCtrl"] = turn_off_ime
+    keymap_global["O-LCtrl"] = turn_on_ime
+    keymap_global["O-RCtrl"] = turn_off_ime
 
     # swap colon and semicolon
     keymap_global["Shift-Semicolon"] = "Colon"
