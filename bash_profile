@@ -39,6 +39,6 @@ alias prime_division='ruby -rprime -e "puts %Q[#{ARGV[0]} = #{ARGV[0].to_i.prime
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 __git_complete g __git_main
 
-complete -F __start_kubectl kubecolor
+# complete -F __start_kubectl kubecolor
 
 export PATH="/Users/ygnmhdtt/repos/dty1er/kubernetes/third_party/etcd:${PATH}"
