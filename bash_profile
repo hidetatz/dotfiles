@@ -13,6 +13,9 @@ export PATH=$PATH:$GOPATH/bin # for go built binary
 export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd from brew
 export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL cli from brew
 
+source /usr/share/bash-completion/completions/git
+source /usr/share/bash-completion/bash_completion
+
 [ -x "$(command -v stern)" ] && source <(stern --completion=bash)
 [ -x "$(command -v kubectl)" ] && source <(kubectl completion bash)
 
