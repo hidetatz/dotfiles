@@ -10,6 +10,7 @@ call plug#begin('$HOME/.vim/plugged')
   Plug 'mattn/vim-goimports'
   Plug 'morhetz/gruvbox'
   Plug 'mileszs/ack.vim'
+  Plug 'ctrlpvim/ctrlp.vim'
 call plug#end()
 
 let mapleader = ","
