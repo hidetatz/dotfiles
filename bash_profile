@@ -13,9 +13,6 @@ export PATH=$PATH:$GOPATH/bin # for go built binary
 export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd from brew
 export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL cli from brew
 
-source /usr/share/bash-completion/completions/git
-source /usr/share/bash-completion/bash_completion
-
 [ -x "$(command -v stern)" ] && source <(stern --completion=bash)
 [ -x "$(command -v kubectl)" ] && source <(kubectl completion bash)
 
@@ -29,6 +26,7 @@ export PS1="\w \[\033[36m\]\$(__git_branch)\[\033[00m\] $ "
 alias ls='ls -GF'
 alias ll='ls -alh'
 alias g='git'
+alias vi='vim'
 
 alias sha1='openssl dgst -sha1 -hex'
 alias sha256='openssl dgst -sha256 -hex'
@@ -37,6 +35,9 @@ alias prime?='ruby -rprime -e "p ARGV[0].to_i.prime?"'
 alias prime_division='ruby -rprime -e "puts %Q[#{ARGV[0]} = #{ARGV[0].to_i.prime_division.map {|p, e| %Q|#{p}#{e > 1 ? %Q!^#{e}! : %q!!}| }.join(%q! * !)}]"'
 
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+[ -f /usr/share/bash-completion/completions/git ] && . /usr/share/bash-completion/completions/git
+[ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+
 __git_complete g __git_main
 
 # complete -F __start_kubectl kubecolor
