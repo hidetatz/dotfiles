@@ -41,6 +41,17 @@ au FileType * set fo-=c fo-=r fo-=o
 au WinEnter * if winnr('$') == 1 && &buftype == "quickfix" | q | endif
 " always use quickfix to show vimgrep result
 au QuickFixCmdPost vimgrep cwindow
+" write copyright at the top
+au BufNewFile *.go,*.cpp call append(0, "// Copyright © 2020 Hidetatsu Yaginuma. All rights reserved.")
+
+func! s:go_main_template()
+  call append(2, 'package main')
+  call append(3, '')
+  call append(4, 'func main() {')
+  call append(5, '')
+  call append(6, '}')
+endf
+au BufNewFile main.go call s:go_main_template()
 
 nnoremap x "_x
 nnoremap Y y$
@@ -54,53 +65,33 @@ nnoremap <C-n> :cnext<CR>
 nnoremap <C-p> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
-let g:lsp_diagnostics_enabled = 0
-
+" lsp
 if executable('gopls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'gopls',
-        \ 'cmd': {server_info->['gopls']},
-        \ 'whitelist': ['go'],
-        \ })
+    au User lsp_setup call lsp#register_server({'name': 'gopls', 'cmd': {server_info->['gopls']}, 'whitelist': ['go']})
 endif
 
-if executable('rls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-        \ 'whitelist': ['rust'],
-        \ })
-    au BufWritePre *.rs LspDocumentFormatSync
-endif
-
-if executable('intelephense')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'intelephense',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
-        \ 'whitelist': ['php'],
-        \ 'initialization_options': {'storagePath': '/tmp/intelephense'},
-        \ 'workspace_config': {
-        \   'intelephense': {
-        \     'files': {
-        \       'maxSize': 1000000,
-        \       'associations': ['*.php', '*.phtml'],
-        \       'exclude': [],
-        \     },
-        \     'completion': {
-        \       'insertUseDeclaration': v:true,
-        \       'fullyQualifyGlobalConstantsAndFunctions': v:false,
-        \       'triggerParameterHints': v:true,
-        \       'maxItems': 100,
-        \     },
-        \     'format': {
-        \       'enable': v:true
-        \     },
-        \   },
-        \ }
-        \})
-    " au BufWritePre *.php LspDocumentFormatSync
-endif
+" if executable('intelephense')
+"     au User lsp_setup call lsp#register_server({
+"         \ 'name': 'intelephense',
+"         \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
+"         \ 'whitelist': ['php'],
+"         \ 'initialization_options': {'storagePath': '/tmp/intelephense'},
+"         \ 'workspace_config': {
+"         \   'intelephense': {
+"         \     'files': {'maxSize': 1000000, 'associations': ['*.php', '*.phtml'], 'exclude': []},
+"         \     'completion': {
+"         \       'insertUseDeclaration': v:true,
+"         \       'fullyQualifyGlobalConstantsAndFunctions': v:false,
+"         \       'triggerParameterHints': v:true,
+"         \       'maxItems': 100,
+"         \     },
+"         \     'format': {
+"         \       'enable': v:true
+"         \     },
+"         \   },
+"         \ }
+"         \})
+" endif
 
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -113,16 +104,21 @@ augroup lsp_install
     au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+let g:lsp_diagnostics_enabled = 0
 let g:lsp_highlights_enabled = 0
 let g:lsp_textprop_enabled = 0
 let g:lsp_highlight_references_enabled = 0
 
+" ctrlp.vim
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMixed'
+
+" ack.vim
 cnoreabbrev Ack Ack!
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
-
 
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
