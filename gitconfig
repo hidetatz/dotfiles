@@ -51,6 +51,5 @@
 
 [http]
     cookiefile = $HOME/.config/git/cookies
-
-[url "git@github.com:"]
-    insteadOf = https://github.com/
+[credential]
+	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe
