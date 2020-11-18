@@ -8,7 +8,6 @@ call plug#begin('$HOME/.vim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'mattn/vim-goimports'
-  Plug 'morhetz/gruvbox'
   Plug 'mileszs/ack.vim'
   Plug 'ctrlpvim/ctrlp.vim'
 call plug#end()
@@ -35,7 +34,7 @@ hi Comment ctermfg=gray
 
 " open a file at last-closed line
 au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
-" do not keep in comment when inserting a new line
+" do not keep being in comment lines when inserting a new line
 au FileType * set fo-=c fo-=r fo-=o
 " close quickfix automatically when close vim
 au WinEnter * if winnr('$') == 1 && &buftype == "quickfix" | q | endif
@@ -70,28 +69,28 @@ if executable('gopls')
     au User lsp_setup call lsp#register_server({'name': 'gopls', 'cmd': {server_info->['gopls']}, 'whitelist': ['go']})
 endif
 
-" if executable('intelephense')
-"     au User lsp_setup call lsp#register_server({
-"         \ 'name': 'intelephense',
-"         \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
-"         \ 'whitelist': ['php'],
-"         \ 'initialization_options': {'storagePath': '/tmp/intelephense'},
-"         \ 'workspace_config': {
-"         \   'intelephense': {
-"         \     'files': {'maxSize': 1000000, 'associations': ['*.php', '*.phtml'], 'exclude': []},
-"         \     'completion': {
-"         \       'insertUseDeclaration': v:true,
-"         \       'fullyQualifyGlobalConstantsAndFunctions': v:false,
-"         \       'triggerParameterHints': v:true,
-"         \       'maxItems': 100,
-"         \     },
-"         \     'format': {
-"         \       'enable': v:true
-"         \     },
-"         \   },
-"         \ }
-"         \})
-" endif
+if executable('intelephense')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'intelephense',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
+        \ 'whitelist': ['php'],
+        \ 'initialization_options': {'storagePath': '/tmp/intelephense'},
+        \ 'workspace_config': {
+        \   'intelephense': {
+        \     'files': {'maxSize': 1000000, 'associations': ['*.php', '*.phtml'], 'exclude': []},
+        \     'completion': {
+        \       'insertUseDeclaration': v:true,
+        \       'fullyQualifyGlobalConstantsAndFunctions': v:false,
+        \       'triggerParameterHints': v:true,
+        \       'maxItems': 100,
+        \     },
+        \     'format': {
+        \       'enable': v:true
+        \     },
+        \   },
+        \ }
+        \})
+endif
 
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
