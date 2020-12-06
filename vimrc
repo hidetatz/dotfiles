@@ -28,8 +28,6 @@ set noswapfile
 set nobackup
 set autoindent 
 
-au Filetype php setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
-
 hi Comment ctermfg=gray
 
 " open a file at last-closed line
@@ -67,29 +65,6 @@ nnoremap <leader>a :cclose<CR>
 " lsp
 if executable('gopls')
     au User lsp_setup call lsp#register_server({'name': 'gopls', 'cmd': {server_info->['gopls']}, 'whitelist': ['go']})
-endif
-
-if executable('intelephense')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'intelephense',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'intelephense --stdio']},
-        \ 'whitelist': ['php'],
-        \ 'initialization_options': {'storagePath': '/tmp/intelephense'},
-        \ 'workspace_config': {
-        \   'intelephense': {
-        \     'files': {'maxSize': 1000000, 'associations': ['*.php', '*.phtml'], 'exclude': []},
-        \     'completion': {
-        \       'insertUseDeclaration': v:true,
-        \       'fullyQualifyGlobalConstantsAndFunctions': v:false,
-        \       'triggerParameterHints': v:true,
-        \       'maxItems': 100,
-        \     },
-        \     'format': {
-        \       'enable': v:true
-        \     },
-        \   },
-        \ }
-        \})
 endif
 
 function! s:on_lsp_buffer_enabled() abort
