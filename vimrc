@@ -39,7 +39,7 @@ au WinEnter * if winnr('$') == 1 && &buftype == "quickfix" | q | endif
 " always use quickfix to show vimgrep result
 au QuickFixCmdPost vimgrep cwindow
 " write copyright at the top
-au BufNewFile *.go,*.cpp call append(0, "// Copyright © 2020 Hidetatsu Yaginuma. All rights reserved.")
+au BufNewFile *.go,*.cpp call append(0, "// Copyright © 2021 Hidetatsu Yaginuma. All rights reserved.")
 
 func! s:go_main_template()
   call append(2, 'package main')
