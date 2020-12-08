@@ -81,7 +81,7 @@ augroup END
 let g:lsp_diagnostics_enabled = 0
 let g:lsp_highlights_enabled = 0
 let g:lsp_textprop_enabled = 0
-let g:lsp_highlight_references_enabled = 0
+let g:lsp_document_highlight_enabled = 0
 
 " ctrlp.vim
 let g:ctrlp_map = '<c-p>'
