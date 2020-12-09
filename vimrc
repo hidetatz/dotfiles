@@ -88,8 +88,9 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 
 " ack.vim
+" ag must be installed in advance
+" https://github.com/ggreer/the_silver_searcher
 cnoreabbrev Ack Ack!
-
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
