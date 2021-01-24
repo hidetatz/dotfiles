@@ -7,7 +7,7 @@ shopt -s histappend
 shopt -s histverify
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
-export GOPATH="$HOME/.go"
+export GOPATH="$HOME/repos"
 export PATH=$PATH:/usr/local/go/bin # for go
 export PATH=$PATH:$GOPATH/bin # for go built binary
 export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd from brew
