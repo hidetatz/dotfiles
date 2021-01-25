@@ -21,7 +21,15 @@ __git_branch() {
 	git branch 2> /dev/null | sed -e '/^[^*]/d'  -e 's/* \(.*\)/\1/'
 }
 
-export PS1="\w \[\033[36m\]\$(__git_branch)\[\033[00m\] $ "
+__short_pwd() {
+	pwd \
+	| sed -e 's#'"$HOME"'#~#g' \
+	| sed -e 's#repos#r#g' \
+	| sed -e 's#src#s#g' \
+	| sed -e 's#github.com#g#g'
+}
+
+export PS1="\$(__short_pwd) \[\033[36m\]\$(__git_branch)\[\033[00m\] $ "
 
 alias ls='ls -GF'
 alias ll='ls -alh'
