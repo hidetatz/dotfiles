@@ -22,10 +22,11 @@
     a = add
     b = branch
     ci = commit
+    commmit = commit
     co = checkout
     cb = checkout -b
     d = diff
-    dc = diff --cached --name-only
+    dc = diff --cached
     dcn = diff --cached --name-only
     f = fech
     l = log
@@ -33,6 +34,7 @@
     lga = log --oneline --decorate --graph --all
     pur = pull --rebase
     purb =! bash -c 'git pull --rebase origin $(git rev-parse --abbrev-ref HEAD)'
+    puu =! bash -c 'git pull --rebase upstream master'
     pushb =! bash -c 'git push origin $(git rev-parse --abbrev-ref HEAD)'
     pushfb =! bash -c 'git push -f origin $(git rev-parse --abbrev-ref HEAD)'
     rb = rebase
@@ -48,4 +50,4 @@
 [http]
     cookiefile = $HOME/.config/git/cookies
 [credential]
-	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe
+    helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe
