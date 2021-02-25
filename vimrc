@@ -22,6 +22,7 @@ set encoding=utf-8
 set hidden
 set clipboard+=unnamed
 set noerrorbells
+set visualbell
 set number
 set incsearch
 set hlsearch
