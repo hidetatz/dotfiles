@@ -2,7 +2,10 @@
 
 bash
 vim
+make
 tmux
 git
-gcloud
-kubectl
+go
+goimports
+gopls
+clangd
