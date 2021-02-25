@@ -46,3 +46,5 @@ __git_complete g __git_main
 
 export PATH="/Users/ygnmhdtt/repos/dty1er/kubernetes/third_party/etcd:${PATH}"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+bind -f ~/.inputrc
