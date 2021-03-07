@@ -110,8 +110,8 @@ let g:lsp_diagnostics_echo_cursor = 1
 let g:sneak#label = 1
 
 " ctrlp.vim
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMixed'
+nnoremap t :CtrlP<CR>
+nnoremap ; :CtrlPBuffer<CR>
 let g:ctrlp_max_height = 30
 
 " WSL yank support
