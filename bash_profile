@@ -1,4 +1,4 @@
-export LESS='-i -M -R -W -q -S'
+export LESS='-i -M -R -W -q -S -N'
 export EDITOR="vim"
 
 export HISTCONTROL=ignoredups:erasedups

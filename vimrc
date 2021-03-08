@@ -54,12 +54,9 @@ nnoremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
-nnoremap <C-n> :cnext<CR>
-nnoremap <C-p> :cprevious<CR>
-nnoremap <C-n> :lnext<CR>
-nnoremap <C-p> :lprevious<CR>
-nnoremap <leader>a :cclose<CR>
-nnoremap <leader>a :lclose<CR>
+nnoremap <silent> <C-n> :cnext<CR>
+nnoremap <silent> <C-p> :cprevious<CR>
+nnoremap <silent> <leader>a :cclose<CR>:lclose<CR>
 " don't append a new line on Enter hit in completion
 inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 
