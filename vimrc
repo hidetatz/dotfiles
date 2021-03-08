@@ -8,7 +8,6 @@ call plug#begin('$HOME/.vim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'tyru/current-func-info.vim'
   Plug 'Yggdroot/LeaderF'
-  Plug 'skywind3000/asyncrun.vim'
 
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/asyncomplete.vim'
@@ -32,8 +31,9 @@ set nobackup
 set autoindent 
 set completeopt=menuone,noinsert
 set grepprg=git\ grep\ -I\ --line-number
+set backspace=indent,eol,start
 
-hi Comment ctermfg=gray
+highlight Comment ctermfg=gray
 
 " open a file at last-closed line
 au! BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -56,7 +56,10 @@ nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap <C-n> :cnext<CR>
 nnoremap <C-p> :cprevious<CR>
+nnoremap <C-n> :lnext<CR>
+nnoremap <C-p> :lprevious<CR>
 nnoremap <leader>a :cclose<CR>
+nnoremap <leader>a :lclose<CR>
 " don't append a new line on Enter hit in completion
 inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 
@@ -82,6 +85,7 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal signcolumn=yes
 
     nmap <buffer> <leader>d <plug>(lsp-definition)
+    nmap <buffer> <leader>g <plug>(lsp-document-diagnostics)
 
     autocmd BufWritePre *.go call execute('LspCodeActionSync source.organizeImports')
     autocmd BufWritePre *.go call execute('LspDocumentFormatSync')
@@ -92,18 +96,8 @@ augroup lsp_install
     au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-let g:lsp_diagnostics_enabled = 1
-let g:asyncomplete_auto_popup = 1
-let g:lsp_highlights_enabled = 0
-let g:lsp_textprop_enabled = 0
 let g:lsp_document_highlight_enabled = 0
-
-" AsyncRun
-let g:asyncrun_open = 16
-function GoRunTestF()
-    let l:fname = cfi#format("%s", "")
-    AsyncRun! "go"."test"."-run" . l:fname . %:p:h/...
-endf
+let g:lsp_diagnostics_echo_cursor = 1
 
 " Leaderf
 let g:Lf_CommandMap = {'<C-k>': ['<C-p>'], '<C-J>': ['<C-n>']}
