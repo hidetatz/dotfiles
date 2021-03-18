@@ -3,7 +3,7 @@
 
     // open WSL2 Ubuntu-20.04 when WindowsTerminal startup
     // the value is copied from below "profiles.list"
-    "defaultProfile": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
+    "defaultProfile": "{7e3616cd-2529-54ce-acb0-a05a5462774e}",
 
     // If enabled, selections are automatically copied to your clipboard.
     "copyOnSelect": true,
@@ -47,12 +47,12 @@
                 "source": "Windows.Terminal.Azure"
             },
             {
-                "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
+                "guid": "{7e3616cd-2529-54ce-acb0-a05a5462774e}",
                 "hidden": false,
-                "name": "Ubuntu-20.04",
+                "name": "Ubuntu-20.04-main",
                 "source": "Windows.Terminal.Wsl",
                 // open ~ directory when startup
-                "commandline": "wsl.exe ~ -d Ubuntu-20.04"
+                "commandline": "wsl.exe ~ -d Ubuntu-20.04-main"
             }
         ]
     },
