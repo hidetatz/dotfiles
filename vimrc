@@ -6,7 +6,6 @@ endif
 call plug#begin('$HOME/.vim/plugged')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
-  Plug 'tyru/current-func-info.vim'
   Plug 'Yggdroot/LeaderF'
 
   Plug 'prabirshrestha/vim-lsp'
@@ -32,12 +31,9 @@ set autoindent
 set completeopt=menuone,noinsert
 set grepprg=git\ grep\ -I\ --line-number
 set backspace=indent,eol,start
+set viewoptions-=options
 
 highlight Comment ctermfg=gray
-
-" open a file at last-closed line
-au! BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
-  \ exe "normal g`\"" | endif
 
 " do not inherit comment line
 au! FileType * set fo-=c fo-=r fo-=o
@@ -48,6 +44,10 @@ au! WinEnter * if winnr('$') == 1 && &buftype == "quickfix" | q | endif
 " always use quickfix to show grep result
 au! QuickFixCmdPost *grep* cwindow
 
+" Save view on quit vim
+au ExitPre * if expand('%') != '' && &buftype !~ 'nofile' | mkview | endif
+au BufRead * if expand('%') != '' && &buftype !~ 'nofile' | silent loadview | endif
+
 nnoremap x "_x
 nnoremap Y y$
 nnoremap <Esc><Esc> :nohl<CR>
@@ -56,7 +56,7 @@ nnoremap <Leader>q :q<CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap <silent> <C-n> :cnext<CR>
 nnoremap <silent> <C-p> :cprevious<CR>
-nnoremap <silent> <leader>a :cclose<CR>:lclose<CR>
+nnoremap <silent> <leader>a :cclose<CR>
 " don't append a new line on Enter hit in completion
 inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 
@@ -108,10 +108,10 @@ noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 
 " WSL yank support
-let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
+let s:clip = '/mnt/c/Windows/System32/clip.exe'
 if executable(s:clip)
     augroup WSLYank
-        autocmd!
-        autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+        au!
+        au TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
     augroup END
 endif
