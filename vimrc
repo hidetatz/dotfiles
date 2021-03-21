@@ -107,7 +107,7 @@ let g:lsp_document_highlight_enabled = 0
 let g:lsp_diagnostics_echo_cursor = 1
 
 " vim-sneak
-let g:sneak#label = 1
+let g:sneak#label = 1 " enable jump
 
 " ctrlp.vim
 nnoremap t :CtrlP<CR>
