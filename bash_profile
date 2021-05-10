@@ -9,8 +9,10 @@ shopt -s histappend
 shopt -s histverify
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
+export JDK_HOME="/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
 export GOPATH="$HOME/repos"
 export PATH=$PATH:/usr/local/go/bin # for go
+export PATH=$PATH:$JDK_HOME # for java
 export PATH=$PATH:$GOPATH/bin # for go built binary
 export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd from brew
 export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL cli from brew
@@ -35,8 +37,8 @@ __short_pwd() {
 
 export PS1="\$(__short_pwd) \[\033[36m\]\$(__git_branch)\[\033[00m\] $ "
 
-alias ls='ls -GF'
-alias ll='ls -alh'
+alias ls='ls --color -F'
+alias ll='ls --color -Falh'
 alias g='git'
 alias vi='vim'
 

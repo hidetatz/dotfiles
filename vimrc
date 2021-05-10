@@ -6,7 +6,9 @@ endif
 call plug#begin('$HOME/.vim/plugged')
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
-  Plug 'Yggdroot/LeaderF'
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'morhetz/gruvbox'
+  Plug 'justinmk/vim-sneak'
 
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/asyncomplete.vim'
@@ -15,8 +17,9 @@ call plug#begin('$HOME/.vim/plugged')
 call plug#end()
 
 let mapleader = ","
-colorscheme peachpuff
+colorscheme gruvbox
 set encoding=utf-8
+set background=dark
 set hidden
 set clipboard+=unnamed
 set noerrorbells
@@ -33,7 +36,9 @@ set grepprg=git\ grep\ -I\ --line-number
 set backspace=indent,eol,start
 set viewoptions-=options
 
-highlight Comment ctermfg=gray
+let &t_SI = "\<esc>[5 q" " blinking vertical bar on insert mode
+let &t_SR = "\<esc>[3 q" " blinking underscore on replace mode
+let &t_EI = "\<esc>[0 q" " block on normal mode
 
 " do not inherit comment line
 au! FileType * set fo-=c fo-=r fo-=o
@@ -48,14 +53,19 @@ au! QuickFixCmdPost *grep* cwindow
 au ExitPre * if expand('%') != '' && &buftype !~ 'nofile' | mkview | endif
 au BufRead * if expand('%') != '' && &buftype !~ 'nofile' | silent loadview | endif
 
+au FileType java setl noexpandtab
+au FileType java setl ts=4
+au FileType java setl shiftwidth=4
+
 nnoremap x "_x
 nnoremap Y y$
 nnoremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
+nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs explorer.exe<CR><CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
-nnoremap <silent> <C-n> :cnext<CR>
-nnoremap <silent> <C-p> :cprevious<CR>
+nnoremap <silent> <C-j> :cnext<CR>
+nnoremap <silent> <C-k> :cprevious<CR>
 nnoremap <silent> <leader>a :cclose<CR>
 " don't append a new line on Enter hit in completion
 inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
@@ -69,11 +79,11 @@ if executable('gopls')
         \ })
 endif
 
-if executable('clangd-9')
+if executable('clangd-10')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
-        \ 'cmd': {server_info->['clangd-9', '-background-index']},
-        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'proto'],
+        \ 'cmd': {server_info->['clangd-10', '-background-index']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'proto', 'java'],
         \ })
 endif
 
@@ -85,7 +95,7 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <leader>g <plug>(lsp-document-diagnostics)
 
     autocmd BufWritePre *.go call execute('LspCodeActionSync source.organizeImports')
-    autocmd BufWritePre *.go call execute('LspDocumentFormatSync')
+    autocmd BufWritePre * call execute('LspDocumentFormatSync')
 endfunction
 
 augroup lsp_install
@@ -96,16 +106,13 @@ augroup END
 let g:lsp_document_highlight_enabled = 0
 let g:lsp_diagnostics_echo_cursor = 1
 
-" Leaderf
-let g:Lf_CommandMap = {'<C-k>': ['<C-p>'], '<C-J>': ['<C-n>']}
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_ShowDevIcons = 0
-let g:Lf_PreviewInPopup = 1
-let g:Lf_UseCache = 0
-let g:Lf_IgnoreCurrentBufferName = 1
-let g:Lf_ShortcutF = "<leader>ff"
-noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
-noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+" vim-sneak
+let g:sneak#label = 1
+
+" ctrlp.vim
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_max_height = 30
 
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'
