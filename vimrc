@@ -111,7 +111,7 @@ let g:sneak#label = 1 " enable jump
 
 " ctrlp.vim
 nnoremap t :CtrlP<CR>
-nnoremap ; :CtrlPBuffer<CR>
+nnoremap ' :CtrlPBuffer<CR>
 let g:ctrlp_max_height = 30
 
 " WSL yank support
