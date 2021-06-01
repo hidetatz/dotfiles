@@ -83,7 +83,7 @@ if executable('clangd-10')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
         \ 'cmd': {server_info->['clangd-10', '-background-index']},
-        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'proto', 'java'],
+        \ 'whitelist': ['c', 'cpp', 'proto', 'java'],
         \ })
 endif
 
