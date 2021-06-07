@@ -9,6 +9,7 @@ call plug#begin('$HOME/.vim/plugged')
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'morhetz/gruvbox'
   Plug 'justinmk/vim-sneak'
+  Plug 'airblade/vim-gitgutter'
 
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/asyncomplete.vim'
@@ -35,6 +36,7 @@ set completeopt=menuone,noinsert
 set grepprg=git\ grep\ -I\ --line-number
 set backspace=indent,eol,start
 set viewoptions-=options
+set updatetime=100
 
 let &t_SI = "\<esc>[5 q" " blinking vertical bar on insert mode
 let &t_SR = "\<esc>[3 q" " blinking underscore on replace mode
