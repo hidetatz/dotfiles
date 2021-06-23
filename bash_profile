@@ -18,13 +18,11 @@ export LESS='-i -M -R -W -q -S -N'
 export EDITOR="vim"
 
 export HISTCONTROL=ignoredups:erasedups
-# unlimited history
 export HISTSIZE=
 export HISTFILESIZE=
 shopt -s histappend
 shopt -s histverify
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
-# GIT_PS1_SHOWCOLORHINTS requires to use __git_ps1 in PROMPT_COMMAND instead of PS1
 
 export PROMPT_COMMAND="__git_ps1 '\W' ' \$ '"
 
