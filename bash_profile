@@ -1,3 +1,19 @@
+export GIT_PS1_SHOWUPSTREAM=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWCOLORHINTS=1
+export JDK_HOME="/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
+export GOPATH="$HOME/repos"
+
+export PATH=$PATH:/usr/local/go/bin # for go
+export PATH=$PATH:$JDK_HOME # for java
+export PATH=$PATH:$GOPATH/bin # for go built binary
+export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd from brew
+export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL cli from brew
+export PATH=$PATH:$GOPATH/src/github.com/dty1er/kubernetes/third_party/etcd # for etcd for k8s local integration test
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
 export LESS='-i -M -R -W -q -S -N'
 export EDITOR="vim"
 
@@ -8,34 +24,12 @@ export HISTFILESIZE=
 shopt -s histappend
 shopt -s histverify
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+# GIT_PS1_SHOWCOLORHINTS requires to use __git_ps1 in PROMPT_COMMAND instead of PS1
 
-export JDK_HOME="/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
-export GOPATH="$HOME/repos"
-export PATH=$PATH:/usr/local/go/bin # for go
-export PATH=$PATH:$JDK_HOME # for java
-export PATH=$PATH:$GOPATH/bin # for go built binary
-export PATH=$PATH:/usr/local/opt/llvm/bin/ # for clangd from brew
-export PATH=$PATH:/usr/local/opt/mysql-client/bin # for MySQL cli from brew
-export PATH=$PATH:$GOPATH/src/github.com/dty1er/kubernetes/third_party/etcd # for etcd for k8s local integration test
-
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PROMPT_COMMAND="__git_ps1 '\W' ' \$ '"
 
 [ -x "$(command -v stern)" ] && source <(stern --completion=bash)
 [ -x "$(command -v kubectl)" ] && source <(kubectl completion bash)
-
-__git_branch() {
-	git branch 2> /dev/null | sed -e '/^[^*]/d'  -e 's/* \(.*\)/\1/'
-}
-
-__short_pwd() {
-	pwd \
-	| sed -e 's#'"$HOME"'#~#g' \
-	| sed -e 's#repos#r#g' \
-	| sed -e 's#src#s#g' \
-	| sed -e 's#github.com#g#g'
-}
-
-export PS1="\$(__short_pwd) \[\033[36m\]\$(__git_branch)\[\033[00m\] $ "
 
 alias ls='ls --color -F'
 alias ll='ls --color -Falh'
@@ -52,7 +46,5 @@ alias vi='vim'
 [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
 __git_complete g __git_main
-
-# complete -F __start_kubectl kubecolor
-
+complete -F __start_kubectl kubecolor
 bind -f ~/.inputrc
