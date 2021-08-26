@@ -46,9 +46,9 @@
 	st = stash
 	sp = stash pop
 	url =! bash -c 'git config --get remote.origin.url | sed -E "s/.git$//g"'
-	showpr = "!f() { open https://github.com/$(dirname $PWD | xargs basename)/$(basename $PWD)/$(git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1 | cut -f5 -d' ' | sed -e 's%#%pull/%'); }; f"
+	; showpr = "!f() { open https://github.com/$(dirname $PWD | xargs basename)/$(basename $PWD)/$(git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1 | cut -f5 -d' ' | sed -e 's%#%pull/%'); }; f"
+	showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
+
 
 [http]
 	cookiefile = $HOME/.config/git/cookies
-[credential]
-	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe

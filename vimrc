@@ -65,7 +65,7 @@ nnoremap Y y$
 nnoremap <Esc><Esc> :nohl<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
-nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs explorer.exe<CR><CR>
+nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
 nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
 nnoremap <silent> <C-j> :cnext<CR>
 nnoremap <silent> <C-k> :cprevious<CR>
@@ -78,7 +78,16 @@ if executable('gopls')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'gopls',
         \ 'cmd': {server_info->['gopls']},
-        \ 'whitelist': ['go'],
+        \ 'initialization_options': {
+        \     'completeUnimported': v:true,
+        \     'matcher': 'fuzzy',
+        \     'codelenses': {
+        \         'generate': v:true,
+        \         'test': v:true,
+        \     },
+        \     'experimentalWorkspaceModule': v:true,
+        \ },
+        \ 'allowlist': ['go'],
         \ })
 endif
 
@@ -116,6 +125,10 @@ let g:sneak#label = 1 " enable jump
 nnoremap t :CtrlP<CR>
 nnoremap ' :CtrlPBuffer<CR>
 let g:ctrlp_max_height = 30
+let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ }
 
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'
