@@ -1,6 +1,6 @@
 [user]
-	name = Hidetatsu Yaginuma
-	email = deetyler@protonmail.com
+	name = Hidetatz Yaginuma
+	email = hidetatz@gmail.com
 
 [pager]
 	branch = false
@@ -9,46 +9,9 @@
 	pager = LESSCHARSET=utf-8 less
 	editor = "vim"
 
-[color]
-	ui = true
-
-[merge]
-	ff = false
-
-[push]
-	default = simple
-
 [alias]
-	a = add
-	b = branch
-	ci = commit
-	commmit = commit
-	co = checkout
-	cb = checkout -b
-	d = diff
-	dc = diff --cached
-	dcn = diff --cached --name-only
-	f = fech
-	l = log
-	lp = log -p
-	lg = log --oneline --decorate --graph
-	lga = log --oneline --decorate --graph --all
-	pur = pull --rebase
+	s = status
 	purb =! bash -c 'git pull --rebase origin $(git rev-parse --abbrev-ref HEAD)'
-	puu =! bash -c 'git pull --rebase upstream master'
 	pushb =! bash -c 'git push origin $(git rev-parse --abbrev-ref HEAD)'
 	pushfb =! bash -c 'git push -f origin $(git rev-parse --abbrev-ref HEAD)'
-	rb = rebase
-	rbc = rebase --continue
-	rbi = rebase -i
-	s = status
-	sb = status -sb
-	st = stash
-	sp = stash pop
 	url =! bash -c 'git config --get remote.origin.url | sed -E "s/.git$//g"'
-	; showpr = "!f() { open https://github.com/$(dirname $PWD | xargs basename)/$(basename $PWD)/$(git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1 | cut -f5 -d' ' | sed -e 's%#%pull/%'); }; f"
-	showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
-
-
-[http]
-	cookiefile = $HOME/.config/git/cookies

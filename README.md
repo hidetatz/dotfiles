@@ -1,11 +1,3 @@
-### Dependencies
+## dotfiles
 
-bash
-vim
-make
-tmux
-git
-go
-goimports
-gopls
-clangd
+This repo contains my dotfiles for Linux. For macOS, there is a separeted repo https://github.com/hidetatz/dot-mac
