@@ -3,9 +3,10 @@ export HISTFILESIZE=
 HISTCONTROL=ignoreboth,erasedups
 shopt -s histappend
 
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
 alias ls='ls --color -F'
 alias ll='ls -al'
-alias g='git'
 alias vi='vim'
 alias sc='screen'
 

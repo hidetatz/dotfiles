@@ -15,7 +15,6 @@
 	purb =! bash -c 'git pull --rebase origin $(git rev-parse --abbrev-ref HEAD)'
 	pushb =! bash -c 'git push origin $(git rev-parse --abbrev-ref HEAD)'
 	pushfb =! bash -c 'git push -f origin $(git rev-parse --abbrev-ref HEAD)'
-	url =! bash -c 'git config --get remote.origin.url | sed -E "s/.git$//g"'
 
 [credential]
 	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe
