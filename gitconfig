@@ -8,6 +8,7 @@
 [core]
 	pager = LESSCHARSET=utf-8 less
 	editor = "vim"
+	excludesFile = "~/.gitignore"
 
 [alias]
 	s = status
