@@ -2,3 +2,6 @@ escape ^Tt
 shell -$SHELL
 defscrollback 10000
 altscreen on
+startup_message off
+
+layout autosave on
