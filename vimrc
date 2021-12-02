@@ -31,3 +31,6 @@ nnoremap <silent> ]b :bnext<CR>
 
 nnoremap <silent> [q :cprevious<CR>
 nnoremap <silent> ]q :cnext<CR>
+
+nnoremap <silent> [l :lprevious<CR>zv
+nnoremap <silent> ]l :lnext<CR>zv
