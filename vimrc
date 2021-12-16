@@ -26,7 +26,6 @@ nnoremap <silent> ]q :cnext<CR>
 nnoremap <silent> [l :lprevious<CR>zv
 nnoremap <silent> ]l :lnext<CR>zv
 
-let g:netrw_banner=0
 let g:netrw_liststyle=3
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
