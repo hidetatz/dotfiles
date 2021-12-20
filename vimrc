@@ -19,12 +19,23 @@ set wildignore+=*git/*
 
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
 
 nnoremap <silent> [q :cprevious<CR>
 nnoremap <silent> ]q :cnext<CR>
+nnoremap <silent> [q :cfirst<CR>
+nnoremap <silent> ]q :clast<CR>
 
 nnoremap <silent> [l :lprevious<CR>zv
 nnoremap <silent> ]l :lnext<CR>zv
+nnoremap <silent> [l :lfirst<CR>zv
+nnoremap <silent> ]l :llast<CR>zv
+
+nnoremap <silent> [t :tprevious<CR>zv
+nnoremap <silent> ]t :tnext<CR>zv
+nnoremap <silent> [t :tfirst<CR>zv
+nnoremap <silent> ]t :tlast<CR>zv
 
 let g:netrw_liststyle=3
 
