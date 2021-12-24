@@ -45,7 +45,7 @@ au QuickFixCmdPost [^l]* cwindow
 au QuickFixCmdPost l*    lwindow
 
 au FileType go compiler go
-au BufWritePost *.go silent! !ctags -R &
+" au BufWritePost *.go silent! !ctags -R &
 
 if executable('gopls')
     au User lsp_setup call lsp#register_server({'name': 'gopls', 'cmd': {server_info->['gopls']}, 'allowlist': ['go']})
