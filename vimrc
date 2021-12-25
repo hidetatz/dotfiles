@@ -47,26 +47,5 @@ au QuickFixCmdPost l*    lwindow
 au FileType go compiler go
 " au BufWritePost *.go silent! !ctags -R &
 
-if executable('gopls')
-    au User lsp_setup call lsp#register_server({'name': 'gopls', 'cmd': {server_info->['gopls']}, 'allowlist': ['go']})
-endif
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    let g:lsp_format_sync_timeout = 1000
-    let g:lsp_document_highlight_enabled = 0
-    autocmd BufWritePre *.go call execute('LspCodeActionSync source.organizeImports')
-    autocmd BufWritePre * call execute('LspDocumentFormatSync')
-endfunction
-
-augroup lsp_install
-    au!
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
 
 let g:ctrlp_root_markers = ['go.mod']
