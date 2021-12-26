@@ -48,4 +48,3 @@ au FileType go compiler go
 " au BufWritePost *.go silent! !ctags -R &
 
 
-let g:ctrlp_root_markers = ['go.mod']
