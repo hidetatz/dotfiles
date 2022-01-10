@@ -45,4 +45,4 @@ au QuickFixCmdPost [^l]* cwindow
 au QuickFixCmdPost l*    lwindow
 
 au FileType go compiler go
-au BufWritePost *.go silent! !ctags -R &
+"au BufWritePost *.go silent! !ctags -R &
