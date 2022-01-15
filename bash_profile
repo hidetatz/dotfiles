@@ -21,13 +21,8 @@ alias g='git'
 alias ls='ls -GF'
 alias ll='ls -al'
 alias vi='vim'
-alias find='gfind'
-alias grep='ggrep'
-alias sed='gsed'
-alias awk='gawk'
 
 __git_complete g __git_main
-complete -F __start_kubectl k
 
 export PS1='\[\033[01;34m\]\w\[\033[00m\] \[\e[1;32m\]($(grep current-context $HOME/.kube/config | cut -f 2 -d " "))\[\e[m\]\[\e[1;36m\]$(__git_ps1)\[\e[m\] $ '
 
