@@ -1,3 +1,3 @@
 ## dotfiles
 
-This repo contains my dotfiles mainly for Linux.
+This repo contains my dotfiles.
