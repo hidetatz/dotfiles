@@ -17,4 +17,6 @@ alias vi='vim'
 __git_complete g __git_main
 
 PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-
+title () {
+  echo -ne '\033]0;'"$1"'\a'
+}
