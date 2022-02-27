@@ -1,6 +1,6 @@
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+[[ -r "/usr/share/bash-completion/completions/git" ]] && . /usr/share/bash-completion/completions/git
 
-export LESS='-i -M -R -W -q -S -N'
+export LESS='-i -M -R -W -q'
 export HISTSIZE=
 export HISTFILESIZE=
 HISTCONTROL=ignoreboth,erasedups
