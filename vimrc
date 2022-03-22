@@ -45,4 +45,16 @@ au QuickFixCmdPost [^l]* cwindow
 au QuickFixCmdPost l*    lwindow
 
 au FileType go compiler go
-"au BufWritePost *.go silent! !ctags -R &
+au BufWritePost *.go silent! !ctags -R &
+
+" copied from :h hex-editing
+augroup Binary
+  au!
+  au BufReadPre  *.bin,*.out let &bin=1
+  au BufReadPost *.bin,*.out  if &bin | %!xxd
+  au BufReadPost *.bin,*.out  set ft=xxd | endif
+  au BufWritePre *.bin,*.out  if &bin | %!xxd -r
+  au BufWritePre *.bin,*.out  endif
+  au BufWritePost *.bin,*.out  if &bin | %!xxd
+  au BufWritePost *.bin,*.out  set nomod | endif
+augroup END
