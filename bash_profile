@@ -7,7 +7,7 @@ HISTCONTROL=ignoreboth,erasedups
 shopt -s histappend
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
-export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:/opt/riscv/bin
 
 alias g='git'
 alias ls='ls -GF'
