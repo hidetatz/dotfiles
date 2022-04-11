@@ -13,8 +13,10 @@ set belloff=all
 set grepprg=git\ grep\ -I\ --line-number
 set smartindent
 
+set path+=$PWD/**
 set path+=**
 set wildmenu
+set wildmode=longest,full
 set wildignore+=*git/*
 
 nnoremap <silent> [b :bprevious<CR>
@@ -46,3 +48,16 @@ au BufWritePost *.go silent! !ctags -R &
 
 au QuickFixCmdPost [^l]* cwindow
 au QuickFixCmdPost l*    lwindow
+
+function! s:clang_format()
+  let now_line = line(".")
+  exec ":%! clang-format -style=Google"
+  exec ":" . now_line
+endfunction
+
+if executable('clang-format')
+  augroup cpp_clang_format
+    autocmd!
+    autocmd BufWrite,FileWritePre,FileAppendPre *.[ch]pp call s:clang_format()
+  augroup END
+endif
