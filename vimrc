@@ -13,10 +13,8 @@ set belloff=all
 set grepprg=git\ grep\ -I\ --line-number
 set smartindent
 
-set path+=$PWD/**
 set path+=**
 set wildmenu
-set wildmode=longest,full
 set wildignore+=*git/*
 
 nnoremap <silent> [b :bprevious<CR>
