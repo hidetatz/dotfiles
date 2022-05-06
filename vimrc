@@ -59,3 +59,22 @@ if executable('clang-format')
     autocmd BufWrite,FileWritePre,FileAppendPre *.[ch]pp call s:clang_format()
   augroup END
 endif
+
+function! GoImports()
+  let saved_view = winsaveview()
+  silent %!goimports
+  if v:shell_error > 0
+    cexpr getline(1, '$')->map({ idx, val -> val->substitute('<standard input>', expand('%'), '') })
+    silent undo
+    cwindow
+  else
+    cclose
+  endif
+  call winrestview(saved_view)
+endfunction
+
+command! GoImports call GoImports()
+
+augroup go_autocmd
+  autocmd BufWritePre *.go GoImports
+augroup END
