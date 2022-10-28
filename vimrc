@@ -34,15 +34,13 @@ au QuickFixCmdPost l*    lwindow
 if expand('%:e') == 'c' || expand('%:e') == 'cc' || expand('%:e') == 'h'
 	set expandtab tabstop=2 softtabstop=2 shiftwidth=2
 	set formatprg=clang-format
-	au BufWritePost * normal gggqG
 endif
 
 if expand('%:e') == 'py'
+	set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 	set formatprg=yapf
-	au BufWritePost * normal gggqG
 endif
 
 if expand('%:e') == 'go'
 	set formatprg=goimports
-	au BufWritePost * normal gggqG
 endif
