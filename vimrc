@@ -34,6 +34,7 @@ au QuickFixCmdPost l*    lwindow
 if expand('%:e') == 'c' || expand('%:e') == 'cc' || expand('%:e') == 'h'
 	set expandtab tabstop=2 softtabstop=2 shiftwidth=2
 	set formatprg=clang-format
+	set path+=/usr/include/c++/9
 endif
 
 if expand('%:e') == 'py'
