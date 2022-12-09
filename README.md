@@ -4,16 +4,15 @@ This repo contains my dotfiles.
 
 ## Ubuntu setup
 
-* Install
+* Install by apt-get
+  - git curl g++ ibus-mozc net-tools clang-format
+* Install manually
   - Google Chrome
   - Tailscale
   - Python
+    - yapf
   - Go
-  - git
-  - curl
-  - g++
-  - ibus-mozc
-  - net-tools
+    - goimports
   - nvidia-driver
 * Settings
   - Background
