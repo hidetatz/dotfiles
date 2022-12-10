@@ -5,7 +5,7 @@ This repo contains my dotfiles.
 ## Ubuntu setup
 
 * Install by apt-get
-  - git curl g++ ibus-mozc net-tools clang-format
+  - git curl g++ ibus-mozc net-tools clang-format autoconf
 * Install manually
   - Google Chrome
   - Tailscale
@@ -14,6 +14,7 @@ This repo contains my dotfiles.
   - Go
     - goimports
   - nvidia-driver
+  - ctags
 * Settings
   - Background
   - Dock
