@@ -2,8 +2,6 @@
 
 This repo contains my dotfiles.
 
-## Ubuntu setup
-
 * Install by apt-get
   - git curl g++ fcitx-mozc net-tools clang-format autoconf universal-ctags vim
 * Install manually
