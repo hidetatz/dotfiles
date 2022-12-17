@@ -4,6 +4,8 @@ export HISTSIZE=
 export HISTFILESIZE=
 export PROMPT_COMMAND='echo -en "\033]0;$(dirs)\a"'
 
+bind 'set bell-style none'
+
 alias g='git'
 alias m='make'
 alias ls='ls -GF'
