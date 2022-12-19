@@ -24,7 +24,8 @@ nnoremap <silent> ]q :cnext<CR>
 nnoremap <silent> [t :tprevious<CR>zv
 nnoremap <silent> ]t :tnext<CR>zv
 
-let g:netrw_liststyle=3
+let g:netrw_liststyle = 3
+let g:netrw_dirhistmax = 0
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
@@ -43,5 +44,5 @@ if expand('%:e') == 'py'
 endif
 
 if expand('%:e') == 'go'
-	set formatprg=goimports
+	set formatprg=gofmt
 endif
