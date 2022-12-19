@@ -1,5 +1,5 @@
 #!/bin/bash
 
-ln -s $HOME/dotfiles/bash_profile $HOME/.bash_profile
-ln -s $HOME/dotfiles/gitconfig    $HOME/.gitconfig
-ln -s $HOME/dotfiles/vimrc        $HOME/.vimrc
+ln -sf $HOME/dotfiles/bash_profile $HOME/.bash_profile
+ln -sf $HOME/dotfiles/gitconfig    $HOME/.gitconfig
+ln -sf $HOME/dotfiles/vimrc        $HOME/.vimrc
