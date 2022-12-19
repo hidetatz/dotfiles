@@ -13,5 +13,4 @@
 	l = log
 
 [credential]
-	helper = /usr/local/bin/git-credential-manager
-	credentialStore = gpg
+	helper = cache --timeout 7776000 # 3 months
