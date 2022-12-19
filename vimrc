@@ -12,6 +12,7 @@ set autowrite
 set belloff=all
 set grepprg=git\ grep\ -I\ --line-number
 set smartindent
+set viminfo+=n~/.config/vim/viminfo
 
 set path+=**
 set wildmenu
